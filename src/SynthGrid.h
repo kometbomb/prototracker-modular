@@ -6,10 +6,12 @@
 
 class ISynth;
 struct Color;
+class ModuleSelector;
 
 class SynthGrid: public Editor
 {
 	ISynth& mSynth;
+	ModuleSelector *mModuleSelector;
 	
 	virtual void onDraw(Renderer& renderer, const SDL_Rect& area);
 	void drawWire(Renderer& renderer, int x1, int y1, int x2, int y2, const Color& color) const;
@@ -34,6 +36,8 @@ class SynthGrid: public Editor
 	bool pickConnector(int x, int y, const SDL_Rect& area, int& module, int& connectorType, int& connector);
 	bool pickModule(int x, int y, const SDL_Rect& area, int& module, bool includeFree = false);
 	
+	void showNewModuleDialog();
+	
 	void startMove(int module);
 	void endMove(int targetModule);
 	void startConnect(int fromModule, int toModule, int fromOutput, int toInput);
@@ -46,4 +50,5 @@ public:
 	SynthGrid(EditorState& editorState, ISynth& synth);
 	
 	virtual bool onEvent(SDL_Event& event);
+	virtual void onFileSelectorEvent(const Editor& moduleSelector, bool accept);
 };

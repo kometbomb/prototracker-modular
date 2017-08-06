@@ -32,6 +32,19 @@ ModularSynth::~ModularSynth()
 			delete mModules[i];
 }
 
+
+bool ModularSynth::addModule(int index, int moduleId)
+{
+	ModuleFactory moduleFactory;
+	
+	if (mModules[index] != NULL)
+		return false;
+	
+	mModules[index] = moduleFactory.createModule(moduleId);
+	
+	return true;
+}
+
 	
 bool ModularSynth::connectModules(int fromModule, int toModule, int fromOutput, int toInput)
 {

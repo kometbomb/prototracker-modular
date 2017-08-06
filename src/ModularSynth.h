@@ -27,6 +27,7 @@ public:
 	const SynthConnection& getConnection(int index) const;
 	int getNumConnections() const;
 	
+	bool addModule(int index, int moduleId);
 	void removeModule(int index);
 	bool connectModules(int fromModule, int toModule, int fromOutput, int toInput);
 	void detachConnection(int moduleIndex, int type, int connectionIndex);

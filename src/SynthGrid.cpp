@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "ModularSynth.h"
 #include "SynthModule.h"
+#include "ModuleSelector.h"
 #include "Color.h"
 #include <cstdlib>
 #include <cstdio>
@@ -14,6 +15,7 @@
 SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth)
 	:Editor(editorState, true), mSynth(synth), mMode(IDLE), mSelectedModule(-1)
 {
+	mModuleSelector = new ModuleSelector(editorState);
 }
 
 
@@ -211,7 +213,10 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		{
 			SDL_Rect moduleArea = getModuleArea(index, area);
 			renderer.drawRect(moduleArea, mSelectedModule == index ? Color(255,0,0) : Color(255,255,255));
-			renderer.renderText(moduleArea, Color(255,255,255), module->getName());
+			
+			SDL_Rect textArea = {moduleArea.x + 2, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
+			
+			renderer.renderText(textArea, Color(255,255,255), module->getName());
 			
 			for (int connectorType = 0 ; connectorType <= 1 ; connectorType++)
 			{
@@ -235,7 +240,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		const SynthConnection& connection = modularSynth.getConnection(i);
 		SDL_Rect fromModuleArea = getConnectorArea(connection.fromModule, 1, connection.fromOutput, area);
 		SDL_Rect toModuleArea = getConnectorArea(connection.toModule, 0, connection.toInput, area);
-		drawWire(renderer, fromModuleArea.x,fromModuleArea.y,toModuleArea.x,toModuleArea.y,Color(255,0,0));
+		drawWire(renderer, fromModuleArea.x, fromModuleArea.y, toModuleArea.x, toModuleArea.y, Color(255,0,0));
 	}
 	
 	if (mMode == CONNECTING_MODULE)
@@ -257,6 +262,12 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 
 bool SynthGrid::onEvent(SDL_Event& event)
 {
+	if (mModal != NULL)
+	{
+		setDirty(true);
+		return mModal->onEvent(event);
+	}
+	
 	if (event.type == SDL_MOUSEBUTTONDOWN)
 	{
 		// Editor base class should probably do this when clicked
@@ -308,8 +319,17 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				{
 					if (mMode == IDLE)
 					{
-						startMove(moduleOut);
-						mSelectedModule = moduleOut;
+						const ModularSynth& modularSynth = static_cast<const ModularSynth&>(mSynth.getOscillator(0));
+						if (modularSynth.getModule(moduleOut) != NULL)
+						{
+							startMove(moduleOut);
+						}
+						else
+						{
+							showNewModuleDialog();
+						}	
+
+						mSelectedModule = moduleOut;						
 					}
 					else if (mMode == MOVING_MODULE)
 					{
@@ -350,4 +370,23 @@ bool SynthGrid::onEvent(SDL_Event& event)
 	}
 
 	return false;
+}
+
+
+void SynthGrid::showNewModuleDialog()
+{
+	setModal(mModuleSelector);
+	setFocus(mModuleSelector);
+}
+
+
+void SynthGrid::onFileSelectorEvent(const Editor& moduleSelector, bool accept)
+{
+	if (accept)
+	{
+		ModularSynth& modularSynth = static_cast<ModularSynth&>(mSynth.getOscillator(0));
+		modularSynth.addModule(mSelectedModule, static_cast<const ModuleSelector&>(moduleSelector).getSelectedModuleId());
+	}
+		
+	setModal(NULL);
 }
