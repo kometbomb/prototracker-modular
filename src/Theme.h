@@ -20,6 +20,7 @@ public:
 		PatternLength,
 		OctaveNumber,
 		TouchRegion,
+		SynthGrid,
 		Unknown
 	};
 

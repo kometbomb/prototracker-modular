@@ -1,15 +1,12 @@
 #include "Synth.h"
-#include "Oscillator.h"
+#include "ModularSynth.h"
 #include "SequenceRow.h"
 #include "Sample.h"
-#include "WaveStore.h"
 #include "SDL.h"
 
 Synth::Synth()
 	: ISynth()
 {
-	mWaveStore = new WaveStore();
-	
 	/* 
 	
 	Initialize the audio tracks.
@@ -18,27 +15,17 @@ Synth::Synth()
 	
 	for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
 	{
-		Oscillator *oscillator = new Oscillator();
-		oscillator->setWaveStore(*mWaveStore);
-		mOscillator[i] = oscillator;
+		mOscillator[i] = new ModularSynth();
 	}
 }
 
 
 Synth::~Synth()
 {
-	delete mWaveStore;
-	
 	/*
 	
 	NOTE: ~ISynth() will delete the Oscillator objects we initialized
 	above! No need to cleanup yourself.
 	
 	*/
-}
-
-
-const WaveStore& Synth::getWaveStore() const
-{
-	return *mWaveStore;
 }

@@ -27,6 +27,7 @@
 #include "Emscripten.h"
 #include "MessageManager.h"
 #include "MessageDisplayer.h"
+#include "SynthGrid.h"
 #include "App.h"
 #include "SDL.h"
 #include "Theme.h"
@@ -771,6 +772,13 @@ bool MainEditor::loadElements(const Theme& theme)
 			{
 				TouchRegion *region = new TouchRegion(mEditorState, SDL_GetScancodeFromName(element.strParameters[0]), static_cast<SDL_Keymod>(0));
 				addChild(region, element.parameters[0], element.parameters[1], element.parameters[2], element.parameters[3]);
+			}
+			break; 
+			
+			case Theme::SynthGrid:
+			{
+				SynthGrid *grid = new SynthGrid(mEditorState, mSynth);
+				addChild(grid, element.parameters[0], element.parameters[1], element.parameters[2], element.parameters[3]);
 			}
 			break; 
 			

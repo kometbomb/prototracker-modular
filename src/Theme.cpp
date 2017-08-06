@@ -139,6 +139,7 @@ bool Theme::loadDefinition(const std::string& path)
 		"PatternLength",
 		"OctaveNumber",
 		"TouchRegion",
+		"SynthGrid",
 		NULL
 	};
 	
