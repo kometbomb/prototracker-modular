@@ -12,7 +12,7 @@
 
 
 SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth)
-	:Editor(editorState, true), mSynth(synth), mMode(IDLE)
+	:Editor(editorState, true), mSynth(synth), mMode(IDLE), mSelectedModule(-1)
 {
 }
 
@@ -210,7 +210,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		if (module != NULL)
 		{
 			SDL_Rect moduleArea = getModuleArea(index, area);
-			renderer.drawRect(moduleArea, Color(255, 255, 255));
+			renderer.drawRect(moduleArea, mSelectedModule == index ? Color(255,0,0) : Color(255,255,255));
 			renderer.renderText(moduleArea, Color(255,255,255), module->getName());
 			
 			for (int connectorType = 0 ; connectorType <= 1 ; connectorType++)
@@ -265,10 +265,11 @@ bool SynthGrid::onEvent(SDL_Event& event)
 		mMouseX = event.button.x;
 		mMouseY = event.button.y;
 		
+		int moduleOut, connectorType, connector;
+		
 		switch (event.button.button)
 		{
 			case SDL_BUTTON_LEFT:
-				int moduleOut, connectorType, connector;
 				
 				// Left button starts module connection mode or module move mode
 				// depending on if the user clicks the connector or just the module
@@ -284,6 +285,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						{
 							endConnect(moduleOut, connector);
 							modularSynth.connectModules(mFromModule, mToModule, mFromOutput, mToInput);
+							mSelectedModule = -1;
 						}
 					}
 					else if (mMode == IDLE)
@@ -292,11 +294,13 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						{
 							startConnect(-1, moduleOut, -1, connector);
 							modularSynth.detachConnection(moduleOut, 0, connector);
+							mSelectedModule = moduleOut;
 						}
 						else
 						{
 							startConnect(moduleOut, -1, connector, -1);
 							modularSynth.detachConnection(moduleOut, 1, connector);
+							mSelectedModule = moduleOut;
 						}
 					}
 				}
@@ -305,22 +309,31 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					if (mMode == IDLE)
 					{
 						startMove(moduleOut);
+						mSelectedModule = moduleOut;
 					}
 					else if (mMode == MOVING_MODULE)
 					{
 						endMove(moduleOut);
+						mSelectedModule = -1;
 					}
+					
+					
 				}
 				
 				break;
 				
 			case SDL_BUTTON_RIGHT:
-				// Abort connecting/moving
-			
 				if (mMode == CONNECTING_MODULE || mMode == MOVING_MODULE)
 				{
+					// Abort connecting/moving
 					mMode = IDLE;
 				}
+				else if (pickModule(event.button.x, event.button.y, mThisArea, moduleOut, true))
+				{
+					ModularSynth& modularSynth = static_cast<ModularSynth&>(mSynth.getOscillator(0));
+					modularSynth.removeModule(moduleOut);
+				}					
+					
 				break;
 		}
 		

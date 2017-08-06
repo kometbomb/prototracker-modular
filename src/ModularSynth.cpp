@@ -70,10 +70,20 @@ void ModularSynth::detachConnection(int moduleIndex, int type, int connectionInd
 	
 	if (i < mNumConnections)
 	{
-		mNumConnections--;
-		memmove(&mConnections[i], &mConnections[i + 1], sizeof(mConnections[i]) * (mNumConnections - i));
+		removeConnection(i);
 	}
 }
+
+
+void ModularSynth::removeConnection(int index)
+{
+	if (index < mNumConnections)
+	{
+		mNumConnections--;
+		memmove(&mConnections[index], &mConnections[index + 1], sizeof(mConnections[index]) * (mNumConnections - index));
+	}
+}
+
 
 void ModularSynth::cycle()
 {
@@ -159,5 +169,27 @@ void ModularSynth::swapModules(int fromModule, int toModule)
 			connection.toModule = fromModule;
 		else if (connection.toModule == fromModule)
 			connection.toModule = toModule;
+	}
+}
+
+
+void ModularSynth::removeModule(int index)
+{
+	if (mModules[index] != NULL)
+	{
+		delete mModules[index];
+		mModules[index] = NULL;
+		
+		// Remove any connections from/to this module
+		
+		for (int i = 0 ; i < mNumConnections ; )
+		{
+			SynthConnection& connection = mConnections[i];
+			
+			if (connection.fromModule == index || connection.toModule == index)
+				removeConnection(i);
+			else
+				++i;
+		}
 	}
 }

@@ -26,6 +26,7 @@ class SynthGrid: public Editor
 	};
 	
 	SynthGridMode mMode;
+	int mSelectedModule;
 	int mFromModule, mFromOutput;
 	int mToModule, mToInput;
 	int mMouseX, mMouseY;

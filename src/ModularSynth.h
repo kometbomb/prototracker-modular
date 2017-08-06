@@ -27,8 +27,10 @@ public:
 	const SynthConnection& getConnection(int index) const;
 	int getNumConnections() const;
 	
+	void removeModule(int index);
 	bool connectModules(int fromModule, int toModule, int fromOutput, int toInput);
 	void detachConnection(int moduleIndex, int type, int connectionIndex);
+	void removeConnection(int index);
 	void swapModules(int fromModule, int toModule);
 
 	// IOscillator virtual methods
