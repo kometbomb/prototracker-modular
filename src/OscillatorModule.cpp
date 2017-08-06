@@ -2,7 +2,7 @@
 #include <cmath>
 
 OscillatorModule::OscillatorModule()
-	:SynthModule(1, 1, 1), mAccumulator(0.0f)
+	:SynthModule(moduleId, 1, 1), mAccumulator(0.0f)
 {
 }
 
@@ -28,5 +28,11 @@ const char * OscillatorModule::getOutputName(int output) const
 
 const char * OscillatorModule::getName() const
 {
-	return "Oscillator";
+	return moduleName;
+}
+
+
+SynthModule * OscillatorModule::createModule()
+{
+	return new OscillatorModule();
 }

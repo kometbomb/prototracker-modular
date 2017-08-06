@@ -1,7 +1,7 @@
 #include "PassthruModule.h"
 
 PassthruModule::PassthruModule()
-	:SynthModule(1, 1, 1)
+	:SynthModule(moduleId, 1, 1)
 {
 }
 
@@ -27,4 +27,9 @@ const char * PassthruModule::getOutputName(int output) const
 const char * PassthruModule::getName() const
 {
 	return "Passthru";
+}
+
+SynthModule * PassthruModule::createModule()
+{
+	return new PassthruModule();
 }

@@ -3,6 +3,8 @@
 class SynthModule
 {
 public:
+	typedef SynthModule* (*CreateModuleFunc)(void); 
+
 	static const int maxInputs = 8;
 	static const int maxOutputs = 8;
 	
@@ -12,9 +14,10 @@ protected:
 	float mInputs[maxInputs], mOutputs[maxOutputs];
 
 	void setOutput(int output, float value);
+	SynthModule(int synthId, int numInputs, int numOutputs);
 	
 public:
-	SynthModule(int synthId, int numInputs, int numOutputs);
+	
 	virtual ~SynthModule();
 	
 	int getSynthId() const;

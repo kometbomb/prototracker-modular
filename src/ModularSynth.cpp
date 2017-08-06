@@ -1,6 +1,5 @@
 #include "ModularSynth.h"
-#include "PassthruModule.h"
-#include "OscillatorModule.h"
+#include "ModuleFactory.h"
 #include "Sample.h"
 #include <cstdlib>
 #include <cstring>
@@ -12,9 +11,11 @@ ModularSynth::ModularSynth()
 	for (int i = 0 ; i < maxModules ; ++i)
 		mModules[i] = NULL;
 	
-	mInputModule = new PassthruModule();
-	mOutputModule = new PassthruModule();
-	mOscillatorModule = new OscillatorModule();
+	ModuleFactory moduleFactory;
+	
+	mInputModule = moduleFactory.createModule(2);
+	mOutputModule = moduleFactory.createModule(2);
+	mOscillatorModule = moduleFactory.createModule(1);
 	mModules[0] = mInputModule;
 	mModules[5] = mOscillatorModule;
 	mModules[11] = mOutputModule;

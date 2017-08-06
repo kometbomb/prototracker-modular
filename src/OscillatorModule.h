@@ -4,9 +4,14 @@
 
 class OscillatorModule: public SynthModule
 {
+	OscillatorModule();
+	
 	float mAccumulator;
 public:
-	OscillatorModule();
+	static const int moduleId = 1;
+	static constexpr const char *moduleName = "Oscillator";
+
+	static SynthModule * createModule();
 	virtual void cycle();
 	
 	virtual const char * getName() const;
