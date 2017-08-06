@@ -138,3 +138,26 @@ int ModularSynth::getNumConnections() const
 {
 	return mNumConnections;
 }
+
+
+void ModularSynth::swapModules(int fromModule, int toModule)
+{
+	SynthModule* temp = mModules[fromModule];
+	mModules[fromModule] = mModules[toModule];
+	mModules[toModule] = temp;
+
+	for (int i = 0 ; i < mNumConnections ; ++i)
+	{
+		SynthConnection& connection = mConnections[i];
+		
+		if (connection.fromModule == toModule)
+			connection.fromModule = fromModule;
+		else if (connection.fromModule == fromModule)
+			connection.fromModule = toModule;
+		
+		if (connection.toModule == toModule)
+			connection.toModule = fromModule;
+		else if (connection.toModule == fromModule)
+			connection.toModule = toModule;
+	}
+}

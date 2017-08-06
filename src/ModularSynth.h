@@ -29,6 +29,7 @@ public:
 	
 	bool connectModules(int fromModule, int toModule, int fromOutput, int toInput);
 	void detachConnection(int moduleIndex, int type, int connectionIndex);
+	void swapModules(int fromModule, int toModule);
 
 	// IOscillator virtual methods
 	virtual void triggerNote();

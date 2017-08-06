@@ -18,14 +18,23 @@ class SynthGrid: public Editor
 	// type: 0 = input, 1 = output
 	SDL_Rect getConnectorArea(int moduleIndex, int type, int connectorIndex, const SDL_Rect& parent) const;
 	
-	bool mIsConnecting;
+	enum SynthGridMode
+	{
+		IDLE,
+		CONNECTING_MODULE,
+		MOVING_MODULE
+	};
+	
+	SynthGridMode mMode;
 	int mFromModule, mFromOutput;
 	int mToModule, mToInput;
 	int mMouseX, mMouseY;
 	
 	bool pickConnector(int x, int y, const SDL_Rect& area, int& module, int& connectorType, int& connector);
-	bool pickModule(int x, int y, const SDL_Rect& area, int& module);
+	bool pickModule(int x, int y, const SDL_Rect& area, int& module, bool includeFree = false);
 	
+	void startMove(int module);
+	void endMove(int targetModule);
 	void startConnect(int fromModule, int toModule, int fromOutput, int toInput);
 	void endConnect(int module, int connector);
 	

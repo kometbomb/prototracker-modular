@@ -12,7 +12,7 @@
 
 
 SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth)
-	:Editor(editorState, true), mSynth(synth), mIsConnecting(false)
+	:Editor(editorState, true), mSynth(synth), mMode(IDLE)
 {
 }
 
@@ -42,9 +42,36 @@ void SynthGrid::drawWire(Renderer& renderer, int x1, int y1, int x2, int y2, con
 }
 
 
+void SynthGrid::startMove(int module)
+{
+	const ModularSynth& modularSynth = static_cast<const ModularSynth&>(mSynth.getOscillator(0));
+	
+	// Don't start moving from empty slot
+	
+	if (modularSynth.getModule(module) == NULL)
+		return;
+	
+	mMode = MOVING_MODULE;
+	mFromModule = module;
+}
+
+
+void SynthGrid::endMove(int targetModule)
+{
+	if (mMode != MOVING_MODULE)
+		return;
+	
+	mMode = IDLE;
+	
+	ModularSynth& modularSynth = static_cast<ModularSynth&>(mSynth.getOscillator(0));
+	
+	modularSynth.swapModules(mFromModule, targetModule);
+}
+	
+
 void SynthGrid::startConnect(int fromModule, int toModule, int fromOutput, int toInput)
 {
-	mIsConnecting = true;
+	mMode = CONNECTING_MODULE;
 	mFromModule = fromModule;
 	mToModule = toModule;
 	mFromOutput = fromOutput; 
@@ -54,10 +81,10 @@ void SynthGrid::startConnect(int fromModule, int toModule, int fromOutput, int t
 
 void SynthGrid::endConnect(int module, int connector)
 {
-	if (!mIsConnecting)
+	if (mMode != CONNECTING_MODULE)
 		return;
 	
-	mIsConnecting = false;
+	mMode = IDLE;
 	
 	if (mFromModule != -1)
 	{
@@ -79,7 +106,6 @@ SDL_Rect SynthGrid::getConnectorArea(int moduleIndex, int type, int connectorInd
 	const int connectorSize = 8;
 	
 	SDL_Rect area = {0,0,connectorSize,connectorSize};
-	
 	
 	if (module)
 	{
@@ -113,7 +139,7 @@ SDL_Rect SynthGrid::getModuleArea(int index, const SDL_Rect& parent) const
 }
 
 
-bool SynthGrid::pickModule(int x, int y, const SDL_Rect& area, int& moduleOut)
+bool SynthGrid::pickModule(int x, int y, const SDL_Rect& area, int& moduleOut, bool includeEmpty)
 {
 	const ModularSynth& modularSynth = static_cast<const ModularSynth&>(mSynth.getOscillator(0));
 	
@@ -121,7 +147,7 @@ bool SynthGrid::pickModule(int x, int y, const SDL_Rect& area, int& moduleOut)
 	{
 		const SynthModule *module = modularSynth.getModule(index);
 		
-		if (module != NULL)
+		if (includeEmpty || module != NULL)
 		{
 			SDL_Rect moduleArea = getModuleArea(index, area);
 			SDL_Point point = {x,y};
@@ -212,7 +238,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		drawWire(renderer, fromModuleArea.x,fromModuleArea.y,toModuleArea.x,toModuleArea.y,Color(255,0,0));
 	}
 	
-	if (mIsConnecting)
+	if (mMode == CONNECTING_MODULE)
 	{
 		SDL_Rect moduleArea;
 		if (mFromModule != -1)
@@ -239,33 +265,63 @@ bool SynthGrid::onEvent(SDL_Event& event)
 		mMouseX = event.button.x;
 		mMouseY = event.button.y;
 		
-		int moduleOut, connectorType, connector;
-		
-		if (pickConnector(event.button.x, event.button.y, mThisArea, moduleOut, connectorType, connector))
+		switch (event.button.button)
 		{
-			ModularSynth& modularSynth = static_cast<ModularSynth&>(mSynth.getOscillator(0));
+			case SDL_BUTTON_LEFT:
+				int moduleOut, connectorType, connector;
+				
+				// Left button starts module connection mode or module move mode
+				// depending on if the user clicks the connector or just the module
+				// area.
+				
+				if (pickConnector(event.button.x, event.button.y, mThisArea, moduleOut, connectorType, connector))
+				{
+					ModularSynth& modularSynth = static_cast<ModularSynth&>(mSynth.getOscillator(0));
+					
+					if (mMode == CONNECTING_MODULE)
+					{
+						if ((connectorType == 0 && mToModule == -1) || (connectorType == 1 && mToModule != -1))
+						{
+							endConnect(moduleOut, connector);
+							modularSynth.connectModules(mFromModule, mToModule, mFromOutput, mToInput);
+						}
+					}
+					else if (mMode == IDLE)
+					{
+						if (connectorType == 0)
+						{
+							startConnect(-1, moduleOut, -1, connector);
+							modularSynth.detachConnection(moduleOut, 0, connector);
+						}
+						else
+						{
+							startConnect(moduleOut, -1, connector, -1);
+							modularSynth.detachConnection(moduleOut, 1, connector);
+						}
+					}
+				}
+				else if (pickModule(event.button.x, event.button.y, mThisArea, moduleOut, true))
+				{
+					if (mMode == IDLE)
+					{
+						startMove(moduleOut);
+					}
+					else if (mMode == MOVING_MODULE)
+					{
+						endMove(moduleOut);
+					}
+				}
+				
+				break;
+				
+			case SDL_BUTTON_RIGHT:
+				// Abort connecting/moving
 			
-			if (mIsConnecting)
-			{
-				if ((connectorType == 0 && mToModule == -1) || (connectorType == 1 && mToModule != -1))
+				if (mMode == CONNECTING_MODULE || mMode == MOVING_MODULE)
 				{
-					endConnect(moduleOut, connector);
-					modularSynth.connectModules(mFromModule, mToModule, mFromOutput, mToInput);
+					mMode = IDLE;
 				}
-			}
-			else
-			{
-				if (connectorType == 0)
-				{
-					startConnect(-1, moduleOut, -1, connector);
-					modularSynth.detachConnection(moduleOut, 0, connector);
-				}
-				else
-				{
-					startConnect(moduleOut, -1, connector, -1);
-					modularSynth.detachConnection(moduleOut, 1, connector);
-				}
-			}
+				break;
 		}
 		
 		return true;
@@ -276,7 +332,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 		mMouseX = event.motion.x;
 		mMouseY = event.motion.y;
 		
-		if (mIsConnecting)
+		if (mMode == CONNECTING_MODULE)
 			setDirty(true);
 	}
 
