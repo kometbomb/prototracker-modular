@@ -1,6 +1,9 @@
 #include "ModularSynth.h"
 #include "ModuleFactory.h"
 #include "Sample.h"
+#include "FileSection.h"
+#include "ModuleFactory.h"
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
@@ -27,9 +30,7 @@ ModularSynth::ModularSynth()
 
 ModularSynth::~ModularSynth()
 {
-	for (int i = 0 ; i < maxModules ; ++i)
-		if (mModules[i] != NULL)
-			delete mModules[i];
+	clear();
 }
 
 
@@ -206,4 +207,140 @@ void ModularSynth::removeModule(int index)
 				++i;
 		}
 	}
+}
+
+
+/* SynthModule parameters are scaled so that -1.0 .. 1.0 equals 0x3fff000 0x4001000
+ * which should be accurate and deep enough for any normal purposes (values mostly between
+ * 0-255).
+ */
+
+static const int paramScale =  0x0001000;
+static const int paramCenter = 0x4000000;
+
+bool ModularSynth::readSynth(const FileSection& section, int& offset)
+{
+	int countModules = section.readByte(offset);
+	
+	if (countModules == FileSection::invalidRead || countModules > maxModules)
+		return false;
+	
+	ModuleFactory moduleFactory;
+	
+	clear();
+	
+	for (int i = 0 ; i < countModules ; ++i)
+	{
+		int synthId = section.readByte(offset);
+		
+		if (synthId != 0)
+		{
+			SynthModule *module = moduleFactory.createModule(synthId);
+			
+			if (!module)
+				return false;
+			
+			for (int p = 0 ; p < module->getNumParams() ; ++p)
+			{
+				int param = section.readDword(offset);
+				module->setParam(p, static_cast<float>(param - paramCenter) / paramScale);
+			}
+			
+			mModules[i] = module;
+		}
+	}
+	
+	int countConnections = section.readByte(offset);
+	
+	if (countConnections == FileSection::invalidRead || countConnections > maxConnections)
+		return false;
+	
+	mNumConnections = countConnections;
+	
+	for (int i = 0 ; i < mNumConnections ; ++i)
+	{
+		SynthConnection& connection = mConnections[i];
+		
+		int temp = section.readByte(offset);
+		
+		if (temp == FileSection::invalidRead || temp > maxModules)
+			return false;
+		
+		connection.fromModule = temp;
+		
+		temp = section.readByte(offset);
+		
+		if (temp == FileSection::invalidRead || temp > maxModules)
+			return false;
+		connection.toModule = temp;
+		
+		temp = section.readByte(offset);
+		
+		if (temp == FileSection::invalidRead || temp > maxModules)
+			return false;
+		
+		connection.fromOutput = temp;
+		
+		temp = section.readByte(offset);
+		
+		if (temp == FileSection::invalidRead || temp > maxModules)
+			return false;
+		
+		connection.toInput = temp;
+	}
+	
+	return true;
+}
+
+
+void ModularSynth::writeSynth(FileSection& section)
+{
+	// Write modules
+	
+	section.writeByte(maxModules);
+	
+	for (int i = 0 ; i < maxModules ; ++i)
+	{
+		if (mModules[i] != NULL)
+		{
+			section.writeByte(mModules[i]->getSynthId());
+		
+			for (int p = 0 ; p < mModules[i]->getNumParams() ; ++p)
+			{
+				section.writeDword(mModules[i]->getParam(p) * paramScale + paramCenter);
+			}
+		}
+		else
+		{
+			section.writeByte(0);
+		}
+	}
+	
+	// Write connections
+	
+	section.writeByte(mNumConnections);
+	
+	for (int i = 0 ; i < mNumConnections ; ++i)
+	{
+		SynthConnection& connection = mConnections[i];
+		section.writeByte(connection.fromModule);
+		section.writeByte(connection.toModule);
+		section.writeByte(connection.fromOutput);
+		section.writeByte(connection.toInput);
+	}
+}
+
+
+void ModularSynth::clear()
+{
+	for (int i = 0 ; i < maxModules ; ++i)
+	{
+		if (mModules[i] != NULL)
+		{
+			delete mModules[i];
+			mModules[i] = NULL;
+		}
+	}
+
+	mNumConnections = 0;	
 }

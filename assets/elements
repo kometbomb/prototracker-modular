@@ -22,4 +22,4 @@ SequenceLength	256	54 16	8
 PatternLength	277	54	16	8
 OctaveNumber	298	54	16	8
 
-SynthGrid 		320	0	160	240
+SynthGrid 		320	16	160	224

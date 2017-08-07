@@ -1,7 +1,7 @@
 #include "PassthruModule.h"
 
 PassthruModule::PassthruModule()
-	:SynthModule(moduleId, 1, 1)
+	:SynthModule(moduleId, 1, 1, 0)
 {
 }
 

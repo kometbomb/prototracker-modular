@@ -1,7 +1,7 @@
 #include "SynthModule.h"
 
-SynthModule::SynthModule(int synthId, int numInputs, int numOutputs)
-	: mSynthId(synthId), mNumInputs(numInputs), mNumOutputs(numOutputs)
+SynthModule::SynthModule(int synthId, int numInputs, int numOutputs, int numParams)
+	: mSynthId(synthId), mNumInputs(numInputs), mNumOutputs(numOutputs), mNumParams(numParams)
 {
 }
 
@@ -15,6 +15,13 @@ int SynthModule::getSynthId() const
 {
 	return mSynthId;
 }
+
+
+void SynthModule::setParam(int param, float value)
+{
+	mParams[param] = value;
+}
+
 	
 void SynthModule::setInput(int input, float value)
 {
@@ -25,6 +32,12 @@ void SynthModule::setInput(int input, float value)
 void SynthModule::setOutput(int output, float value)
 {
 	mOutputs[output] = value;
+}
+
+
+float SynthModule::getParam(int param) const
+{
+	return mParams[param];
 }
 
 
@@ -50,5 +63,10 @@ int SynthModule::getNumOutputs() const
 {
 	return mNumOutputs;
 }
-	
+
+
+int SynthModule::getNumParams() const
+{
+	return mNumParams;
+}
 	

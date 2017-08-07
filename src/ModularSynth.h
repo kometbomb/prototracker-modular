@@ -4,6 +4,7 @@
 #include "IOscillator.h"
 
 struct SynthModule;
+struct FileSection;
 
 class ModularSynth: public IOscillator
 {
@@ -33,6 +34,11 @@ public:
 	void detachConnection(int moduleIndex, int type, int connectionIndex);
 	void removeConnection(int index);
 	void swapModules(int fromModule, int toModule);
+	
+	void clear();
+	
+	void writeSynth(FileSection& section);
+	bool readSynth(const FileSection& section, int& offset);
 
 	// IOscillator virtual methods
 	virtual void triggerNote();

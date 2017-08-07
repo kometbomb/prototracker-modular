@@ -11,6 +11,7 @@
 #include "Emscripten.h"
 #include "Theme.h"
 #include "Context.h"
+#include "SectionListener.h"
 #include <cstdlib>
 #include <cstdio>
 #include <unistd.h>
@@ -43,6 +44,8 @@ Context::Context()
 	
 	themeLoaded = true;
 	previousTick = SDL_GetTicks();
+	
+	song.addSectionListener("SYNT", &synth, SectionListener::Save|SectionListener::Load);
 }
 
 
