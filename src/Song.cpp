@@ -14,7 +14,7 @@
 #include <algorithm>
 
 Song::Song()
-	: patternLength(64), sequenceLength(1)
+	: patternLength(64), sequenceLength(1), mNumListeners(0)
 {
 	sequence = new Sequence();
 	patterns = new Pattern[maxPatterns];
@@ -170,7 +170,7 @@ FileSection* Song::pack()
 	
 	for (int i = 0 ; i < mNumListeners ; ++i)
 	{
-		if (mListeners[i].flags & SectionListener::Load)
+		if (mListeners[i].flags & SectionListener::Save)
 		{
 			FileSection *listenerSection = FileSection::createSection(mListeners[i].sectionId);
 			mListeners[i].listener->onFileSectionSave(*listenerSection);
