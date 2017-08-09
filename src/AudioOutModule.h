@@ -8,6 +8,7 @@ class AudioOutModule: public SynthModule
 	
 public:
 	static const int moduleId = 4;
+	static const int maxInstances = 1;
 	static constexpr const char *moduleName = "AudioOut";
 
 	static SynthModule * createModule(ModularSynth& synth);

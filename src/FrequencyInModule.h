@@ -8,6 +8,7 @@ class FrequencyInModule: public SynthModule
 	
 public:
 	static const int moduleId = 3;
+	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "FrequencyIn";
 
 	static SynthModule * createModule(ModularSynth& synth);

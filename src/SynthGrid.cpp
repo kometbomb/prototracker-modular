@@ -203,6 +203,13 @@ bool SynthGrid::pickConnector(int x, int y, const SDL_Rect& area, int& moduleOut
 void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 {
 	setDirty(false);
+	
+	if (mModal != NULL)
+	{
+		//mModal->onDraw(renderer, area);
+		return;
+	}
+	
 	renderer.clearRect(area, Color(0,0,0));
 	
 	const ModularSynth& modularSynth = static_cast<const ModularSynth&>(mSynth.getOscillator(0));
@@ -257,7 +264,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 			moduleArea = getConnectorArea(mToModule, 0, mToInput, area);
 		}
 		
-		drawWire(renderer, mMouseX, mMouseY, moduleArea.x, moduleArea.y, Color(255, 0,0), Color(0,255,0));
+		drawWire(renderer, mMouseX, mMouseY, moduleArea.x + moduleArea.w / 2, moduleArea.y + moduleArea.h / 2, Color(255, 0,0), Color(0,255,0));
 	}
 }
 
@@ -266,7 +273,6 @@ bool SynthGrid::onEvent(SDL_Event& event)
 {
 	if (mModal != NULL)
 	{
-		setDirty(true);
 		return mModal->onEvent(event);
 	}
 	
@@ -328,8 +334,11 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						}
 						else
 						{
-							showNewModuleDialog();
-						}	
+							if (event.button.clicks == 2)
+							{
+								showNewModuleDialog();
+							}
+						}
 
 						mSelectedModule = moduleOut;						
 					}
@@ -338,8 +347,6 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						endMove(moduleOut);
 						mSelectedModule = -1;
 					}
-					
-					
 				}
 				
 				break;
@@ -377,6 +384,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 
 void SynthGrid::showNewModuleDialog()
 {
+	mModuleSelector->populate(static_cast<const ModularSynth&>(mSynth.getOscillator(0)));
 	setModal(mModuleSelector);
 	setFocus(mModuleSelector);
 }

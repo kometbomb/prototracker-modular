@@ -5,7 +5,7 @@
 #include "FrequencyInModule.h"
 #include <cstdlib>
 
-#define REGISTER(module) registerModule(module::moduleId, module::moduleName, &module::createModule)
+#define REGISTER(module) registerModule(module::moduleId, module::moduleName, &module::createModule, module::maxInstances)
 
 ModuleFactory::ModuleFactory()
 {
@@ -16,9 +16,9 @@ ModuleFactory::ModuleFactory()
 }
 
 
-void ModuleFactory::registerModule(int id, const char *name, SynthModule::CreateModuleFunc createModule)
+void ModuleFactory::registerModule(int id, const char *name, SynthModule::CreateModuleFunc createModule, int maxInstances)
 {
-	mModules.push_back(Module(id, name, createModule));
+	mModules.push_back(Module(id, name, createModule, maxInstances));
 }
 
 

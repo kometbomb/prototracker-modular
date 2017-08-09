@@ -1,4 +1,5 @@
 #include "ModuleSelector.h"
+#include "ModularSynth.h"
 #include "Color.h"
 #include "Renderer.h"
 #include "Label.h"
@@ -7,11 +8,6 @@
 ModuleSelector::ModuleSelector(EditorState& editorState)
 	: Editor(editorState), mSelectedItem(0)
 {
-	ModuleFactory moduleFactory;
-	
-	for (int i = 0 ; i < moduleFactory.getNumModules() ; ++i)
-		mModules.push_back(ModuleInfo(moduleFactory.getModuleInfo(i).id, moduleFactory.getModuleInfo(i).name));
-	
 	mLabel = new Label(editorState);
 	mLabel->setColor(Color(0, 0, 0));
 	mLabel->setBackground(Color(255, 255, 255));
@@ -23,6 +19,41 @@ ModuleSelector::ModuleSelector(EditorState& editorState)
 ModuleSelector::~ModuleSelector()
 {
 	delete mLabel;
+}
+
+
+void ModuleSelector::populate(const ModularSynth& modularSynth)
+{
+	mSelectedItem = 0;
+	mModules.clear();
+	
+	ModuleFactory moduleFactory;
+	
+	for (int i = 0 ; i < moduleFactory.getNumModules() ; ++i)
+	{
+		const ModuleFactory::Module& info = moduleFactory.getModuleInfo(i);
+		
+		// Check if max number of instances for this SynthModule type
+		// are limited
+		
+		if (info.maxInstances != -1)
+		{
+			int count = 0;
+			for (int i = 0 ; i < ModularSynth::maxModules ; ++i)
+			{
+				const SynthModule *module = modularSynth.getModule(i);
+				if (module != NULL && module->getSynthId() == info.id)
+					++count;
+			}
+				
+			// Don't add in the list (should probably add but disabled)
+			
+			if (count >= info.maxInstances)
+				continue;
+		}
+		
+		mModules.push_back(ModuleInfo(info.id, moduleFactory.getModuleInfo(i).name));
+	}
 }
 	
 

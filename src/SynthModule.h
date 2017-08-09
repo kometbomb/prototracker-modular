@@ -21,6 +21,8 @@ protected:
 	SynthModule(ModularSynth& synth, int synthId, int numInputs, int numOutputs, int numParams);
 	
 public:
+
+	static const int maxInstances = -1;
 	
 	virtual ~SynthModule();
 	

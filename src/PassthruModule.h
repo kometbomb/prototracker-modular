@@ -8,6 +8,7 @@ class PassthruModule: public SynthModule
 	
 public:
 	static const int moduleId = 2;
+	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "Passthru";
 
 	static SynthModule * createModule(ModularSynth& synth);

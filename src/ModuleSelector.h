@@ -5,6 +5,7 @@
 #include "ModuleFactory.h"
 
 struct Label;
+struct ModularSynth;
 
 class ModuleSelector: public Editor
 {
@@ -32,6 +33,8 @@ public:
 	/* Set dialog title
 	 */
 	void setTitle(const char *title);
+	
+	void populate(const ModularSynth& modularSynth);
 	
 	int getSelectedModuleId() const;
 	
