@@ -11,12 +11,14 @@ class ModularSynth: public IOscillator
 public:
 	static const int maxModules = 16;
 	static const int maxConnections = 64;
+	static const int outputResolution = 1000;
 
 private:
 	SynthModule *mModules[maxModules];
-	SynthModule *mInputModule, *mOutputModule, *mOscillatorModule;
 	SynthConnection mConnections[maxConnections];
 	int mNumConnections;
+	float mFrequency, mVolume, mOutput[2];
+	bool mNoteTrigger;
 	
 	void cycle();
 	
@@ -37,8 +39,14 @@ public:
 	
 	void clear();
 	
+	// Disk ops
 	void writeSynth(FileSection& section);
 	bool readSynth(const FileSection& section, int& offset);
+	
+	// For communication with SynthModules
+	float getFrequency() const;
+	bool getNoteTrigger() const;
+	void setMasterOutput(int channel, float output);
 
 	// IOscillator virtual methods
 	virtual void triggerNote();

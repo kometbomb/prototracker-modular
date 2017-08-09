@@ -1,21 +1,24 @@
 #pragma once
 
+struct ModularSynth;
+
 class SynthModule
 {
 public:
-	typedef SynthModule* (*CreateModuleFunc)(void); 
+	typedef SynthModule* (*CreateModuleFunc)(ModularSynth&); 
 
 	static const int maxInputs = 8;
 	static const int maxOutputs = 8;
 	static const int maxParams = 8;
 	
 protected:
+	ModularSynth& mSynth;
 	const int mSynthId;
 	int mNumInputs, mNumOutputs, mNumParams;
 	float mInputs[maxInputs], mOutputs[maxOutputs], mParams[maxParams];
 
 	void setOutput(int output, float value);
-	SynthModule(int synthId, int numInputs, int numOutputs, int numParams);
+	SynthModule(ModularSynth& synth, int synthId, int numInputs, int numOutputs, int numParams);
 	
 public:
 	

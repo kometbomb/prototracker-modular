@@ -4,13 +4,13 @@
 
 class PassthruModule: public SynthModule
 {
-	PassthruModule();
+	PassthruModule(ModularSynth& synth);
 	
 public:
 	static const int moduleId = 2;
 	static constexpr const char *moduleName = "Passthru";
 
-	static SynthModule * createModule();
+	static SynthModule * createModule(ModularSynth& synth);
 	
 	virtual void cycle();
 	

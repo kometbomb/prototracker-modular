@@ -2,16 +2,16 @@
 
 #include "SynthModule.h"
 
-class OscillatorModule: public SynthModule
+class AudioOutModule: public SynthModule
 {
-	OscillatorModule(ModularSynth& synth);
+	AudioOutModule(ModularSynth& synth);
 	
-	float mAccumulator;
 public:
-	static const int moduleId = 1;
-	static constexpr const char *moduleName = "Oscillator";
+	static const int moduleId = 4;
+	static constexpr const char *moduleName = "AudioOut";
 
 	static SynthModule * createModule(ModularSynth& synth);
+	
 	virtual void cycle();
 	
 	virtual const char * getName() const;

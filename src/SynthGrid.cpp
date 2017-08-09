@@ -19,7 +19,7 @@ SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth)
 }
 
 
-void SynthGrid::drawWire(Renderer& renderer, int x1, int y1, int x2, int y2, const Color& color) const
+void SynthGrid::drawWire(Renderer& renderer, int x1, int y1, int x2, int y2, const Color& color1, const Color& color2) const
 {
 	const int spacing = 8;
 	int dx = x1 - x2, dy = y1 - y2;
@@ -36,7 +36,7 @@ void SynthGrid::drawWire(Renderer& renderer, int x1, int y1, int x2, int y2, con
 		int y = (y2 - y1) * i / d + y1 + sin((float)i/d * M_PI) * 16;
 		
 		renderer.renderLine(px, py, x, y + 1, Color(0,0,0));
-		renderer.renderLine(px, py, x, y, color);
+		renderer.renderLine(px, py, x, y, i % 2 ? color1 : color2);
 		
 		px = x;
 		py = y;
@@ -242,7 +242,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		const SynthConnection& connection = modularSynth.getConnection(i);
 		SDL_Rect fromModuleArea = getConnectorArea(connection.fromModule, 1, connection.fromOutput, area);
 		SDL_Rect toModuleArea = getConnectorArea(connection.toModule, 0, connection.toInput, area);
-		drawWire(renderer, fromModuleArea.x + fromModuleArea.w / 2, fromModuleArea.y + fromModuleArea.h / 2, toModuleArea.x + toModuleArea.w / 2, toModuleArea.y + toModuleArea.h / 2, Color(255,0,0));
+		drawWire(renderer, fromModuleArea.x + fromModuleArea.w / 2, fromModuleArea.y + fromModuleArea.h / 2, toModuleArea.x + toModuleArea.w / 2, toModuleArea.y + toModuleArea.h / 2, Color(255,0,0), Color(0,255,0));
 	}
 	
 	if (mMode == CONNECTING_MODULE)
@@ -257,7 +257,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 			moduleArea = getConnectorArea(mToModule, 0, mToInput, area);
 		}
 		
-		drawWire(renderer, mMouseX, mMouseY, moduleArea.x, moduleArea.y, Color(255, 0,0));
+		drawWire(renderer, mMouseX, mMouseY, moduleArea.x, moduleArea.y, Color(255, 0,0), Color(0,255,0));
 	}
 }
 

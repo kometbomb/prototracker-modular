@@ -4,6 +4,8 @@
 #include "Editor.h"
 #include "ModuleFactory.h"
 
+struct Label;
+
 class ModuleSelector: public Editor
 {
 	struct ModuleInfo {
@@ -14,6 +16,9 @@ class ModuleSelector: public Editor
 	};
 	std::vector<ModuleInfo> mModules;
 	int mSelectedItem;
+	static const int titleSize = 256;
+	char mTitle[titleSize];
+	Label *mLabel;
 	
 	void renderItem(Renderer& renderer, const SDL_Rect& area, const ModuleInfo& item, bool isSelected);
 	void accept(bool isFinal = false);
@@ -23,6 +28,10 @@ class ModuleSelector: public Editor
 public:
 	ModuleSelector(EditorState& editorState);
 	virtual ~ModuleSelector();
+	
+	/* Set dialog title
+	 */
+	void setTitle(const char *title);
 	
 	int getSelectedModuleId() const;
 	

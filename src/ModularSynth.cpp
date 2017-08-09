@@ -3,28 +3,17 @@
 #include "Sample.h"
 #include "FileSection.h"
 #include "ModuleFactory.h"
+#include "ITrackState.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
 
 ModularSynth::ModularSynth()
-	:mNumConnections(0)
+	:mNumConnections(0), mFrequency(0), mVolume(0), mNoteTrigger(false)
 {
 	for (int i = 0 ; i < maxModules ; ++i)
 		mModules[i] = NULL;
-	
-	ModuleFactory moduleFactory;
-	
-	mInputModule = moduleFactory.createModule(2);
-	mOutputModule = moduleFactory.createModule(2);
-	mOscillatorModule = moduleFactory.createModule(1);
-	mModules[0] = mInputModule;
-	mModules[5] = mOscillatorModule;
-	mModules[11] = mOutputModule;
-	
-	connectModules(0, 5, 0, 0);
-	connectModules(5, 11, 0, 0);
 }
 
 
@@ -41,7 +30,7 @@ bool ModularSynth::addModule(int index, int moduleId)
 	if (mModules[index] != NULL)
 		return false;
 	
-	mModules[index] = moduleFactory.createModule(moduleId);
+	mModules[index] = moduleFactory.createModule(moduleId, *this);
 	
 	return true;
 }
@@ -51,6 +40,17 @@ bool ModularSynth::connectModules(int fromModule, int toModule, int fromOutput, 
 {
 	if (mNumConnections >= maxConnections)
 		return false;
+	
+	for (int i = 0 ; i < mNumConnections ; ++i)
+	{
+		SynthConnection& connection = mConnections[i];
+		
+		if (connection.toModule == toModule && connection.toInput == toInput)
+			return false;
+		
+		if (connection.fromModule == fromModule && connection.fromOutput == fromOutput)
+			return false;
+	}
 	
 	SynthConnection& connection = mConnections[mNumConnections];
 	connection.fromModule = fromModule;
@@ -111,22 +111,28 @@ void ModularSynth::cycle()
 	for (int i = 0 ; i < maxModules ; ++i)
 		if (mModules[i] != NULL)
 			mModules[i]->cycle();
+	
+	// After all modules have had their change to see if note was triggered,
+	// reset the status
+	mNoteTrigger = false;
 }
 
 
 void ModularSynth::triggerNote()
 {
+	mNoteTrigger = true;
 }
 
 
 void ModularSynth::setFrequency(float frequency)
 {
-	mInputModule->setInput(0, frequency);
+	mFrequency = frequency;
 }
 
 
 void ModularSynth::setVolume(int volume)
 {
+	mVolume = static_cast<float>(volume) / ITrackState::maxVolume;
 }
 
 
@@ -137,12 +143,17 @@ void ModularSynth::update(int numSamples)
 
 void ModularSynth::render(Sample16 *buffer, int numSamples, int offset)
 {
-	for (int i = offset ; i < numSamples ; ++i)
+	// No update or output if volume is zero, meaning the channel is muted
+	if (mVolume > 0.0f)
 	{
-		cycle();
-		
-		buffer[i].left += mOutputModule->getOutput(0) * 1000;
-		buffer[i].right += mOutputModule->getOutput(0) * 1000;
+		for (int i = offset ; i < numSamples ; ++i)
+		{
+			cycle();
+			
+			// Only mono output for now
+			buffer[i].left += mOutput[0] * outputResolution;
+			buffer[i].right += mOutput[0] * outputResolution;
+		}
 	}
 }
 
@@ -235,7 +246,7 @@ bool ModularSynth::readSynth(const FileSection& section, int& offset)
 		
 		if (synthId != 0)
 		{
-			SynthModule *module = moduleFactory.createModule(synthId);
+			SynthModule *module = moduleFactory.createModule(synthId, *this);
 			
 			if (!module)
 				return false;
@@ -343,4 +354,25 @@ void ModularSynth::clear()
 	}
 
 	mNumConnections = 0;	
+}
+
+
+float ModularSynth::getFrequency() const
+{
+	return mFrequency;
+}
+
+
+void ModularSynth::setMasterOutput(int channel, float output)
+{
+	mOutput[channel] = output;
+}
+	
+	
+bool ModularSynth::getNoteTrigger() const
+{
+	if (mNoteTrigger) 
+		return 1.0f;
+	else
+		return 0.0f;
 }

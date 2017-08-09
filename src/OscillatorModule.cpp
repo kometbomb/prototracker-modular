@@ -1,8 +1,8 @@
 #include "OscillatorModule.h"
 #include <cmath>
 
-OscillatorModule::OscillatorModule()
-	:SynthModule(moduleId, 1, 1, 0), mAccumulator(0.0f)
+OscillatorModule::OscillatorModule(ModularSynth& synth)
+	:SynthModule(synth, moduleId, 1, 1, 0), mAccumulator(0.0f)
 {
 }
 
@@ -32,7 +32,7 @@ const char * OscillatorModule::getName() const
 }
 
 
-SynthModule * OscillatorModule::createModule()
+SynthModule * OscillatorModule::createModule(ModularSynth& synth)
 {
-	return new OscillatorModule();
+	return new OscillatorModule(synth);
 }

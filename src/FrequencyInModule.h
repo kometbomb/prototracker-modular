@@ -2,16 +2,16 @@
 
 #include "SynthModule.h"
 
-class OscillatorModule: public SynthModule
+class FrequencyInModule: public SynthModule
 {
-	OscillatorModule(ModularSynth& synth);
+	FrequencyInModule(ModularSynth& synth);
 	
-	float mAccumulator;
 public:
-	static const int moduleId = 1;
-	static constexpr const char *moduleName = "Oscillator";
+	static const int moduleId = 3;
+	static constexpr const char *moduleName = "FrequencyIn";
 
 	static SynthModule * createModule(ModularSynth& synth);
+	
 	virtual void cycle();
 	
 	virtual const char * getName() const;

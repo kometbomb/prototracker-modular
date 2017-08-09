@@ -1,7 +1,7 @@
 #include "SynthModule.h"
 
-SynthModule::SynthModule(int synthId, int numInputs, int numOutputs, int numParams)
-	: mSynthId(synthId), mNumInputs(numInputs), mNumOutputs(numOutputs), mNumParams(numParams)
+SynthModule::SynthModule(ModularSynth& synth, int synthId, int numInputs, int numOutputs, int numParams)
+	: mSynth(synth), mSynthId(synthId), mNumInputs(numInputs), mNumOutputs(numOutputs), mNumParams(numParams)
 {
 }
 

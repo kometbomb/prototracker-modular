@@ -1,6 +1,8 @@
 #include "ModuleSelector.h"
 #include "Color.h"
 #include "Renderer.h"
+#include "Label.h"
+#include <cstring>
 
 ModuleSelector::ModuleSelector(EditorState& editorState)
 	: Editor(editorState), mSelectedItem(0)
@@ -9,11 +11,18 @@ ModuleSelector::ModuleSelector(EditorState& editorState)
 	
 	for (int i = 0 ; i < moduleFactory.getNumModules() ; ++i)
 		mModules.push_back(ModuleInfo(moduleFactory.getModuleInfo(i).id, moduleFactory.getModuleInfo(i).name));
+	
+	mLabel = new Label(editorState);
+	mLabel->setColor(Color(0, 0, 0));
+	mLabel->setBackground(Color(255, 255, 255));
+	addChild(mLabel, 0, 0, 140, 8);
+	setTitle("Add module");
 }
 
 
 ModuleSelector::~ModuleSelector()
 {
+	delete mLabel;
 }
 	
 
@@ -134,3 +143,10 @@ void ModuleSelector::selectItem(int index)
 	setDirty(true);
 }
 
+
+void ModuleSelector::setTitle(const char *title)
+{
+	strncpy(mTitle, title, titleSize);
+	mLabel->setText(mTitle);
+	setModal(NULL);
+}

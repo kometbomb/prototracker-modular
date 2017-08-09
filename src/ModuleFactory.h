@@ -4,6 +4,8 @@
 
 #include "SynthModule.h"
 
+struct ModularSynth;
+
 class ModuleFactory
 {
 public:
@@ -21,7 +23,7 @@ private:
 public:
 	ModuleFactory();
 
-	SynthModule* createModule(int id) const;
+	SynthModule* createModule(int id, ModularSynth& synth) const;
 	int getNumModules() const;
 	const Module& getModuleInfo(int index) const;
 };
