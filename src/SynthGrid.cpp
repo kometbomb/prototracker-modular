@@ -307,8 +307,10 @@ bool SynthGrid::onEvent(SDL_Event& event)
 							mSelectedModule = -1;
 						}
 					}
-					else if (mMode == IDLE)
+					else if (mMode == IDLE || mMode == MOVING_MODULE)
 					{
+						// Abort moving if clicking on connectors 
+						
 						if (connectorType == 0)
 						{
 							startConnect(-1, moduleOut, -1, connector);
@@ -357,19 +359,27 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					// Abort connecting/moving
 					mMode = IDLE;
 				}
-				else if (pickModule(event.button.x, event.button.y, mThisArea, moduleOut, true))
-				{
-					ModularSynth& modularSynth = static_cast<ModularSynth&>(mSynth.getOscillator(0));
-					modularSynth.removeModule(moduleOut);
-				}					
-					
 				break;
 		}
 		
 		return true;
 	}
-	
-	if (event.type == SDL_MOUSEMOTION)
+	else if (event.type == SDL_KEYDOWN)
+	{
+		switch (event.key.keysym.sym)
+		{
+			case SDLK_DELETE:
+				ModularSynth& modularSynth = static_cast<ModularSynth&>(mSynth.getOscillator(0));
+				if (modularSynth.getModule(mSelectedModule) != NULL)
+				{
+					modularSynth.removeModule(mSelectedModule);
+					mMode = IDLE;
+				}
+									
+				break;
+		}
+	}
+	else if (event.type == SDL_MOUSEMOTION)
 	{
 		mMouseX = event.motion.x;
 		mMouseY = event.motion.y;
