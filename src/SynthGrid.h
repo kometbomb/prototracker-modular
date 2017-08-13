@@ -33,6 +33,9 @@ class SynthGrid: public Editor
 	int mToModule, mToInput;
 	int mMouseX, mMouseY;
 	
+	ModularSynth& getModularSynth();
+	const ModularSynth& getModularSynth() const;
+	
 	bool pickConnector(int x, int y, const SDL_Rect& area, int& module, int& connectorType, int& connector);
 	bool pickModule(int x, int y, const SDL_Rect& area, int& module, bool includeFree = false);
 	

@@ -46,11 +46,9 @@ void SynthGrid::drawWire(Renderer& renderer, int x1, int y1, int x2, int y2, con
 
 void SynthGrid::startMove(int module)
 {
-	const ModularSynth& modularSynth = static_cast<const ModularSynth&>(mSynth.getOscillator(0));
-	
 	// Don't start moving from empty slot
 	
-	if (modularSynth.getModule(module) == NULL)
+	if (getModularSynth().getModule(module) == NULL)
 		return;
 	
 	mMode = MOVING_MODULE;
@@ -65,9 +63,7 @@ void SynthGrid::endMove(int targetModule)
 	
 	mMode = IDLE;
 	
-	ModularSynth& modularSynth = static_cast<ModularSynth&>(mSynth.getOscillator(0));
-	
-	modularSynth.swapModules(mFromModule, targetModule);
+	getModularSynth().swapModules(mFromModule, targetModule);
 }
 	
 
@@ -103,8 +99,7 @@ void SynthGrid::endConnect(int module, int connector)
 
 SDL_Rect SynthGrid::getConnectorArea(int moduleIndex, int type, int connectorIndex, const SDL_Rect& parent) const
 {
-	const ModularSynth& modularSynth = static_cast<const ModularSynth&>(mSynth.getOscillator(0));
-	const SynthModule* module = modularSynth.getModule(moduleIndex);
+	const SynthModule* module = getModularSynth().getModule(moduleIndex);
 	const int connectorSize = 8;
 	
 	SDL_Rect area = {0,0,connectorSize,connectorSize};
@@ -145,7 +140,7 @@ SDL_Rect SynthGrid::getModuleArea(int index, const SDL_Rect& parent) const
 
 bool SynthGrid::pickModule(int x, int y, const SDL_Rect& area, int& moduleOut, bool includeEmpty)
 {
-	const ModularSynth& modularSynth = static_cast<const ModularSynth&>(mSynth.getOscillator(0));
+	const ModularSynth& modularSynth = getModularSynth();
 	
 	for (int index = 0 ; index < ModularSynth::maxModules ; ++index)
 	{
@@ -173,7 +168,7 @@ bool SynthGrid::pickConnector(int x, int y, const SDL_Rect& area, int& moduleOut
 	if (!pickModule(x, y, area, moduleOut))
 		return false;
 	
-	const ModularSynth& modularSynth = static_cast<const ModularSynth&>(mSynth.getOscillator(0));
+	const ModularSynth& modularSynth = getModularSynth();
 	const SynthModule *module = modularSynth.getModule(moduleOut);
 	SDL_Point point = {x,y};
 	
@@ -212,7 +207,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 	
 	renderer.clearRect(area, Color(0,0,0));
 	
-	const ModularSynth& modularSynth = static_cast<const ModularSynth&>(mSynth.getOscillator(0));
+	const ModularSynth& modularSynth = getModularSynth();
 	
 	for (int index = 0 ; index < ModularSynth::maxModules ; ++index)
 	{
@@ -281,8 +276,8 @@ bool SynthGrid::onEvent(SDL_Event& event)
 		// Editor base class should probably do this when clicked
 		setFocus(this);
 
-		mMouseX = event.button.x;
-		mMouseY = event.button.y;
+		mMouseX = event.button.x / SCALE;
+		mMouseY = event.button.y / SCALE;
 		
 		int moduleOut, connectorType, connector;
 		
@@ -294,9 +289,9 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				// depending on if the user clicks the connector or just the module
 				// area.
 				
-				if (pickConnector(event.button.x, event.button.y, mThisArea, moduleOut, connectorType, connector))
+				if (pickConnector(event.button.x / SCALE, event.button.y / SCALE, mThisArea, moduleOut, connectorType, connector))
 				{
-					ModularSynth& modularSynth = static_cast<ModularSynth&>(mSynth.getOscillator(0));
+					ModularSynth& modularSynth = getModularSynth();
 					
 					if (mMode == CONNECTING_MODULE)
 					{
@@ -325,11 +320,11 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						}
 					}
 				}
-				else if (pickModule(event.button.x, event.button.y, mThisArea, moduleOut, true))
+				else if (pickModule(event.button.x / SCALE, event.button.y / SCALE, mThisArea, moduleOut, true))
 				{
 					if (mMode == IDLE)
 					{
-						const ModularSynth& modularSynth = static_cast<const ModularSynth&>(mSynth.getOscillator(0));
+						const ModularSynth& modularSynth = getModularSynth();
 						if (modularSynth.getModule(moduleOut) != NULL)
 						{
 							startMove(moduleOut);
@@ -369,7 +364,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 		switch (event.key.keysym.sym)
 		{
 			case SDLK_DELETE:
-				ModularSynth& modularSynth = static_cast<ModularSynth&>(mSynth.getOscillator(0));
+				ModularSynth& modularSynth = getModularSynth();
 				if (modularSynth.getModule(mSelectedModule) != NULL)
 				{
 					modularSynth.removeModule(mSelectedModule);
@@ -381,8 +376,8 @@ bool SynthGrid::onEvent(SDL_Event& event)
 	}
 	else if (event.type == SDL_MOUSEMOTION)
 	{
-		mMouseX = event.motion.x;
-		mMouseY = event.motion.y;
+		mMouseX = event.motion.x / SCALE;
+		mMouseY = event.motion.y / SCALE;
 		
 		if (mMode == CONNECTING_MODULE)
 			setDirty(true);
@@ -394,7 +389,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 
 void SynthGrid::showNewModuleDialog()
 {
-	mModuleSelector->populate(static_cast<const ModularSynth&>(mSynth.getOscillator(0)));
+	mModuleSelector->populate(getModularSynth());
 	setModal(mModuleSelector);
 	setFocus(mModuleSelector);
 }
@@ -404,9 +399,20 @@ void SynthGrid::onFileSelectorEvent(const Editor& moduleSelector, bool accept)
 {
 	if (accept)
 	{
-		ModularSynth& modularSynth = static_cast<ModularSynth&>(mSynth.getOscillator(0));
-		modularSynth.addModule(mSelectedModule, static_cast<const ModuleSelector&>(moduleSelector).getSelectedModuleId());
+		getModularSynth().addModule(mSelectedModule, static_cast<const ModuleSelector&>(moduleSelector).getSelectedModuleId());
 	}
 		
 	setModal(NULL);
+}
+
+
+ModularSynth& SynthGrid::getModularSynth()
+{
+	return static_cast<ModularSynth&>(mSynth.getOscillator(0));
+}
+
+
+const ModularSynth& SynthGrid::getModularSynth() const
+{
+	return static_cast<const ModularSynth&>(mSynth.getOscillator(0));
 }
