@@ -234,7 +234,6 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 	}
 	
 	renderer.clearRect(area, Color(0,0,0));
-	renderer.setClip(area);
 	
 	const ModularSynth& modularSynth = getModularSynth();
 	
@@ -245,6 +244,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		if (module != NULL)
 		{
 			SDL_Rect moduleArea = getModuleArea(index, area);
+			renderer.setClip(moduleArea);
 			renderer.drawRect(moduleArea, mSelectedModule == index ? Color(255,0,0) : Color(255,255,255));
 			
 			SDL_Rect textArea = {moduleArea.x + 2, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
@@ -266,6 +266,8 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 			}
 		}
 	}
+	
+	renderer.setClip(area);
 		
 	for (int i = 0 ; i < modularSynth.getNumConnections() ; ++i)
 	{
@@ -288,6 +290,17 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		}
 		
 		drawWire(renderer, mMouseX, mMouseY, moduleArea.x + moduleArea.w / 2, moduleArea.y + moduleArea.h / 2, Color(255, 0,0), Color(0,255,0));
+	}
+	
+	if (mMode == MOVING_MODULE)
+	{
+		int moduleOut;
+		
+		if (pickModule(mMouseX, mMouseY, area, moduleOut, true))
+		{
+			SDL_Rect moduleArea = getModuleArea(moduleOut, area);
+			renderer.drawRect(moduleArea, Color(128,128,128));
+		}
 	}
 }
 
