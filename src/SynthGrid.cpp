@@ -325,9 +325,11 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					{
 						if ((connectorType == 0 && mToModule == -1) || (connectorType == 1 && mToModule != -1))
 						{
-							endConnect(moduleOut, connector);
-							modularSynth.connectModules(mFromModule, mToModule, mFromOutput, mToInput);
-							mSelectedModule = -1;
+							if (modularSynth.connectModules(mFromModule != -1 ? mFromModule : moduleOut, mToModule != -1 ? mToModule : moduleOut, mFromOutput != -1 ? mFromOutput : connector, mToInput != -1 ? mToInput : connector))
+							{
+								endConnect(moduleOut, connector);
+								mSelectedModule = -1;
+							}
 						}
 					}
 					else if (mMode == IDLE || mMode == MOVING_MODULE)
