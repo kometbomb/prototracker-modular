@@ -7,6 +7,7 @@
 #include "SplitModule.h"
 #include "AudioOutModule.h"
 #include "FrequencyInModule.h"
+#include "TriggerNoteModule.h"
 #include <cstdlib>
 
 #define REGISTER(module) registerModule(module::moduleId, module::moduleName, &module::createModule, module::maxInstances)
@@ -20,6 +21,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(ConstModule);
 	REGISTER(SplitModule);
 	REGISTER(FrequencyInModule);
+	REGISTER(TriggerNoteModule);
 	REGISTER(AudioOutModule);
 }
 
