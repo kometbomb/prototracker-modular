@@ -9,8 +9,8 @@ struct FileSection;
 class ModularSynth: public IOscillator
 {
 public:
-	static const int maxModules = 16;
-	static const int maxConnections = 64;
+	static const int maxModules = 32;
+	static const int maxConnections = 128;
 	static const int outputResolution = 1000;
 
 private:
