@@ -74,6 +74,30 @@ void SynthGrid::startConnect(int fromModule, int toModule, int fromOutput, int t
 	mToModule = toModule;
 	mFromOutput = fromOutput; 
 	mToInput = toInput;
+	
+	const ModularSynth& modularSynth = getModularSynth();
+	
+	for (int i = 0 ; i < modularSynth.getNumConnections() ; ++i)
+	{
+		const SynthConnection& connection = modularSynth.getConnection(i);
+		
+		if (connection.fromModule == fromModule && connection.fromOutput == fromOutput)
+		{
+			mFromModule = -1;
+			mFromOutput = -1;
+			mToModule = connection.toModule;
+			mToInput = connection.toInput;
+			break;
+		}
+		else if (connection.toModule == toModule && connection.toInput == toInput)
+		{
+			mFromModule = connection.fromModule;
+			mFromOutput = connection.fromOutput;
+			mToModule = -1;
+			mToInput = -1;
+			break;
+		}
+	}
 }
 
 
