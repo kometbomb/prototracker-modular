@@ -4,6 +4,7 @@
 #include "AddModule.h"
 #include "MulModule.h"
 #include "ConstModule.h"
+#include "SplitModule.h"
 #include "AudioOutModule.h"
 #include "FrequencyInModule.h"
 #include <cstdlib>
@@ -17,6 +18,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(AddModule);
 	REGISTER(MulModule);
 	REGISTER(ConstModule);
+	REGISTER(SplitModule);
 	REGISTER(FrequencyInModule);
 	REGISTER(AudioOutModule);
 }
