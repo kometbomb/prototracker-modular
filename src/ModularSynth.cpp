@@ -94,6 +94,10 @@ void ModularSynth::removeConnection(int index)
 {
 	if (index < mNumConnections)
 	{
+		SynthConnection& connection = mConnections[index];
+		if (mModules[connection.toModule] != NULL)
+			mModules[connection.toModule]->setInput(connection.toInput, 0.0f);
+		
 		mNumConnections--;
 		memmove(&mConnections[index], &mConnections[index + 1], sizeof(mConnections[index]) * (mNumConnections - index));
 	}
