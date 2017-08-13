@@ -27,6 +27,7 @@ public:
 	virtual ~ModularSynth();
 	
 	const SynthModule* getModule(int index) const;
+	SynthModule* getModule(int index);
 	const SynthConnection& getConnection(int index) const;
 	int getNumConnections() const;
 	

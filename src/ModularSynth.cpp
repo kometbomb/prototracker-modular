@@ -31,6 +31,7 @@ bool ModularSynth::addModule(int index, int moduleId)
 		return false;
 	
 	mModules[index] = moduleFactory.createModule(moduleId, *this);
+	mModules[index]->onLoaded();
 	
 	return true;
 }
@@ -168,6 +169,12 @@ const SynthModule* ModularSynth::getModule(int index) const
 }
 
 
+SynthModule* ModularSynth::getModule(int index)
+{
+	return mModules[index];
+}
+
+
 const SynthConnection& ModularSynth::getConnection(int index) const
 {
 	return mConnections[index];
@@ -262,6 +269,7 @@ bool ModularSynth::readSynth(const FileSection& section, int& offset)
 			}
 			
 			mModules[i] = module;
+			module->onLoaded();
 		}
 	}
 	

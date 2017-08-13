@@ -38,6 +38,9 @@ public:
 	int getNumOutputs() const;
 	int getNumParams() const;
 	
+	virtual void onLoaded();
+	virtual void onDial(int delta);
+	
 	virtual const char * getName() const = 0;
 	virtual const char * getInputName(int input) const = 0;
 	virtual const char * getOutputName(int output) const = 0;

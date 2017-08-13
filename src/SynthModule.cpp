@@ -8,6 +8,9 @@ SynthModule::SynthModule(ModularSynth& synth, int synthId, int numInputs, int nu
 	
 	for (int i = 0 ; i < mNumOutputs ; ++i)
 		mOutputs[i] = 0.0f;
+	
+	for (int i = 0 ; i < mNumParams ; ++i)
+		mParams[i] = 0.0f;
 }
 
 
@@ -73,5 +76,15 @@ int SynthModule::getNumOutputs() const
 int SynthModule::getNumParams() const
 {
 	return mNumParams;
+}
+	
+
+void SynthModule::onDial(int delta)
+{
+}
+
+
+void SynthModule::onLoaded()
+{
 }
 	
