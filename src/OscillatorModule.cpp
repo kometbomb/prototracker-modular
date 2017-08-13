@@ -2,12 +2,17 @@
 #include <cmath>
 
 OscillatorModule::OscillatorModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 1, 1, 0), mAccumulator(0.0f)
+	:SynthModule(synth, moduleId, 2, 1, 0), mAccumulator(0.0f), mPreviousSync(0.0f)
 {
 }
 
 void OscillatorModule::cycle()
 {
+	if (getInput(1) > 0.0f && mPreviousSync <= 0.0f)
+		mAccumulator = 0;
+	
+	mPreviousSync = getInput(1);
+	
 	mAccumulator = fmod(mAccumulator + getInput(0), 1.0f);
 	setOutput(0, sin(mAccumulator * (3.14157 * 2)));
 }
@@ -16,7 +21,8 @@ void OscillatorModule::cycle()
 
 const char * OscillatorModule::getInputName(int input) const 
 {
-	return "Frequency";
+	static const char *names[] = {"Frequency", "Sync", "C"};
+	return names[input];
 }
 
 

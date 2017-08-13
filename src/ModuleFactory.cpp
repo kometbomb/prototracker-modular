@@ -1,6 +1,9 @@
 #include "ModuleFactory.h"
 #include "OscillatorModule.h"
 #include "PassthruModule.h"
+#include "AddModule.h"
+#include "MulModule.h"
+#include "ConstModule.h"
 #include "AudioOutModule.h"
 #include "FrequencyInModule.h"
 #include <cstdlib>
@@ -11,6 +14,9 @@ ModuleFactory::ModuleFactory()
 {
 	REGISTER(OscillatorModule);
 	REGISTER(PassthruModule);
+	REGISTER(AddModule);
+	REGISTER(MulModule);
+	REGISTER(ConstModule);
 	REGISTER(FrequencyInModule);
 	REGISTER(AudioOutModule);
 }

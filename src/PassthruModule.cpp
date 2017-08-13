@@ -5,6 +5,7 @@ PassthruModule::PassthruModule(ModularSynth& synth)
 {
 }
 
+
 void PassthruModule::cycle()
 {
 	setOutput(0, getInput(0));
