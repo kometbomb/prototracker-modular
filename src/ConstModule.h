@@ -4,6 +4,9 @@
 
 class ConstModule: public SynthModule
 {
+	float mValue;
+	char mLabel[50];
+	
 	ConstModule(ModularSynth& synth);
 	
 public:
@@ -14,6 +17,9 @@ public:
 	static SynthModule * createModule(ModularSynth& synth);
 	
 	virtual void cycle();
+	
+	virtual void onLoaded();
+	virtual void onDial(int delta);
 	
 	virtual const char * getName() const;
 	virtual const char * getInputName(int input) const;

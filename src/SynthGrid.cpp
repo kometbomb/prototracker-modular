@@ -234,6 +234,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 	}
 	
 	renderer.clearRect(area, Color(0,0,0));
+	renderer.setClip(area);
 	
 	const ModularSynth& modularSynth = getModularSynth();
 	
@@ -247,7 +248,6 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 			renderer.drawRect(moduleArea, mSelectedModule == index ? Color(255,0,0) : Color(255,255,255));
 			
 			SDL_Rect textArea = {moduleArea.x + 2, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
-			
 			renderer.renderText(textArea, Color(255,255,255), module->getName());
 			
 			for (int connectorType = 0 ; connectorType <= 1 ; connectorType++)
@@ -369,11 +369,6 @@ bool SynthGrid::onEvent(SDL_Event& event)
 
 						mSelectedModule = moduleOut;						
 					}
-					else if (mMode == MOVING_MODULE)
-					{
-						endMove(moduleOut);
-						mSelectedModule = -1;
-					}
 				}
 				
 				break;
@@ -388,6 +383,31 @@ bool SynthGrid::onEvent(SDL_Event& event)
 		}
 		
 		return true;
+	}
+	else if (event.type == SDL_MOUSEBUTTONUP)
+	{
+		if (mMode == MOVING_MODULE)
+		{
+			int moduleOut;
+			if (pickModule(event.button.x / SCALE, event.button.y / SCALE, mThisArea, moduleOut, true) && moduleOut != mFromModule)
+			{
+				endMove(moduleOut);
+				mSelectedModule = -1;
+			}
+			else
+			{
+				mMode = IDLE;
+			}	
+		}
+	}		
+	else if (event.type == SDL_MOUSEWHEEL)
+	{
+		int moduleOut;
+		
+		if (pickModule(mMouseX, mMouseY, mThisArea, moduleOut, false))
+		{
+			getModularSynth().getModule(moduleOut)->onDial(event.wheel.y < 0 ? -1 : 1);
+		}
 	}
 	else if (event.type == SDL_KEYDOWN)
 	{
