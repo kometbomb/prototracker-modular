@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cmath>
+#include <algorithm>
 
 
 
@@ -23,7 +24,7 @@ void SynthGrid::drawWire(Renderer& renderer, int x1, int y1, int x2, int y2, con
 {
 	const int spacing = 8;
 	int dx = x1 - x2, dy = y1 - y2;
-	int d = sqrt(dx * dx + dy * dy) / spacing;
+	int d = std::max(4, static_cast<int>(sqrt(dx * dx + dy * dy) / spacing));
 	
 	if (d == 0)
 		return;
@@ -138,13 +139,16 @@ SDL_Rect SynthGrid::getConnectorArea(int moduleIndex, int type, int connectorInd
 		else
 			c = module->getNumOutputs();
 		
-		area.x = moduleArea.x + moduleArea.w / 2 + (connectorIndex - c / 2) * moduleArea.w / c - connectorSize / 2;
-		area.y = moduleArea.y;
+		if (c > 0)
+		{	
+			area.x = moduleArea.x + moduleArea.w * (connectorIndex * 2 + 1) / (c * 2) - connectorSize / 2;
+			area.y = moduleArea.y;
 		
-		if (type == 1)
-			area.y += moduleArea.h - area.h - 2;
-		else
-			area.y += 2;
+			if (type == 1)
+				area.y += moduleArea.h - area.h - 2;
+			else
+				area.y += 2;
+		}
 	}
 	
 	return area;
@@ -156,7 +160,7 @@ SDL_Rect SynthGrid::getModuleArea(int index, const SDL_Rect& parent) const
 	SDL_Rect area = {0, 0, parent.w / gridWidth, parent.h / gridHeight};
 	
 	area.x = parent.x + area.w * (index % gridWidth);
-	area.y = parent.y + area.h * (index / gridHeight);
+	area.y = parent.y + area.h * (index / gridWidth);
 	
 	return area;
 }
@@ -389,7 +393,8 @@ bool SynthGrid::onEvent(SDL_Event& event)
 		{
 			case SDLK_DELETE:
 				ModularSynth& modularSynth = getModularSynth();
-				if (modularSynth.getModule(mSelectedModule) != NULL)
+				
+				if (mSelectedModule != -1 && modularSynth.getModule(mSelectedModule) != NULL)
 				{
 					modularSynth.removeModule(mSelectedModule);
 					mMode = IDLE;
