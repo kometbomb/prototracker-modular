@@ -11,7 +11,7 @@ ModuleSelector::ModuleSelector(EditorState& editorState)
 	mLabel = new Label(editorState);
 	mLabel->setColor(Color(0, 0, 0));
 	mLabel->setBackground(Color(255, 255, 255));
-	addChild(mLabel, 0, 0, 140, 8);
+	addChild(mLabel, 0, 0, 100, 8);
 	setTitle("Add module");
 }
 
