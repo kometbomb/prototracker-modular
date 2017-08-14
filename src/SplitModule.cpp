@@ -8,8 +8,8 @@ SplitModule::SplitModule(ModularSynth& synth)
 
 void SplitModule::cycle()
 {
-	setOutput(0, getInput(0));
-	setOutput(1, getInput(0));
+	for (int i = 0 ; i < mNumOutputs ; ++i)
+		setOutput(i, getInput(0));
 }
 
 

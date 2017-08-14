@@ -8,7 +8,10 @@ AddModule::AddModule(ModularSynth& synth)
 
 void AddModule::cycle()
 {
-	setOutput(0, getInput(0) + getInput(1));
+	float sum = 0.0f;
+	for (int i = 0 ; i < mNumInputs	; ++i)
+		sum += getInput(0);
+	setOutput(0, sum);
 }
 
 
