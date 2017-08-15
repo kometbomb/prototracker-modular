@@ -1,7 +1,7 @@
 #include "MulModule.h"
 
 MulModule::MulModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 2, 1, 0)
+	:SynthModule(synth, moduleId, 3, 1, 0)
 {
 }
 
