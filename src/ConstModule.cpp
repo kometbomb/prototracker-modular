@@ -2,7 +2,7 @@
 #include <cstdio>
 
 ConstModule::ConstModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 0, 1, 1)
+	:SynthModule(synth, moduleId, 0, 1, 2)
 {
 }
 
@@ -10,6 +10,7 @@ ConstModule::ConstModule(ModularSynth& synth)
 void ConstModule::cycle()
 {
 	setOutput(0, getParam(0));
+	setOutput(1, getParam(0) / mSampleRate);
 }
 
 
@@ -22,7 +23,8 @@ const char * ConstModule::getInputName(int input) const
 
 const char * ConstModule::getOutputName(int output) const 
 {
-	return "Output";
+	static const char *names[] = {"Output", "SOutput"};
+	return names[output];
 }
 
 
