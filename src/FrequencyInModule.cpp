@@ -2,13 +2,14 @@
 #include "ModularSynth.h"
 
 FrequencyInModule::FrequencyInModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 0, 1, 0)
+	:SynthModule(synth, moduleId, 0, 2, 0)
 {
 }
 
 void FrequencyInModule::cycle()
 {
 	setOutput(0, mSynth.getFrequency());
+	setOutput(1, mSynth.getFrequency() * mSampleRate);
 }
 
 
@@ -21,7 +22,8 @@ const char * FrequencyInModule::getInputName(int input) const
 
 const char * FrequencyInModule::getOutputName(int output) const 
 {
-	return "Output";
+	static const char *names[] = {"Output", "SOutput"};
+	return names[output];
 }
 
 
