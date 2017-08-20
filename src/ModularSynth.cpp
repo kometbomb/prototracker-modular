@@ -31,6 +31,7 @@ bool ModularSynth::addModule(int index, int moduleId)
 		return false;
 	
 	mModules[index] = moduleFactory.createModule(moduleId, *this);
+	mModules[index]->setSampleRate(mSampleRate);
 	mModules[index]->onLoaded();
 	
 	return true;
@@ -270,6 +271,7 @@ bool ModularSynth::readSynth(const FileSection& section, int& offset)
 			
 			mModules[i] = module;
 			module->onLoaded();
+			module->setSampleRate(mSampleRate);
 		}
 	}
 	

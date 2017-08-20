@@ -16,6 +16,7 @@ protected:
 	const int mSynthId;
 	int mNumInputs, mNumOutputs, mNumParams;
 	float mInputs[maxInputs], mOutputs[maxOutputs], mParams[maxParams];
+	int mSampleRate;
 
 	void setOutput(int output, float value);
 	SynthModule(ModularSynth& synth, int synthId, int numInputs, int numOutputs, int numParams);
@@ -25,6 +26,8 @@ public:
 	static const int maxInstances = -1;
 	
 	virtual ~SynthModule();
+	
+	virtual void setSampleRate(int newRate);
 	
 	int getSynthId() const;
 	

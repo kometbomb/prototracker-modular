@@ -87,4 +87,9 @@ void SynthModule::onDial(int delta)
 void SynthModule::onLoaded()
 {
 }
-	
+
+
+void SynthModule::setSampleRate(int newRate)
+{
+	mSampleRate = newRate;
+}
