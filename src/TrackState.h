@@ -4,8 +4,6 @@
 
 struct TrackState: public ITrackState
 {
-	int wave, queuedWave;
-	
 	TrackState();
 	
 	virtual bool handleEffectZeroTick(const EffectParam& effect, PlayerState& playerState);

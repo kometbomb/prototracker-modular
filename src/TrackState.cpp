@@ -2,7 +2,7 @@
 #include "EffectParam.h"
 
 TrackState::TrackState()
-	: ITrackState(), wave(0), queuedWave(0)
+	: ITrackState()
 {
 
 }
@@ -14,21 +14,6 @@ bool TrackState::handleEffectZeroTick(const EffectParam& effect, PlayerState& pl
 	
 	switch (effect.effect)
 	{
-		/*
-		
-		Handle effects relevant to our ITrackState and IOscillator classes.
-		
-		*/
-		
-		case 'w':
-			wave = asByte;
-			queuedWave = asByte;
-			break;
-			
-		case 'q':
-			queuedWave = asByte;
-			break;
-		
 		/*
 		
 		In case we didn't handle the effect, let the parent class handle it.
