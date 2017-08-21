@@ -2,7 +2,7 @@
 #include <cstdio>
 
 ConstModule::ConstModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 0, 1, 2)
+	:SynthModule(synth, moduleId, 0, 2, 1)
 {
 }
 
