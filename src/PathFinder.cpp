@@ -36,7 +36,7 @@ int PathFinder::realCost(const PathFinder::Node& from, const PathFinder::Node& t
 			turnCost += 1;
 	}
 	
-	return (from.cost + to.cost) + estimate(from, to) + turnCost;
+	return (from.cost + to.cost + 1) * estimate(from, to) + turnCost;
 }
 
 

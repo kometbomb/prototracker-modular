@@ -662,9 +662,9 @@ void SynthGrid::rebuildWires()
 		{
 			if (getModularSynth().getModule(x + y * gridWidth))
 			{
-				for (int dy = 1 ; dy < gridResolution - 1 ; ++dy)
+				for (int dy = 1 ; dy < gridResolution ; ++dy)
 				{
-					for (int dx = 1 ; dx < gridResolution - 1 ; ++dx)
+					for (int dx = 1 ; dx < gridResolution ; ++dx)
 					{
 						int networkLocation = (x * gridResolution + dx) + (y * gridResolution + dy) * networkWidth;
 						mNetwork[networkLocation].cost = 9999;
@@ -694,7 +694,7 @@ void SynthGrid::rebuildWires()
 		
 		for (auto node : path)
 		{
-			//mNetwork[node].cost += 1;
+			mNetwork[node].cost += 1;
 			if (prevNode != -1)
 			{
 				PathFinder::Node::Connection& prevConnection = mNetwork[prevNode].findConnectionTo(node);

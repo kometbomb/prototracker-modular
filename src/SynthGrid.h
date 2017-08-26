@@ -14,7 +14,7 @@ class SynthGrid: public Editor
 public:
 	static const int gridWidth = 4;
 	static const int gridHeight = ModularSynth::maxModules / gridWidth;
-	static const int gridResolution = 4;
+	static const int gridResolution = 8;
 	static const int networkWidth = gridWidth * gridResolution + 1;
 	static const int networkHeight = gridHeight * gridResolution + 1;
 private:
