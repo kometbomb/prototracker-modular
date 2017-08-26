@@ -344,14 +344,6 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		}
 	}
 	
-	for (int i = 0 ; i < modularSynth.getNumConnections() ; ++i)
-	{
-		const SynthConnection& connection = modularSynth.getConnection(i);
-		SDL_Rect fromModuleArea = getConnectorArea(connection.fromModule, 1, connection.fromOutput, area);
-		SDL_Rect toModuleArea = getConnectorArea(connection.toModule, 0, connection.toInput, area);
-		//drawWire(renderer, fromModuleArea.x + fromModuleArea.w / 2, fromModuleArea.y + fromModuleArea.h / 2, toModuleArea.x + toModuleArea.w / 2, toModuleArea.y + toModuleArea.h / 2, Color(255,0,0), Color(0,255,0));
-	}
-	
 	if (mMode == CONNECTING_MODULE)
 	{
 		SDL_Rect moduleArea;
