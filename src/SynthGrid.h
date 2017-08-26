@@ -14,7 +14,7 @@ class SynthGrid: public Editor
 public:
 	static const int gridWidth = 4;
 	static const int gridHeight = ModularSynth::maxModules / gridWidth;
-	static const int gridResolution = 16;
+	static const int gridResolution = 12;
 	static const int moduleMargin = 2;
 	static const int networkWidth = gridWidth * gridResolution + 1;
 	static const int networkHeight = gridHeight * gridResolution + 1;
@@ -29,6 +29,7 @@ private:
 	
 	// type: 0 = input, 1 = output
 	SDL_Rect getConnectorArea(int moduleIndex, int type, int connectorIndex, const SDL_Rect& parent) const;
+	int getConnectorNode(int moduleIndex, int type, int connectorIndex) const;
 	
 	enum SynthGridMode
 	{

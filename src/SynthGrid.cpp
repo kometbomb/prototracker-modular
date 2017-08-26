@@ -314,9 +314,9 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		if (mConnectionPath[i].size() > 1)
 		{
 			
-			const SDL_Point& node = mConnectionPath[i][1];
+			const SDL_Point& node = mConnectionPath[i][0];
 			SDL_Rect prevArea = { node.x, node.y, 16, 16 };
-			for (int p = 1 ; p < mConnectionPath[i].size() - 1 ; ++p)
+			for (int p = 0 ; p < mConnectionPath[i].size() ; ++p)
 			{
 				const SDL_Point& path = mConnectionPath[i][p];
 				SDL_Rect nodeArea = { path.x, path.y, 16, 16 };
@@ -326,20 +326,18 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		}
 		
 		{
-			const SDL_Point& node = mConnectionPath[i][std::min(1, (int)mConnectionPath[i].size() - 1)];
+			const SDL_Point& node = mConnectionPath[i][0];
 			SDL_Rect nodeArea = { node.x, node.y, 16, 16 };
-			SDL_Rect nodeArea1 = { mConnectionPath[i][0].x, mConnectionPath[i][0].y, 16, 16 };
 			SDL_Rect fromModuleArea = getConnectorArea(connection.toModule, 0, connection.toInput, area);
-			drawAngledWire(renderer, fromModuleArea.x + fromModuleArea.w / 2, fromModuleArea.y + fromModuleArea.h / 2, nodeArea.x, nodeArea.y, nodeArea1.y, wireColor);
+			drawAngledWire(renderer, fromModuleArea.x + fromModuleArea.w / 2, fromModuleArea.y + fromModuleArea.h / 2, nodeArea.x, nodeArea.y, nodeArea.y, wireColor);
 			renderer.renderRect(fromModuleArea, wireColor);
 		}
 		
 		{
-			const SDL_Point& node = mConnectionPath[i][std::max(0, (int)mConnectionPath[i].size() - 2)];
+			const SDL_Point& node = mConnectionPath[i][(int)mConnectionPath[i].size() - 1];
 			SDL_Rect nodeArea = { node.x, node.y, 16, 16 };
-			SDL_Rect nodeArea1 = { mConnectionPath[i][mConnectionPath[i].size() - 1].x, mConnectionPath[i][mConnectionPath[i].size() - 1].y, 16, 16 };
 			SDL_Rect fromModuleArea = getConnectorArea(connection.fromModule, 1, connection.fromOutput, area);
-			drawAngledWire(renderer, fromModuleArea.x + fromModuleArea.w / 2, fromModuleArea.y + fromModuleArea.h / 2, nodeArea.x, nodeArea.y, nodeArea1.y, wireColor);
+			drawAngledWire(renderer, fromModuleArea.x + fromModuleArea.w / 2, fromModuleArea.y + fromModuleArea.h / 2, nodeArea.x, nodeArea.y, nodeArea.y, wireColor);
 			renderer.renderRect(fromModuleArea, wireColor);
 		}
 	}
@@ -637,6 +635,31 @@ void SynthGrid::initNetwork()
 }
 
 
+int SynthGrid::getConnectorNode(int moduleIndex, int type, int connectorIndex) const
+{
+	int x = moduleIndex % gridWidth;
+	int y = moduleIndex / gridWidth;
+	int c, yOffset;
+	
+	const SynthModule *module = getModularSynth().getModule(moduleIndex);
+	
+	if (type == 0)
+	{
+		c = module->getNumInputs();
+		yOffset = 1;
+	}
+	else
+	{
+		c = module->getNumOutputs();
+		yOffset = gridResolution - 1;
+	}
+				
+	// moduleArea.x + moduleArea.w * (connectorIndex * 2 + 1) / (c * 2) - connectorSize / 2;
+	
+	return (x * gridResolution + gridResolution * (connectorIndex * 2 + 1) / (c * 2)) + (y * gridResolution + yOffset) * networkWidth;
+}
+
+
 void SynthGrid::rebuildWires()
 {
 	// Reset network cost
@@ -677,7 +700,7 @@ void SynthGrid::rebuildWires()
 	{
 		pathFinder.setNetwork(mNetwork);
 		const SynthConnection& connection = getModularSynth().getConnection(i);
-		std::vector<int> path = pathFinder.findPath(mModuleLocation[connection.fromModule][1], mModuleLocation[connection.toModule][0]);
+		std::vector<int> path = pathFinder.findPath(getConnectorNode(connection.fromModule, 1, connection.fromOutput), getConnectorNode(connection.toModule, 0, connection.toInput));
 		
 		// Add some cost to nodes used by the connection
 		
