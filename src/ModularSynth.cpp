@@ -390,3 +390,15 @@ bool ModularSynth::getNoteTrigger() const
 	else
 		return 0.0f;
 }
+
+
+void ModularSynth::setSampleRate(int rate)
+{
+	mSampleRate = rate;
+	for (int index = 0 ; index < maxModules ; ++index)
+	{
+		if (mModules[index] != NULL)
+			mModules[index]->setSampleRate(mSampleRate);
+	}
+}
+

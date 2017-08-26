@@ -55,4 +55,5 @@ public:
 	virtual void setVolume(int volume);
 	virtual void update(int numSamples);
 	virtual void render(Sample16 *buffer, int numSamples, int offset = 0);
+	virtual void setSampleRate(int rate);
 };
