@@ -173,11 +173,11 @@ SDL_Rect SynthGrid::getModuleArea(int index, const SDL_Rect& parent, bool shrink
 	
 	if (shrinkByMargin)
 	{
-		const int margin = 2;
-		area.x += margin;
-		area.y += margin;
-		area.w -= margin * 2;
-		area.h -= margin * 2;
+		const int margin = moduleMargin * parent.w / networkWidth;
+		area.x += margin / 2;
+		area.y += margin / 2;
+		area.w -= margin;
+		area.h -= margin;
 	}
 	
 	return area;
@@ -662,9 +662,9 @@ void SynthGrid::rebuildWires()
 		{
 			if (getModularSynth().getModule(x + y * gridWidth))
 			{
-				for (int dy = 1 ; dy < gridResolution ; ++dy)
+				for (int dy = moduleMargin ; dy <= gridResolution - moduleMargin ; ++dy)
 				{
-					for (int dx = 1 ; dx < gridResolution ; ++dx)
+					for (int dx = moduleMargin ; dx <= gridResolution - moduleMargin ; ++dx)
 					{
 						int networkLocation = (x * gridResolution + dx) + (y * gridResolution + dy) * networkWidth;
 						mNetwork[networkLocation].cost = 9999;
