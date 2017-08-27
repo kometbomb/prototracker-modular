@@ -392,29 +392,42 @@ bool ModularSynth::getNoteTrigger() const
 }
 
 
+void ModularSynth::copy(const ModularSynth& source)
+{
+	for (int i = 0 ; i < maxModules ; ++i)
+	{
+		if (source.getModule(i) != NULL)
+		{
+			addModule(i, source.getModule(i)->getSynthId());
+			SynthModule *newModule = getModule(i);
+			
+			for (int p = 0 ; mModules[i]->getNumParams() ; ++p)
+			{
+				newModule->setParam(p, source.getModule(i)->getParam(p));
+			}
+		}
+		else
+		{
+			if (getModule(i) != NULL)
+				removeModule(i);
+		}
+	}
+	
+	mNumConnections = 0;
+	
+	for (int i = 0 ; i < source.getNumConnections() ; ++i)
+	{
+		const SynthConnection& connection = source.getConnection(i);
+		connectModules(connection.fromModule, connection.toModule, connection.fromOutput, connection.toInput);
+	}
+}
+
+
 ModularSynth* ModularSynth::clone() const
 {
 	ModularSynth *newSynth = new ModularSynth();
 	
-	for (int i = 0 ; i < maxModules ; ++i)
-	{
-		if (mModules[i] != NULL)
-		{
-			newSynth->addModule(i, mModules[i]->getSynthId());
-			SynthModule *newModule = newSynth->getModule(i);
-			
-			for (int p = 0 ; mModules[i]->getNumParams() ; ++p)
-			{
-				newModule->setParam(p, mModules[i]->getParam(p));
-			}
-		}
-	}
-	
-	for (int i = 0 ; i < getNumConnections() ; ++i)
-	{
-		const SynthConnection& connection = getConnection(i);
-		newSynth->connectModules(connection.fromModule, connection.toModule, connection.fromOutput, connection.toInput);
-	}
+	newSynth->copy(*this);
 	
 	return newSynth;
 }

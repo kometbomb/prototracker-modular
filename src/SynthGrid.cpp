@@ -14,9 +14,16 @@
 
 
 SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth)
-	:Editor(editorState, true), mSynth(synth), mMode(IDLE), mSelectedModule(-1)
+	:Editor(editorState, true), mSynth(synth), mMode(IDLE), mSelectedModule(-1), mCopyBuffer(NULL)
 {
 	mModuleSelector = new ModuleSelector(editorState);
+}
+
+
+SynthGrid::~SynthGrid()
+{
+	if (mCopyBuffer != NULL)
+		delete mCopyBuffer;
 }
 
 
@@ -426,6 +433,14 @@ bool SynthGrid::onEvent(SDL_Event& event)
 	{
 		switch (event.key.keysym.sym)
 		{
+			case SDLK_F3:
+				copySynth();
+				break;
+				
+			case SDLK_F4:
+				pasteSynth();
+				break;
+			
 			case SDLK_DELETE:
 				ModularSynth& modularSynth = getModularSynth();
 				
@@ -446,7 +461,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 		if (mMode == CONNECTING_MODULE)
 			setDirty(true);
 	}
-
+	
 	return false;
 }
 
@@ -479,4 +494,23 @@ ModularSynth& SynthGrid::getModularSynth()
 const ModularSynth& SynthGrid::getModularSynth() const
 {
 	return static_cast<const ModularSynth&>(mSynth.getOscillator(0));
+}
+
+
+void SynthGrid::copySynth()
+{
+	if (mCopyBuffer != NULL)
+		delete mCopyBuffer;
+	
+	mCopyBuffer = getModularSynth().clone();
+	
+	showMessageV(MessageInfo, "Synth layout copied.");
+}
+
+
+void SynthGrid::pasteSynth()
+{
+	getModularSynth().copy(*mCopyBuffer);
+	
+	showMessageV(MessageInfo, "Synth layout pasted.");
 }

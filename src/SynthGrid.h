@@ -32,6 +32,7 @@ class SynthGrid: public Editor
 	int mFromModule, mFromOutput;
 	int mToModule, mToInput;
 	int mMouseX, mMouseY;
+	ModularSynth *mCopyBuffer;
 	
 	ModularSynth& getModularSynth();
 	const ModularSynth& getModularSynth() const;
@@ -46,11 +47,15 @@ class SynthGrid: public Editor
 	void startConnect(int fromModule, int toModule, int fromOutput, int toInput);
 	void endConnect(int module, int connector);
 	
+	void copySynth();
+	void pasteSynth();
+	
 public:
 	static const int gridWidth = 4;
 	static const int gridHeight = ModularSynth::maxModules / gridWidth;
 
 	SynthGrid(EditorState& editorState, ISynth& synth);
+	virtual ~SynthGrid();
 	
 	virtual bool onEvent(SDL_Event& event);
 	virtual void onFileSelectorEvent(const Editor& moduleSelector, bool accept);
