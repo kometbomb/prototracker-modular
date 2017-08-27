@@ -25,6 +25,8 @@ private:
 public:
 	ModularSynth();
 	virtual ~ModularSynth();
+	ModularSynth* clone() const;
+	void copy(const ModularSynth& source);
 	
 	const SynthModule* getModule(int index) const;
 	SynthModule* getModule(int index);

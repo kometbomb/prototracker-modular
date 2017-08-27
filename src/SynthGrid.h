@@ -42,6 +42,7 @@ private:
 	int mFromModule, mFromOutput;
 	int mToModule, mToInput;
 	int mMouseX, mMouseY;
+	ModularSynth *mCopyBuffer;
 	
 	int mModuleLocation[gridWidth * gridHeight][2];
 	std::vector<PathFinder::Node> mNetwork;
@@ -63,9 +64,13 @@ private:
 	void startConnect(int fromModule, int toModule, int fromOutput, int toInput);
 	void endConnect(int module, int connector);
 	
+	void copySynth();
+	void pasteSynth();
+	
 public:
 	
 	SynthGrid(EditorState& editorState, ISynth& synth);
+	virtual ~SynthGrid();
 	
 	virtual bool onEvent(SDL_Event& event);
 	virtual void onFileSelectorEvent(const Editor& moduleSelector, bool accept);
