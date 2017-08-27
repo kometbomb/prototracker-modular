@@ -14,8 +14,8 @@ class SynthGrid: public Editor
 public:
 	static const int gridWidth = 4;
 	static const int gridHeight = ModularSynth::maxModules / gridWidth;
-	static const int gridResolution = 12;
-	static const int moduleMargin = 2;
+	static const int gridResolution = 8;
+	static const int moduleMargin = 1;
 	static const int networkWidth = gridWidth * gridResolution + 1;
 	static const int networkHeight = gridHeight * gridResolution + 1;
 private:
@@ -70,5 +70,6 @@ public:
 	
 	virtual bool onEvent(SDL_Event& event);
 	virtual void onFileSelectorEvent(const Editor& moduleSelector, bool accept);
+	virtual void onListenableChange(Listenable *listenable);
 	virtual void onLoaded();
 };

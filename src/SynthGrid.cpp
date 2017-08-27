@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include "ModularSynth.h"
 #include "SynthModule.h"
+#include "EditorState.h"
 #include "ModuleSelector.h"
 #include "Color.h"
 #include <cstdlib>
@@ -17,6 +18,7 @@ SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth)
 	:Editor(editorState, true), mSynth(synth), mMode(IDLE), mSelectedModule(-1)
 {
 	mModuleSelector = new ModuleSelector(editorState);
+	editorState.patternEditor.currentTrack.addListener(this);
 	initNetwork();
 }
 
@@ -543,7 +545,7 @@ void SynthGrid::onFileSelectorEvent(const Editor& moduleSelector, bool accept)
 
 ModularSynth& SynthGrid::getModularSynth()
 {
-	return static_cast<ModularSynth&>(mSynth.getOscillator(0));
+	return static_cast<ModularSynth&>(mSynth.getOscillator(mEditorState.patternEditor.currentTrack));
 }
 
 
@@ -662,6 +664,8 @@ int SynthGrid::getConnectorNode(int moduleIndex, int type, int connectorIndex) c
 
 void SynthGrid::rebuildWires()
 {
+	setDirty(true);
+	
 	// Reset network cost
 	
 	for (auto& node : mNetwork)
@@ -727,6 +731,12 @@ void SynthGrid::rebuildWires()
 
 
 void SynthGrid::onLoaded()
+{
+	rebuildWires();
+}
+
+
+void SynthGrid::onListenableChange(Listenable *listenable)
 {
 	rebuildWires();
 }
