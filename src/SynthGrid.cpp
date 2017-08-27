@@ -747,5 +747,7 @@ void SynthGrid::pasteSynth()
 {
 	getModularSynth().copy(*mCopyBuffer);
 	
+	rebuildWires();
+	
 	showMessageV(MessageInfo, "Synth layout pasted.");
 }
