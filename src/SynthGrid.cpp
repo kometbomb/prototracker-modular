@@ -739,7 +739,7 @@ void SynthGrid::copySynth()
 	
 	mCopyBuffer = getModularSynth().clone();
 	
-	showMessageV(MessageInfo, "Synth layout copied.");
+	showMessageV(MessageInfo, "Synth layout copied");
 }
 
 
@@ -749,5 +749,5 @@ void SynthGrid::pasteSynth()
 	
 	rebuildWires();
 	
-	showMessageV(MessageInfo, "Synth layout pasted.");
+	showMessageV(MessageInfo, "Synth layout pasted");
 }
