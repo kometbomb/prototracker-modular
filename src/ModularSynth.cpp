@@ -390,3 +390,31 @@ bool ModularSynth::getNoteTrigger() const
 	else
 		return 0.0f;
 }
+
+
+ModularSynth* ModularSynth::clone() const
+{
+	ModularSynth *newSynth = new ModularSynth();
+	
+	for (int i = 0 ; i < maxModules ; ++i)
+	{
+		if (mModules[i] != NULL)
+		{
+			newSynth->addModule(i, mModules[i]->getSynthId());
+			SynthModule *newModule = newSynth->getModule(i);
+			
+			for (int p = 0 ; mModules[i]->getNumParams() ; ++p)
+			{
+				newModule->setParam(p, mModules[i]->getParam(p));
+			}
+		}
+	}
+	
+	for (int i = 0 ; i < getNumConnections() ; ++i)
+	{
+		const SynthConnection& connection = getConnection(i);
+		newSynth->connectModules(connection.fromModule, connection.toModule, connection.fromOutput, connection.toInput);
+	}
+	
+	return newSynth;
+}
