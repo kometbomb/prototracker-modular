@@ -28,3 +28,7 @@
 *.out
 *.app
 assets/Thumbs.db
+prototracker.data
+prototracker.html
+prototracker.html.mem
+prototracker.js

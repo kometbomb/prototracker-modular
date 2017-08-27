@@ -392,6 +392,17 @@ bool ModularSynth::getNoteTrigger() const
 }
 
 
+void ModularSynth::setSampleRate(int rate)
+{
+	mSampleRate = rate;
+	for (int index = 0 ; index < maxModules ; ++index)
+	{
+		if (mModules[index] != NULL)
+			mModules[index]->setSampleRate(mSampleRate);
+	}
+}
+
+
 void ModularSynth::copy(const ModularSynth& source)
 {
 	for (int i = 0 ; i < maxModules ; ++i)
@@ -431,3 +442,4 @@ ModularSynth* ModularSynth::clone() const
 	
 	return newSynth;
 }
+
