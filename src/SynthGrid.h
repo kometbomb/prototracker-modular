@@ -23,7 +23,6 @@ private:
 	ModuleSelector *mModuleSelector;
 	
 	virtual void onDraw(Renderer& renderer, const SDL_Rect& area);
-	void drawWire(Renderer& renderer, int x1, int y1, int x2, int y2, const Color& color1, const Color& color2) const;
 	void drawAngledWire(Renderer& renderer, int x1, int y1, int x2, int y2, int y3, const Color& color1) const;
 	SDL_Rect getModuleArea(int index, const SDL_Rect& parent, bool shrinkByMargin = false) const; 
 	

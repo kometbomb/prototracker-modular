@@ -23,31 +23,6 @@ SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth)
 }
 
 
-void SynthGrid::drawWire(Renderer& renderer, int x1, int y1, int x2, int y2, const Color& color1, const Color& color2) const
-{
-	const int spacing = 8;
-	int dx = x1 - x2, dy = y1 - y2;
-	int d = std::max(4, static_cast<int>(sqrt(dx * dx + dy * dy) / spacing));
-	
-	if (d == 0)
-		return;
-	
-	int px = x1, py = y1;
-	
-	for (int i = 1 ; i <= d ; ++i)
-	{
-		int x = (x2 - x1) * i / d + x1;
-		int y = (y2 - y1) * i / d + y1 + sin((float)i/d * M_PI) * 16;
-		
-		renderer.renderLine(px, py, x, y + 1, Color(0,0,0));
-		renderer.renderLine(px, py, x, y, i % 2 ? color1 : color2);
-		
-		px = x;
-		py = y;
-	}
-}
-
-
 void SynthGrid::drawAngledWire(Renderer& renderer, int x1, int y1, int x2, int y2, int y3, const Color& color1) const
 {
 	renderer.renderLine(x1, y1, x1, y3, color1);
@@ -356,7 +331,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 			moduleArea = getConnectorArea(mToModule, 0, mToInput, area);
 		}
 		
-		drawWire(renderer, mMouseX, mMouseY, moduleArea.x + moduleArea.w / 2, moduleArea.y + moduleArea.h / 2, Color(255, 0,0), Color(0,255,0));
+		drawAngledWire(renderer, mMouseX, mMouseY, moduleArea.x + moduleArea.w / 2, moduleArea.y + moduleArea.h / 2, (mMouseY + moduleArea.y + moduleArea.h / 2) / 2, Color(255, 255, 255));
 	}
 	
 	if (mMode == MOVING_MODULE)
