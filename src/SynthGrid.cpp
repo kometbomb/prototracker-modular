@@ -541,7 +541,7 @@ ModularSynth& SynthGrid::getModularSynth()
 
 const ModularSynth& SynthGrid::getModularSynth() const
 {
-	return static_cast<const ModularSynth&>(mSynth.getOscillator(0));
+	return static_cast<ModularSynth&>(mSynth.getOscillator(mEditorState.patternEditor.currentTrack));
 }
 
 
