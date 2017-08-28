@@ -183,15 +183,12 @@ void Mixer::audioCallback(void* userdata, unsigned char* stream, int len)
 		
 		chunk = mixer.getSampleRate() / player.getPlayerState().songRate;
 			
-		player.unlock();
-		
 		int toBeWritten = std::min(length - i, chunk);
 		
 		mixer.getSynth().render(data + i, toBeWritten);
 		mixer.getSynth().update(toBeWritten);
 		mixer.getSamples() += toBeWritten;
 		
-		player.lock();
 		player.getPlayerState().setUpdated(PlayerState::OscillatorProbe);
 		player.unlock();
 	}

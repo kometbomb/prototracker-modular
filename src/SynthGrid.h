@@ -7,6 +7,7 @@
 
 class ISynth;
 struct Color;
+struct IPlayer;
 class ModuleSelector;
 
 class SynthGrid: public Editor
@@ -20,6 +21,7 @@ public:
 	static const int networkHeight = gridHeight * gridResolution + 1;
 private:
 	ISynth& mSynth;
+	IPlayer& mPlayer;
 	ModuleSelector *mModuleSelector;
 	
 	virtual void onDraw(Renderer& renderer, const SDL_Rect& area);
@@ -69,7 +71,7 @@ private:
 	
 public:
 	
-	SynthGrid(EditorState& editorState, ISynth& synth);
+	SynthGrid(EditorState& editorState, ISynth& synth, IPlayer& player);
 	virtual ~SynthGrid();
 	
 	virtual bool onEvent(SDL_Event& event);

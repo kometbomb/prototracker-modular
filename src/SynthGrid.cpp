@@ -1,6 +1,7 @@
 #include "SynthGrid.h"
 #include "SDL.h"
 #include "ISynth.h"
+#include "IPlayer.h"
 #include "Renderer.h"
 #include "ModularSynth.h"
 #include "SynthModule.h"
@@ -14,8 +15,8 @@
 
 
 
-SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth)
-	:Editor(editorState, true), mSynth(synth), mMode(IDLE), mSelectedModule(-1), mCopyBuffer(NULL)
+SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth, IPlayer& player)
+	:Editor(editorState, true), mSynth(synth), mPlayer(player), mMode(IDLE), mSelectedModule(-1), mCopyBuffer(NULL)
 {
 	mModuleSelector = new ModuleSelector(editorState);
 	editorState.patternEditor.currentTrack.addListener(this);
@@ -387,12 +388,14 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					{
 						if ((connectorType == 0 && mToModule == -1) || (connectorType == 1 && mToModule != -1))
 						{
+							mPlayer.lock();
 							if (modularSynth.connectModules(mFromModule != -1 ? mFromModule : moduleOut, mToModule != -1 ? mToModule : moduleOut, mFromOutput != -1 ? mFromOutput : connector, mToInput != -1 ? mToInput : connector))
 							{
 								endConnect(moduleOut, connector);
 								rebuildWires();
 								mSelectedModule = -1;
 							}
+							mPlayer.unlock();
 						}
 					}
 					else if (mMode == IDLE || mMode == MOVING_MODULE)
@@ -402,13 +405,17 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						if (connectorType == 0)
 						{
 							startConnect(-1, moduleOut, -1, connector);
+							mPlayer.lock();
 							modularSynth.detachConnection(moduleOut, 0, connector);
+							mPlayer.unlock();
 							mSelectedModule = moduleOut;
 						}
 						else
 						{
 							startConnect(moduleOut, -1, connector, -1);
+							mPlayer.lock();
 							modularSynth.detachConnection(moduleOut, 1, connector);
+							mPlayer.unlock();
 							mSelectedModule = moduleOut;
 						}
 						
@@ -472,7 +479,9 @@ bool SynthGrid::onEvent(SDL_Event& event)
 		
 		if (pickModule(mMouseX, mMouseY, mThisArea, moduleOut, false))
 		{
+			mPlayer.lock();
 			getModularSynth().getModule(moduleOut)->onDial(event.wheel.y < 0 ? -1 : 1);
+			mPlayer.unlock();
 			setDirty(true);
 		}
 	}
@@ -493,7 +502,9 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				
 				if (mSelectedModule != -1 && modularSynth.getModule(mSelectedModule) != NULL)
 				{
+					mPlayer.lock();
 					modularSynth.removeModule(mSelectedModule);
+					mPlayer.unlock();
 					rebuildWires();
 					mMode = IDLE;
 				}
