@@ -6,6 +6,7 @@
 #include "ConstModule.h"
 #include "SplitModule.h"
 #include "ClampModule.h"
+#include "ShapeModule.h"
 #include "AccumulatorModule.h"
 #include "AudioOutModule.h"
 #include "FrequencyInModule.h"
@@ -23,6 +24,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(ConstModule);
 	REGISTER(SplitModule);
 	REGISTER(ClampModule);
+	REGISTER(ShapeModule);
 	REGISTER(AccumulatorModule);
 	REGISTER(FrequencyInModule);
 	REGISTER(TriggerNoteModule);
