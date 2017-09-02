@@ -472,7 +472,16 @@ bool SynthGrid::onEvent(SDL_Event& event)
 		
 		if (pickModule(mMouseX, mMouseY, mThisArea, moduleOut, false))
 		{
-			getModularSynth().getModule(moduleOut)->onDial(event.wheel.y < 0 ? -1 : 1);
+			int dialSpeed = 1;
+			SDL_Keymod modState = SDL_GetModState();
+			
+			if (modState & KMOD_CTRL)
+				dialSpeed = 5;
+			
+			if (modState & KMOD_SHIFT)
+				dialSpeed *= 10;
+			
+			getModularSynth().getModule(moduleOut)->onDial(event.wheel.y < 0 ? -dialSpeed : dialSpeed);
 			setDirty(true);
 		}
 	}

@@ -42,7 +42,7 @@ SynthModule * ConstModule::createModule(ModularSynth& synth)
 
 void ConstModule::onDial(int delta)
 {
-	setParam(0, static_cast<float>(delta) * 0.05 + mParams[0]);
+	setParam(0, static_cast<float>(delta) * 0.01 + mParams[0]);
 	sprintf(mLabel, "%.2f", mParams[0]);
 }
 

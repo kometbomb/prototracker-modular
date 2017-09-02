@@ -779,7 +779,7 @@ bool MainEditor::loadElements(const Theme& theme)
 			
 			case Theme::SynthGrid:
 			{
-				SynthGrid *grid = new SynthGrid(mEditorState, mSynth, mPlayer);
+				SynthGrid *grid = new SynthGrid(mEditorState, mSynth);
 				addChild(grid, element.parameters[0], element.parameters[1], element.parameters[2], element.parameters[3]);
 			}
 			break; 
