@@ -9,6 +9,10 @@
 #include <cstring>
 #include <cmath>
 
+#ifndef TUNING
+#define TUNING 440.0
+#endif
+
 ModularSynth::ModularSynth()
 	:mNumConnections(0), mFrequency(0), mVolume(0), mNoteTrigger(false)
 {
@@ -132,7 +136,7 @@ void ModularSynth::triggerNote()
 
 void ModularSynth::setFrequency(float frequency)
 {
-	mFrequency = frequency;
+	mFrequency = frequency * mSampleRate / static_cast<float>(TUNING);
 }
 
 

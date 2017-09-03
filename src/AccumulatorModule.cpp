@@ -9,7 +9,7 @@ AccumulatorModule::AccumulatorModule(ModularSynth& synth)
 
 void AccumulatorModule::cycle()
 {
-	mAccumulator += getInput(0);
+	mAccumulator += getInput(0) / mSampleRate;
 	
 	if (getInput(1) > 0.0f && mPreviousSync <= 0.0f)
 		mAccumulator = getInput(2);
