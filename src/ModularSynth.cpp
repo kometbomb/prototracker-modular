@@ -417,7 +417,7 @@ void ModularSynth::copy(const ModularSynth& source)
 			addModule(i, source.getModule(i)->getSynthId());
 			SynthModule *newModule = getModule(i);
 			
-			for (int p = 0 ; mModules[i]->getNumParams() ; ++p)
+			for (int p = 0 ; p < newModule->getNumParams() ; ++p)
 			{
 				newModule->setParam(p, source.getModule(i)->getParam(p));
 			}
