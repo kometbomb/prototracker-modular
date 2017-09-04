@@ -54,7 +54,6 @@ void EffectModule::onDial(int delta)
 	}
 	
 	setParam(0, effect);
-	printf("%d\n", effect);
 	sprintf(mLabel, "%cxx", effect);
 }
 
