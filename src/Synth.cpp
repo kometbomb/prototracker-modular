@@ -57,3 +57,10 @@ void Synth::onFileSectionSave(FileSection& section)
 		static_cast<ModularSynth*>(mOscillator[i])->writeSynth(section);
 	}
 }
+
+
+void Synth::reset()
+{
+	for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
+		static_cast<ModularSynth*>(mOscillator[i])->clear();
+}

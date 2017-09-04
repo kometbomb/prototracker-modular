@@ -9,6 +9,8 @@ public:
 	Synth();
 	virtual ~Synth();
 	
+	virtual void reset();
+	
 	virtual bool onFileSectionLoad(const FileSection& section, int& offset);
 	virtual void onFileSectionSave(FileSection& section);
 };
