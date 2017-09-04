@@ -1,16 +1,19 @@
 #include "TrackState.h"
 #include "EffectParam.h"
+#include "SDL.h"
 
 TrackState::TrackState()
 	: ITrackState()
 {
-
+	SDL_memset(effectValues, 0, sizeof(effectValues));
 }
 
 
 bool TrackState::handleEffectZeroTick(const EffectParam& effect, PlayerState& playerState)
 {
 	int asByte = effect.getParamsAsByte();
+	
+	effectValues[effect.effect] = asByte;
 	
 	switch (effect.effect)
 	{

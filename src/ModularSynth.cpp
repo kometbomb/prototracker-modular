@@ -3,7 +3,8 @@
 #include "Sample.h"
 #include "FileSection.h"
 #include "ModuleFactory.h"
-#include "ITrackState.h"
+#include "TrackState.h"
+#include "SDL.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -447,3 +448,15 @@ ModularSynth* ModularSynth::clone() const
 	return newSynth;
 }
 
+
+void ModularSynth::handleTrackState(ITrackState& _trackState)
+{
+	TrackState& trackState = static_cast<TrackState&>(_trackState);
+	SDL_memcpy(mEffectValues, trackState.effectValues, sizeof(mEffectValues));
+}
+
+
+int ModularSynth::getEffectValue(int effect) const
+{
+	return mEffectValues[effect];
+}

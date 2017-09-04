@@ -19,6 +19,7 @@ private:
 	int mNumConnections;
 	float mFrequency, mVolume, mOutput[2];
 	bool mNoteTrigger;
+	int mEffectValues[256];
 	
 	void cycle();
 	
@@ -50,6 +51,7 @@ public:
 	float getFrequency() const;
 	bool getNoteTrigger() const;
 	void setMasterOutput(int channel, float output);
+	int getEffectValue(int effect) const;
 
 	// IOscillator virtual methods
 	virtual void triggerNote();
@@ -58,4 +60,5 @@ public:
 	virtual void update(int numSamples);
 	virtual void render(Sample16 *buffer, int numSamples, int offset = 0);
 	virtual void setSampleRate(int rate);
+	virtual void handleTrackState(ITrackState& trackState);
 };
