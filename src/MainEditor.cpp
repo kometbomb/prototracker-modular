@@ -865,6 +865,7 @@ void MainEditor::newSong()
 {
 	mSong.clear();
 	mEditorState.reset();
+	mSynth.reset();
 	refreshAll();
 }
 
