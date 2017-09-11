@@ -527,7 +527,6 @@ void SynthGrid::showNewModuleDialog()
 {
 	mModuleSelector->populate(getModularSynth());
 	setModal(mModuleSelector);
-	setFocus(mModuleSelector);
 }
 
 
