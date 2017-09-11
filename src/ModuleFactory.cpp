@@ -5,6 +5,7 @@
 #include "MulModule.h"
 #include "ConstModule.h"
 #include "EffectModule.h"
+#include "EGModule.h"
 #include "SplitModule.h"
 #include "ClampModule.h"
 #include "ShapeModule.h"
@@ -19,6 +20,7 @@
 ModuleFactory::ModuleFactory()
 {
 	REGISTER(OscillatorModule);
+	REGISTER(EGModule);
 	REGISTER(PassthruModule);
 	REGISTER(AddModule);
 	REGISTER(MulModule);
