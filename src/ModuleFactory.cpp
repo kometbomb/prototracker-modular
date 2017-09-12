@@ -8,6 +8,7 @@
 #include "EGModule.h"
 #include "SplitModule.h"
 #include "ClampModule.h"
+#include "DelayModule.h"
 #include "ShapeModule.h"
 #include "AccumulatorModule.h"
 #include "AudioOutModule.h"
@@ -29,6 +30,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(SplitModule);
 	REGISTER(ClampModule);
 	REGISTER(ShapeModule);
+	REGISTER(DelayModule);
 	REGISTER(AccumulatorModule);
 	REGISTER(FrequencyInModule);
 	REGISTER(TriggerNoteModule);
