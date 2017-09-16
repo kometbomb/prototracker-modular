@@ -19,7 +19,7 @@ void OscillatorModule::cycle()
 	
 	mAccumulator = fmod(mAccumulator + getInput(0) / mSampleRate * static_cast<float>(TUNING / 2), 1.0f);
 	setOutput(0, sin((mAccumulator + getInput(2)) * (3.14157 * 2)));
-	setOutput(1, fmod(mAccumulator + getInput(2), 1.0f));
+	setOutput(1, fmod(mAccumulator + getInput(2), 1.0f) * 2.0f - 1.0f);
 }
 
 
