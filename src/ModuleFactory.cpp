@@ -6,6 +6,7 @@
 #include "ConstModule.h"
 #include "EffectModule.h"
 #include "EGModule.h"
+#include "FilterModule.h"
 #include "SplitModule.h"
 #include "ClampModule.h"
 #include "DelayModule.h"
@@ -31,6 +32,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(ClampModule);
 	REGISTER(ShapeModule);
 	REGISTER(DelayModule);
+	REGISTER(FilterModule);
 	REGISTER(AccumulatorModule);
 	REGISTER(FrequencyInModule);
 	REGISTER(TriggerNoteModule);
