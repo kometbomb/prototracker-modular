@@ -1,5 +1,6 @@
 #include "ModuleFactory.h"
 #include "OscillatorModule.h"
+#include "NoiseModule.h"
 #include "PassthruModule.h"
 #include "AddModule.h"
 #include "MulModule.h"
@@ -11,6 +12,7 @@
 #include "ClampModule.h"
 #include "DelayModule.h"
 #include "ShapeModule.h"
+#include "DistortionModule.h"
 #include "AccumulatorModule.h"
 #include "AudioOutModule.h"
 #include "FrequencyInModule.h"
@@ -22,6 +24,7 @@
 ModuleFactory::ModuleFactory()
 {
 	REGISTER(OscillatorModule);
+	REGISTER(NoiseModule);
 	REGISTER(EGModule);
 	REGISTER(PassthruModule);
 	REGISTER(AddModule);
@@ -31,6 +34,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(SplitModule);
 	REGISTER(ClampModule);
 	REGISTER(ShapeModule);
+	REGISTER(DistortionModule);
 	REGISTER(DelayModule);
 	REGISTER(FilterModule);
 	REGISTER(AccumulatorModule);
