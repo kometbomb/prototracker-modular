@@ -1,6 +1,7 @@
 #include "ModuleFactory.h"
 #include "OscillatorModule.h"
 #include "NoiseModule.h"
+#include "PulseModule.h"
 #include "PassthruModule.h"
 #include "AddModule.h"
 #include "MulModule.h"
@@ -25,6 +26,7 @@ ModuleFactory::ModuleFactory()
 {
 	REGISTER(OscillatorModule);
 	REGISTER(NoiseModule);
+	REGISTER(PulseModule);
 	REGISTER(EGModule);
 	REGISTER(PassthruModule);
 	REGISTER(AddModule);
