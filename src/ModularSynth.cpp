@@ -163,7 +163,7 @@ void ModularSynth::render(Sample16 *buffer, int numSamples, int offset)
 			
 			// Only mono output for now
 			buffer[i].left += mOutput[0] * outputResolution;
-			buffer[i].right += mOutput[0] * outputResolution;
+			buffer[i].right += mOutput[1] * outputResolution;
 		}
 	}
 }

@@ -2,21 +2,24 @@
 #include "ModularSynth.h"
 
 AudioOutModule::AudioOutModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 1, 0, 0)
+	:SynthModule(synth, moduleId, 3, 0, 0)
 {
 }
 
 
 void AudioOutModule::cycle()
 {
-	// Only left channel! (mono)
-	mSynth.setMasterOutput(0, getInput(0));
+	float leftChannel = getInput(0) + getInput(1);
+	float rightChannel = getInput(0) + getInput(2);
+	mSynth.setMasterOutput(0, leftChannel);
+	mSynth.setMasterOutput(1, rightChannel);
 }
 
 
 const char * AudioOutModule::getInputName(int input) const 
 {
-	return "AudioOut";
+	static const char *names[] = {"L+R", "Left", "Right"};
+	return names[input];
 }
 
 
