@@ -1,6 +1,7 @@
 #include "SynthGrid.h"
 #include "SDL.h"
 #include "ISynth.h"
+#include "IPlayer.h"
 #include "Renderer.h"
 #include "ModularSynth.h"
 #include "SynthModule.h"
@@ -14,8 +15,8 @@
 
 
 
-SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth)
-	:Editor(editorState, true), mSynth(synth), mMode(IDLE), mSelectedModule(-1), mCopyBuffer(NULL)
+SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth, IPlayer& player)
+	:Editor(editorState, true), mSynth(synth), mPlayer(player), mMode(IDLE), mSelectedModule(-1), mCopyBuffer(NULL)
 {
 	mModuleSelector = new ModuleSelector(editorState);
 	editorState.patternEditor.currentTrack.addListener(this);
@@ -660,9 +661,22 @@ int SynthGrid::getConnectorNode(int moduleIndex, int type, int connectorIndex) c
 }
 
 
-void SynthGrid::rebuildWires()
+void SynthGrid::rebuildWires(bool fromInit)
 {
 	setDirty(true);
+	
+	// Unlock the player while the wires are rerouted...
+	// does not have any effect other than visual so we
+	// don't need the lock while it does its thing (which 
+	// could take >500 ms.
+	
+	// Also, from init we don't want to unlock this since
+	// It's not locked yet (the below .lock()) would cause
+	// a freeze.
+	
+	if (!fromInit)
+		mPlayer.unlock();
+								
 	
 	// Reset network cost
 	
@@ -725,12 +739,18 @@ void SynthGrid::rebuildWires()
 			mConnectionPath[i].push_back(point);
 		}
 	}
+	
+	// Lock it again since there could be something related
+	// to the audio happening later.
+	
+	if (!fromInit)
+		mPlayer.lock();
 }
 
 
 void SynthGrid::onLoaded()
 {
-	rebuildWires();
+	rebuildWires(true);
 }
 
 

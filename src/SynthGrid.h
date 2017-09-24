@@ -6,6 +6,7 @@
 #include "PathFinder.h"
 
 class ISynth;
+class IPlayer;
 struct Color;
 class ModuleSelector;
 
@@ -20,6 +21,7 @@ public:
 	static const int networkHeight = gridHeight * gridResolution + 1;
 private:
 	ISynth& mSynth;
+	IPlayer& mPlayer;
 	ModuleSelector *mModuleSelector;
 	
 	virtual void onDraw(Renderer& renderer, const SDL_Rect& area);
@@ -49,7 +51,7 @@ private:
 	std::vector<std::vector<SDL_Point> > mConnectionPath;
 	
 	void initNetwork();
-	void rebuildWires();
+	void rebuildWires(bool fromInit = false);
 	
 	ModularSynth& getModularSynth();
 	const ModularSynth& getModularSynth() const;
@@ -69,7 +71,7 @@ private:
 	
 public:
 	
-	SynthGrid(EditorState& editorState, ISynth& synth);
+	SynthGrid(EditorState& editorState, ISynth& synth, IPlayer& player);
 	virtual ~SynthGrid();
 	
 	virtual bool onEvent(SDL_Event& event);
