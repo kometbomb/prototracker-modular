@@ -6,11 +6,12 @@ class NoiseModule: public SynthModule
 {
 	NoiseModule(ModularSynth& synth);
 	
-	unsigned long int mLfsrRegister;
+	unsigned long int mLfsrRegister, mRandomValue;
 	float mAccumulator, mPreviousSync;
 	
 	void reset();
 	void update();
+	unsigned int nextRandomValue();
 	
 public:
 	virtual ~NoiseModule();

@@ -20,6 +20,19 @@ NoiseModule::~NoiseModule()
 void NoiseModule::reset()
 {
 	mLfsrRegister = 1;
+	mRandomValue = nextRandomValue();
+}
+
+
+unsigned int NoiseModule::nextRandomValue()
+{
+	for (int bit = 0 ; bit < 15 ; ++bit)
+	{
+		update();
+		mRandomValue = (mRandomValue << 1) | (mLfsrRegister & 1);
+	}
+	
+	mRandomValue &= 0xffff;
 }
 
 
@@ -51,7 +64,7 @@ void NoiseModule::cycle()
 	while (mAccumulator >= 1.0f) 
 	{
 		mAccumulator -= 1.0f;
-		update();
+		mRandomValue = nextRandomValue();
 	}
 	
 	setOutput(0, static_cast<float>(mLfsrRegister & 0x0ffff) / 32768.0f - 1.0f);
