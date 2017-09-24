@@ -11,7 +11,7 @@ class ModularSynth: public IOscillator
 public:
 	static const int maxModules = 32;
 	static const int maxConnections = 128;
-	static const int outputResolution = 1000;
+	static const int outputResolution = 2000;
 
 private:
 	SynthModule *mModules[maxModules];
