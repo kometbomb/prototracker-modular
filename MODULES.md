@@ -1,5 +1,7 @@
 # Prototracker-modular modules
 
+Most modules output either in the -1..1 range or similar, this means you can basically connect anything to anything. Experiment.
+
 ## Control
 
 ### FrequencyIn
