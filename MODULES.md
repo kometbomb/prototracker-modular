@@ -24,7 +24,17 @@ Use mousewheel to change the constant value. CTRL/Shift change the speed.
 | 0 | Dialed value |
 | 1 | Dialed value divided by 1000 (useful for milliseconds) |
 
-## Output
+### AudioOut
+
+Use this module to output sound.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Mono out |
+| 1 | Left channel out |
+| 2 | Right channel out |
+
+## Generators
 
 ### Oscillator
 
