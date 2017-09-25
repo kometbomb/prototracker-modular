@@ -283,18 +283,21 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 	
 	renderer.setClip(area);
 	
-	Color palette[6];
+	Color palette[9];
 	palette[0] = Color(255,64,64);
 	palette[1] = Color(64,255,64);
 	palette[2] = Color(255,255,64);
 	palette[3] = Color(64,64,255);
 	palette[4] = Color(255,64,255);
 	palette[5] = Color(128,128,128);
+	palette[6] = Color(128,0,128);
+	palette[7] = Color(255,128,64);
+	palette[8] = Color(32,128,32);
 	
 	for (int i = 0 ; i < modularSynth.getNumConnections() ; ++i)
 	{
 		
-		const Color wireColor = palette[i % 6];
+		const Color wireColor = palette[i % 9];
 		const SynthConnection& connection = modularSynth.getConnection(i);
 		if (mConnectionPath[i].size() > 1)
 		{
