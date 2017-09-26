@@ -28,4 +28,3 @@ public:
 	virtual const char * getInputName(int input) const;
 	virtual const char * getOutputName(int output) const;
 };
-
