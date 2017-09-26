@@ -10,5 +10,3 @@ Jxx		Jump to macro row xx (immediate)
 Kxx		Set volume to zero at tick xx (K00 = immediately)
 Mxx		Set macro to xx
 Sxx		Set macro speed to xx ticks per row
-Wxx		Set waveform to xx (including but not limited to: $00-$0f = square wave with varying PW, $7F = triangle, $FF = noise)
-Qxx		Queue waveform xx (switch waveform after currently playing waveform loops)
