@@ -4,6 +4,8 @@ Modules are loosely divided in three categories: Control, Generators and Modifie
 
 Most modules output either in the -1..1 range (or similar), this means you can basically connect anything to anything. Experiment.
 
+Note that there is a delay in signal propagation: every connection between two modules results in a delay of one cycle. This might make things harder with e.g. the accumulator if the reset value is changed at the same time when the reset signal is sent and the signals won't arrive at the exact same cycle. 
+
 ## Control
 
 These modules are used to control other modules.
@@ -19,7 +21,7 @@ Note that this is just the initial keypress. You need to implement key-off funct
 
 | Output | Description |
 |--------|-------------|
-| 0 | Key pressed down |
+| 0 | Key pressed down (0 = not pressed, 1.0 = pressed down) |
 
 ### Const
 
@@ -56,7 +58,7 @@ Generates a simple attack-decay envelope. Key down input
 |-------|--------------|
 | 0 | Attack time (in seconds) |
 | 1 | Decay time (in seconds) |
-| 2 | Key down (1.0 = down) |
+| 2 | Key down (>0.5 = down) |
 
 | Output | Description  |
 |--------|--------------|
@@ -70,7 +72,7 @@ This module simply accumulates an internal register. Useful as some kind of rudi
 | Input | Description  |
 |-------|--------------|
 | 0 | Add to accumulator |
-| 1 | Reset accumulator to the value in input 2 |
+| 1 | Reset (rising signal crossing 0.5 triggers reset to the amplitude in input 2) |
 | 2 | Reset value |
 
 | Output | Description  |
@@ -86,7 +88,7 @@ These modules are used to generate signals useful as audio.
 | Input | Description  |
 |-------|--------------|
 | 0 | Frequency in (rate at which the phase advances) |
-| 1 | Sync (rising signal from 0 to 1 sets phase to zero) |
+| 1 | Sync (rising signal crossing 0.5 sets phase to zero) |
 | 2 | Phase add (add to current phase, use for FM) |
 
 | Output | Description  |
@@ -99,7 +101,7 @@ These modules are used to generate signals useful as audio.
 | Input | Description  |
 |-------|--------------|
 | 0 | Frequency in (rate at which the phase advances) |
-| 1 | Sync (rising signal from 0 to 1 sets phase to zero) |
+| 1 | Sync (rising signal crossing 0.5 sets phase to zero) |
 | 2 | Pulse width (-1..1) |
 
 | Output | Description  |
@@ -111,7 +113,7 @@ These modules are used to generate signals useful as audio.
 | Input | Description  |
 |-------|--------------|
 | 0 | Frequency in (rate at which the phase advances) |
-| 1 | Sync (rising signal from 0 to 1 sets phase to zero) |
+| 1 | Sync (rising signal crossing 0.5 sets phase to zero) |
 
 | Output | Description  |
 |--------|--------------|

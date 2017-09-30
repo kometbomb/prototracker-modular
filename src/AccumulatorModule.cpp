@@ -11,7 +11,7 @@ void AccumulatorModule::cycle()
 {
 	mAccumulator += getInput(0) / mSampleRate;
 	
-	if (getInput(1) > 0.0f && mPreviousSync <= 0.0f)
+	if (getInput(1) > 0.5f && mPreviousSync <= 0.5f)
 		mAccumulator = getInput(2);
 	
 	mPreviousSync = getInput(1);

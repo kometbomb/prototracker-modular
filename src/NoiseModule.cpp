@@ -51,7 +51,7 @@ void NoiseModule::update()
 
 void NoiseModule::cycle()
 {
-	if (getInput(1) > 0.0f && mPreviousSync <= 0.0f)
+	if (getInput(1) > 0.5f && mPreviousSync <= 0.5f)
 	{
 		mAccumulator = 0;
 		reset();

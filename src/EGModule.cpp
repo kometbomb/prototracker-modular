@@ -9,7 +9,7 @@ EGModule::EGModule(ModularSynth& synth)
 
 void EGModule::cycle()
 {
-	if (mPrevKeyOn < 1.0f && getInput(2) > 0.0f)
+	if (mPrevKeyOn <= 0.5f && getInput(2) > 0.5f)
 		mState = Attack;
 	
 	mPrevKeyOn = getInput(2);
@@ -39,7 +39,7 @@ void EGModule::cycle()
 			break;
 		 
 		case Full:
-			if (getInput(2) < 1.0f)
+			if (getInput(2) < 0.5f)
 				mState = Decay;
 			break;
 		 
