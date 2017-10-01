@@ -759,7 +759,7 @@ void SynthGrid::onLoaded()
 
 void SynthGrid::onListenableChange(Listenable *listenable)
 {
-	rebuildWires();
+	rebuildWires(true);
 }
 
 	
