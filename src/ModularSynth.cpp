@@ -19,6 +19,8 @@ ModularSynth::ModularSynth()
 {
 	for (int i = 0 ; i < maxModules ; ++i)
 		mModules[i] = NULL;
+	
+	SDL_memset(mOutput, 0, sizeof(mOutput));
 }
 
 
@@ -274,8 +276,8 @@ bool ModularSynth::readSynth(const FileSection& section, int& offset)
 			}
 			
 			mModules[i] = module;
-			module->onLoaded();
 			module->setSampleRate(mSampleRate);
+			module->onLoaded();
 		}
 	}
 	

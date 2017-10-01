@@ -30,7 +30,7 @@ Mixer::~Mixer()
 {
 	deinitAudio();
 	
-	free(mConvert);
+	SDL_free(mConvert);
 }
 
 
