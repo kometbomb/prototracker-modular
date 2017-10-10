@@ -5,6 +5,7 @@
 #include "PassthruModule.h"
 #include "AddModule.h"
 #include "MulModule.h"
+#include "AbsModule.h"
 #include "ConstModule.h"
 #include "EffectModule.h"
 #include "EGModule.h"
@@ -13,6 +14,7 @@
 #include "ClampModule.h"
 #include "DelayModule.h"
 #include "ShapeModule.h"
+#include "BitsModule.h"
 #include "DistortionModule.h"
 #include "AccumulatorModule.h"
 #include "AudioOutModule.h"
@@ -31,12 +33,14 @@ ModuleFactory::ModuleFactory()
 	REGISTER(PassthruModule);
 	REGISTER(AddModule);
 	REGISTER(MulModule);
+	REGISTER(AbsModule);
 	REGISTER(ConstModule);
 	REGISTER(EffectModule);
 	REGISTER(SplitModule);
 	REGISTER(ClampModule);
 	REGISTER(ShapeModule);
 	REGISTER(DistortionModule);
+	REGISTER(BitsModule);
 	REGISTER(DelayModule);
 	REGISTER(FilterModule);
 	REGISTER(AccumulatorModule);
