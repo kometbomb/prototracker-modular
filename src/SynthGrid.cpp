@@ -236,7 +236,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		return;
 	}
 	
-	renderer.clearRect(area, Color(0,0,0));
+	renderer.renderBackground(area);
 
 	/*for (const auto& node : mNetwork)
 	{
