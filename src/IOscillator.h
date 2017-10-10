@@ -8,7 +8,7 @@ class IOscillator
 protected:
 	int mSampleRate;
 public:
-	static const int oscillatorResolution = 4096;
+	static const int oscillatorResolution = 8192;
 
 	virtual ~IOscillator();
 	virtual void setSampleRate(int rate);
