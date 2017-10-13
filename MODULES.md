@@ -152,6 +152,31 @@ Multiply inputs and output the result. Use as an amplifier.
 |--------|--------------|
 | 0 | The product of inputs |
 
+### Abs
+
+Outputs the absolute value of the input.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Input |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Absolute value of input |
+
+### Bits
+
+Converts the input to any bit depth between 1..16.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Input |
+| 1 | Bit depth |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Bit reduced input value |
+
 ### Shape
 
 Shape outputs input #1 to the power of input #2. Useful as a distortion and to shape envelopes.
