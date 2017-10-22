@@ -1,5 +1,5 @@
 Font "font.png" 8 8
-GUI "gui.png" 480 240
+GUI "gui.png" 480 320
 
 # this is a comment
 # element		x 	y	w	h 	track
@@ -12,6 +12,8 @@ Oscilloscope 	173 2 	55 	61 	3
 PatternEditor	3 	78	232	160	4	4
 MacroEditor		241	78 	76 	160	4 	4
 SequenceEditor	234	3 	82 	40	2 	0
+SynthGrid 		320	16	160	224
+AutomationEditor    1	241 478	78
 
 # element     	x 	y  	w	h
 SongName		4	67 	128	8
@@ -21,5 +23,3 @@ SequencePosition	235	54	16	8
 SequenceLength	256	54 16	8
 PatternLength	277	54	16	8
 OctaveNumber	298	54	16	8
-
-SynthGrid 		320	16	160	224

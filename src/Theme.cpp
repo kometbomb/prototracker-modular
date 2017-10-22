@@ -19,7 +19,7 @@ Theme::Theme()
 bool Theme::load(const std::string& path)
 {
 	mPath = path;
-	
+
 	if (!loadDefinition(path))
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Could not load theme", ("Could not load "+path+". Perhaps you need to set the working directory?").c_str(), NULL);
@@ -140,6 +140,7 @@ bool Theme::loadDefinition(const std::string& path)
 		"OctaveNumber",
 		"TouchRegion",
 		"SynthGrid",
+		"AutomationEditor",
 		NULL
 	};
 	

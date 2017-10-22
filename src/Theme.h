@@ -21,6 +21,7 @@ public:
 		OctaveNumber,
 		TouchRegion,
 		SynthGrid,
+		AutomationEditor,
 		Unknown
 	};
 

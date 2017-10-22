@@ -8,6 +8,7 @@
 #include "AbsModule.h"
 #include "ConstModule.h"
 #include "EffectModule.h"
+#include "AutomationModule.h"
 #include "EGModule.h"
 #include "FilterModule.h"
 #include "SplitModule.h"
@@ -36,6 +37,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(AbsModule);
 	REGISTER(ConstModule);
 	REGISTER(EffectModule);
+	REGISTER(AutomationModule);
 	REGISTER(SplitModule);
 	REGISTER(ClampModule);
 	REGISTER(ShapeModule);

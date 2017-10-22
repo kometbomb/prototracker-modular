@@ -5,6 +5,7 @@
 #include "ModuleFactory.h"
 #include "TrackState.h"
 #include "SDL.h"
+#include "Synth.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -14,8 +15,8 @@
 #define TUNING 440.0
 #endif
 
-ModularSynth::ModularSynth()
-	:mNumConnections(0), mFrequency(0), mVolume(0), mNoteTrigger(false)
+ModularSynth::ModularSynth(Synth& synth)
+	:mSynth(synth), mNumConnections(0), mFrequency(0), mVolume(0), mNoteTrigger(false)
 {
 	for (int i = 0 ; i < maxModules ; ++i)
 		mModules[i] = NULL;
@@ -442,7 +443,7 @@ void ModularSynth::copy(const ModularSynth& source)
 
 ModularSynth* ModularSynth::clone() const
 {
-	ModularSynth *newSynth = new ModularSynth();
+	ModularSynth *newSynth = new ModularSynth(mSynth);
 	
 	newSynth->copy(*this);
 	
@@ -460,4 +461,10 @@ void ModularSynth::handleTrackState(ITrackState& _trackState)
 int ModularSynth::getEffectValue(int effect) const
 {
 	return mEffectValues[effect];
+}
+
+
+float ModularSynth::getAutomationValue(int track) const
+{
+	return mSynth.getAutomationValue(track);
 }

@@ -5,6 +5,7 @@
 
 struct SynthModule;
 struct FileSection;
+struct Synth;
 
 class ModularSynth: public IOscillator
 {
@@ -14,6 +15,7 @@ public:
 	static const int outputResolution = 4096;
 
 private:
+	Synth& mSynth;
 	SynthModule *mModules[maxModules];
 	SynthConnection mConnections[maxConnections];
 	int mNumConnections;
@@ -24,7 +26,7 @@ private:
 	void cycle();
 	
 public:
-	ModularSynth();
+	ModularSynth(Synth& synth);
 	virtual ~ModularSynth();
 	ModularSynth* clone() const;
 	void copy(const ModularSynth& source);
@@ -52,6 +54,7 @@ public:
 	bool getNoteTrigger() const;
 	void setMasterOutput(int channel, float output);
 	int getEffectValue(int effect) const;
+	float getAutomationValue(int track) const;
 
 	// IOscillator virtual methods
 	virtual void triggerNote();

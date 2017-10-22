@@ -5,9 +5,6 @@
 class AbsModule: public SynthModule
 {
 	AbsModule(ModularSynth& synth);
-	int mMaxBufferSize;
-	int mHead;
-	float *mBuffer;
 	
 public:
 	virtual ~AbsModule();
@@ -23,6 +20,5 @@ public:
 	virtual const char * getName() const;
 	virtual const char * getInputName(int input) const;
 	virtual const char * getOutputName(int output) const;
-	
 };
 

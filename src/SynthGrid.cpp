@@ -299,7 +299,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		
 		const Color wireColor = palette[i % 9];
 		const SynthConnection& connection = modularSynth.getConnection(i);
-		if (mConnectionPath[i].size() > 1)
+		if (mConnectionPath.size() > i && mConnectionPath[i].size() > 1)
 		{
 			
 			const SDL_Point& node = mConnectionPath[i][0];
