@@ -12,6 +12,7 @@
 #include "EGModule.h"
 #include "FilterModule.h"
 #include "SplitModule.h"
+#include "MixerModule.h"
 #include "ClampModule.h"
 #include "DelayModule.h"
 #include "ShapeModule.h"
@@ -39,6 +40,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(EffectModule);
 	REGISTER(AutomationModule);
 	REGISTER(SplitModule);
+	REGISTER(MixerModule);
 	REGISTER(ClampModule);
 	REGISTER(ShapeModule);
 	REGISTER(DistortionModule);
