@@ -184,14 +184,17 @@ bool AutomationEditor::onEvent(SDL_Event& event)
 				{
 					Synth& synth = static_cast<Synth&>(mSynth);
 					SDL_Keymod modState = SDL_GetModState();
-					int granularity = 1;
+					int xGranularity = 1, yGranularity = 1;
 					
 					if (modState & KMOD_CTRL)
-						granularity = synth.getPatternLength();
+					{
+						xGranularity = synth.getPatternLength();
+						yGranularity = mThisArea.h / 2;
+					}
 
 					mSelectedNode = getAutomationTrack().addNode(
-						granularize(mMouseX - mThisArea.x, granularity) + getScrollPosition(), 
-						1.0f - static_cast<float>(mMouseY - mThisArea.y) / mThisArea.h
+						granularize(mMouseX - mThisArea.x, xGranularity) + getScrollPosition(), 
+						1.0f - static_cast<float>(granularize(mMouseY - mThisArea.y, yGranularity)) / mThisArea.h
 					);
 					setDirty(true);
 				}
@@ -209,14 +212,17 @@ bool AutomationEditor::onEvent(SDL_Event& event)
 		{
 			Synth& synth = static_cast<Synth&>(mSynth);
 			SDL_Keymod modState = SDL_GetModState();
-			int granularity = 1;
+			int xGranularity = 1, yGranularity = 1;
 			
 			if (modState & KMOD_CTRL)
-				granularity = synth.getPatternLength();
+			{
+				xGranularity = synth.getPatternLength() / 2;
+				yGranularity = mThisArea.h / 2;
+			}
 
 			getAutomationTrack().editNode(mSelectedNode,
-				granularize(mMouseX - mThisArea.x, granularity) + getScrollPosition(),
-				1.0f - static_cast<float>(mMouseY - mThisArea.y) / mThisArea.h
+				granularize(mMouseX - mThisArea.x, xGranularity) + getScrollPosition(),
+				1.0f - static_cast<float>(granularize(mMouseY - mThisArea.y, yGranularity)) / mThisArea.h
 			);
 		}
 	}
@@ -259,8 +265,9 @@ void AutomationEditor::onLoaded()
 
 int AutomationEditor::granularize(int value, int steps)
 {
-	value += steps / 2;
-	return value - (value % steps);
+	int newValue = value + steps / 2;
+	newValue = newValue - (newValue % steps);
+	return abs(newValue - value) < 4 ? newValue : value;
 }
 
 
