@@ -40,6 +40,14 @@ This outputs whatever value was used as a parameter for a pattern effect. Use mo
 |--------|-------------|
 | 0 | Effect value (0x40 = 1.0, 0x80 = 2.0 etc.) |
 
+### Automation
+
+This module outputs the value from the automation timeline. Use mousewheel to select the automation track.
+
+| Output | Description |
+|--------|-------------|
+| 0 | Automation value (0.0..1.0) |
+
 ### AudioOut
 
 Use this module to output sound.
