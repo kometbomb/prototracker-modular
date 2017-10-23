@@ -193,7 +193,7 @@ bool AutomationEditor::onEvent(SDL_Event& event)
 					}
 
 					mSelectedNode = getAutomationTrack().addNode(
-						granularize(mMouseX - mThisArea.x, xGranularity) + getScrollPosition(), 
+						granularize(mMouseX - mThisArea.x + getScrollPosition(), xGranularity), 
 						1.0f - static_cast<float>(granularize(mMouseY - mThisArea.y, yGranularity)) / mThisArea.h
 					);
 					setDirty(true);
@@ -221,7 +221,7 @@ bool AutomationEditor::onEvent(SDL_Event& event)
 			}
 
 			getAutomationTrack().editNode(mSelectedNode,
-				granularize(mMouseX - mThisArea.x, xGranularity) + getScrollPosition(),
+				granularize(mMouseX - mThisArea.x + getScrollPosition(), xGranularity),
 				1.0f - static_cast<float>(granularize(mMouseY - mThisArea.y, yGranularity)) / mThisArea.h
 			);
 		}
