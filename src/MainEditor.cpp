@@ -28,7 +28,12 @@
 #include "Emscripten.h"
 #include "MessageManager.h"
 #include "MessageDisplayer.h"
+<<<<<<< HEAD
 #include "SynthGrid.h"
+=======
+#include "TooltipManager.h"
+#include "TooltipDisplayer.h"
+>>>>>>> upstream/master
 #include "App.h"
 #include "SDL.h"
 #include "Theme.h"
@@ -55,6 +60,7 @@ MainEditor::MainEditor(EditorState& editorState, IPlayer& player, PlayerState& p
 	fileSelector = new FileSelector(editorState);
 	
 	mMessageManager = new MessageManager();
+	mTooltipManager = new TooltipManager();
 }
 
 
@@ -123,6 +129,19 @@ bool MainEditor::onEvent(SDL_Event& event)
 		
 		startDragging(event.button.x, event.button.y);
 	}
+	else if (event.type == SDL_MOUSEMOTION)
+	{
+		SDL_Point point = {event.motion.x/SCALE, event.motion.y/SCALE};
+		
+		for (int index = 0 ; index < mNumChildren ; ++index)
+		{
+			if (pointInRect(point, mChildrenArea[index]))
+			{
+				target = mChildren[index];
+				break;
+			}
+		}
+	}
 	else if (event.type == SDL_MOUSEBUTTONUP)
 	{
 		stopDragging();
@@ -168,8 +187,13 @@ bool MainEditor::onEvent(SDL_Event& event)
 		// Target Editor consumed the event, we don't need to process it here.
 		return true;
 	}
+
+	if (event.type == SDL_MOUSEMOTION)
+	{
+		mTooltipManager->updateTooltipMotion(event.motion.x/SCALE, event.motion.y/SCALE);
+	}
 	
-	if (target->isFocusable())
+	if (target->isFocusable() && event.type != SDL_MOUSEMOTION)
 	{
 		setFocus(target);
 	}
@@ -796,6 +820,8 @@ bool MainEditor::loadElements(const Theme& theme)
 	
 	mMessageDisplayer = new MessageDisplayer(mEditorState, *mMessageManager);
 	addChild(mMessageDisplayer, 0, theme.getHeight() - 16, theme.getWidth(), 16);
+	mTooltipDisplayer = new TooltipDisplayer(mEditorState, *mTooltipManager);
+	addChild(mTooltipDisplayer, 0, 0, theme.getWidth(), theme.getHeight());
 	
 	return true;
 }
@@ -876,7 +902,14 @@ void MainEditor::showMessage(MessageClass messageClass, const char* message)
 }
 
 
+void MainEditor::showTooltip(const SDL_Rect& area, const char* message)
+{
+	mTooltipManager->setTooltip(area, message);
+}
+
+
 void MainEditor::onUpdate(int ms)
 {
 	mMessageManager->update(ms);
+	mTooltipManager->update(ms);
 }
