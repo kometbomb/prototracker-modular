@@ -107,6 +107,10 @@ bool Synth::onFileSectionLoad(const FileSection& section, int& offset)
 
 		return true;
 	}
+	else
+	{
+		return false;
+	}
 }
 
 
