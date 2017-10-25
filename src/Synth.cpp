@@ -4,6 +4,7 @@
 #include "FileSection.h"
 #include "Sample.h"
 #include "SDL.h"
+#include <cstring>
 
 Synth::Synth()
 	: ISynth()
@@ -34,27 +35,37 @@ Synth::~Synth()
 
 bool Synth::onFileSectionLoad(const FileSection& section, int& offset)
 {
-	int synthCount = section.readByte(offset);
-	
-	if (synthCount == FileSection::invalidRead || synthCount > SequenceRow::maxTracks)
-		return false;
-	
-	for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
+	if (strcmp(section.getName(), "SYNT") == 0)
 	{
-		static_cast<ModularSynth*>(mOscillator[i])->readSynth(section, offset);
+		int synthCount = section.readByte(offset);
+		
+		if (synthCount == FileSection::invalidRead || synthCount > SequenceRow::maxTracks)
+			return false;
+		
+		for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
+		{
+			static_cast<ModularSynth*>(mOscillator[i])->readSynth(section, offset);
+		}
+		
+		return true;
 	}
-	
-	return true;
+	else
+	{
+		return false;
+	}
 }
 
 
 void Synth::onFileSectionSave(FileSection& section)
 {
-	section.writeByte(SequenceRow::maxTracks);
-	
-	for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
+	if (strcmp(section.getName(), "SYNT") == 0)
 	{
-		static_cast<ModularSynth*>(mOscillator[i])->writeSynth(section);
+		section.writeByte(SequenceRow::maxTracks);
+		
+		for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
+		{
+			static_cast<ModularSynth*>(mOscillator[i])->writeSynth(section);
+		}
 	}
 }
 
