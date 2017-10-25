@@ -28,12 +28,9 @@
 #include "Emscripten.h"
 #include "MessageManager.h"
 #include "MessageDisplayer.h"
-<<<<<<< HEAD
 #include "SynthGrid.h"
-=======
 #include "TooltipManager.h"
 #include "TooltipDisplayer.h"
->>>>>>> upstream/master
 #include "App.h"
 #include "SDL.h"
 #include "Theme.h"
