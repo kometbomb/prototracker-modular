@@ -520,7 +520,18 @@ bool SynthGrid::onEvent(SDL_Event& event)
 		mMouseY = event.motion.y / SCALE;
 		
 		if (mMode == CONNECTING_MODULE)
+		{
 			setDirty(true);
+		}
+		else
+		{
+			int moduleOut, connectorType, connector;
+			if (pickConnector(event.button.x / SCALE, event.button.y / SCALE, mThisArea, moduleOut, connectorType, connector))
+			{
+				SynthModule *module = getModularSynth().getModule(moduleOut);
+				showTooltip(getConnectorArea(moduleOut, connectorType, connector, mThisArea), connectorType == 1 ? module->getOutputName(connector) : module->getInputName(connector));
+			}
+		}
 	}
 	
 	return false;
