@@ -69,6 +69,7 @@ MainEditor::~MainEditor()
 	deleteChildren();
 	
 	delete mMessageManager;
+	delete mTooltipManager;
 }
 
 
