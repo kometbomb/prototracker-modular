@@ -16,7 +16,8 @@
 
 
 SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth, IPlayer& player)
-	:Editor(editorState, true), mSynth(synth), mPlayer(player), mMode(IDLE), mSelectedModule(-1), mCopyBuffer(NULL)
+	:Editor(editorState, true), mSynth(synth), mPlayer(player), mMode(IDLE), mSelectedModule(-1),
+	mHoveredConnection(-1), mCopyBuffer(NULL)
 {
 	mModuleSelector = new ModuleSelector(editorState);
 	editorState.patternEditor.currentTrack.addListener(this);
@@ -42,10 +43,10 @@ void SynthGrid::drawAngledWire(Renderer& renderer, int x1, int y1, int x2, int y
 void SynthGrid::startMove(int module)
 {
 	// Don't start moving from empty slot
-	
+
 	if (getModularSynth().getModule(module) == NULL)
 		return;
-	
+
 	mMode = MOVING_MODULE;
 	mFromModule = module;
 }
@@ -55,27 +56,27 @@ void SynthGrid::endMove(int targetModule)
 {
 	if (mMode != MOVING_MODULE)
 		return;
-	
+
 	mMode = IDLE;
-	
+
 	getModularSynth().swapModules(mFromModule, targetModule);
 }
-	
+
 
 void SynthGrid::startConnect(int fromModule, int toModule, int fromOutput, int toInput)
 {
 	mMode = CONNECTING_MODULE;
 	mFromModule = fromModule;
 	mToModule = toModule;
-	mFromOutput = fromOutput; 
+	mFromOutput = fromOutput;
 	mToInput = toInput;
-	
+
 	const ModularSynth& modularSynth = getModularSynth();
-	
+
 	for (int i = 0 ; i < modularSynth.getNumConnections() ; ++i)
 	{
 		const SynthConnection& connection = modularSynth.getConnection(i);
-		
+
 		if (connection.fromModule == fromModule && connection.fromOutput == fromOutput)
 		{
 			mFromModule = -1;
@@ -100,9 +101,9 @@ void SynthGrid::endConnect(int module, int connector)
 {
 	if (mMode != CONNECTING_MODULE)
 		return;
-	
+
 	mMode = IDLE;
-	
+
 	if (mFromModule != -1)
 	{
 		mToModule = module;
@@ -120,31 +121,31 @@ SDL_Rect SynthGrid::getConnectorArea(int moduleIndex, int type, int connectorInd
 {
 	const SynthModule* module = getModularSynth().getModule(moduleIndex);
 	const int connectorSize = 5;
-	
+
 	SDL_Rect area = {0,0,connectorSize,connectorSize};
-	
+
 	if (module)
 	{
 		SDL_Rect moduleArea = getModuleArea(moduleIndex, parent, true);
 		int c;
-		
+
 		if (type == 0)
 			c = module->getNumInputs();
 		else
 			c = module->getNumOutputs();
-		
+
 		if (c > 0)
-		{	
+		{
 			area.x = moduleArea.x + moduleArea.w * (connectorIndex * 2 + 1) / (c * 2) - connectorSize / 2;
 			area.y = moduleArea.y;
-		
+
 			if (type == 1)
 				area.y += moduleArea.h - area.h - 2;
 			else
 				area.y += 2;
 		}
 	}
-	
+
 	return area;
 }
 
@@ -152,10 +153,10 @@ SDL_Rect SynthGrid::getConnectorArea(int moduleIndex, int type, int connectorInd
 SDL_Rect SynthGrid::getModuleArea(int index, const SDL_Rect& parent, bool shrinkByMargin) const
 {
 	SDL_Rect area = {0, 0, parent.w / gridWidth, parent.h / gridHeight};
-	
+
 	area.x = parent.x + area.w * (index % gridWidth);
 	area.y = parent.y + area.h * (index / gridWidth);
-	
+
 	if (shrinkByMargin)
 	{
 		const int margin = moduleMargin * parent.w / networkWidth;
@@ -164,7 +165,7 @@ SDL_Rect SynthGrid::getModuleArea(int index, const SDL_Rect& parent, bool shrink
 		area.w -= margin;
 		area.h -= margin;
 	}
-	
+
 	return area;
 }
 
@@ -172,16 +173,16 @@ SDL_Rect SynthGrid::getModuleArea(int index, const SDL_Rect& parent, bool shrink
 bool SynthGrid::pickModule(int x, int y, const SDL_Rect& area, int& moduleOut, bool includeEmpty)
 {
 	const ModularSynth& modularSynth = getModularSynth();
-	
+
 	for (int index = 0 ; index < ModularSynth::maxModules ; ++index)
 	{
 		const SynthModule *module = modularSynth.getModule(index);
-		
+
 		if (includeEmpty || module != NULL)
 		{
 			SDL_Rect moduleArea = getModuleArea(index, area);
 			SDL_Point point = {x,y};
-			
+
 			if (pointInRect(point, moduleArea))
 			{
 				moduleOut = index;
@@ -189,7 +190,7 @@ bool SynthGrid::pickModule(int x, int y, const SDL_Rect& area, int& moduleOut, b
 			}
 		}
 	}
-	
+
 	return false;
 }
 
@@ -198,20 +199,20 @@ bool SynthGrid::pickConnector(int x, int y, const SDL_Rect& area, int& moduleOut
 {
 	if (!pickModule(x, y, area, moduleOut))
 		return false;
-	
+
 	const ModularSynth& modularSynth = getModularSynth();
 	const SynthModule *module = modularSynth.getModule(moduleOut);
 	SDL_Point point = {x,y};
-	
+
 	for (connectorType = 0 ; connectorType <= 1 ; connectorType++)
 	{
 		int c;
-		
+
 		if (connectorType == 0)
 			c = module->getNumInputs();
 		else
 			c = module->getNumOutputs();
-		
+
 		for (int i = 0 ; i < c ; ++i)
 		{
 			if (pointInRect(point, getConnectorArea(moduleOut, connectorType, i, area)))
@@ -221,21 +222,57 @@ bool SynthGrid::pickConnector(int x, int y, const SDL_Rect& area, int& moduleOut
 			}
 		}
 	}
-	
+
 	return false;
+}
+
+
+void SynthGrid::drawConnection(Renderer& renderer, const SDL_Rect& area, int index, const Color& wireColor)
+{
+	const SynthConnection& connection = getModularSynth().getConnection(index);
+
+	if (mConnectionPath[index].size() > 1)
+	{
+
+		const SDL_Point& node = mConnectionPath[index][0];
+		SDL_Rect prevArea = { node.x, node.y, 16, 16 };
+		for (int p = 0 ; p < mConnectionPath[index].size() ; ++p)
+		{
+			const SDL_Point& path = mConnectionPath[index][p];
+			SDL_Rect nodeArea = { path.x, path.y, 16, 16 };
+			renderer.renderLine(nodeArea.x, nodeArea.y, prevArea.x, prevArea.y, wireColor);
+			prevArea = nodeArea;
+		}
+	}
+
+	{
+		const SDL_Point& node = mConnectionPath[index][0];
+		SDL_Rect nodeArea = { node.x, node.y, 16, 16 };
+		SDL_Rect fromModuleArea = getConnectorArea(connection.toModule, 0, connection.toInput, area);
+		drawAngledWire(renderer, fromModuleArea.x + fromModuleArea.w / 2, fromModuleArea.y + fromModuleArea.h / 2, nodeArea.x, nodeArea.y, nodeArea.y, wireColor);
+		renderer.renderRect(fromModuleArea, wireColor);
+	}
+
+	{
+		const SDL_Point& node = mConnectionPath[index][(int)mConnectionPath[index].size() - 1];
+		SDL_Rect nodeArea = { node.x, node.y, 16, 16 };
+		SDL_Rect fromModuleArea = getConnectorArea(connection.fromModule, 1, connection.fromOutput, area);
+		drawAngledWire(renderer, fromModuleArea.x + fromModuleArea.w / 2, fromModuleArea.y + fromModuleArea.h / 2, nodeArea.x, nodeArea.y, nodeArea.y, wireColor);
+		renderer.renderRect(fromModuleArea, wireColor);
+	}
 }
 
 
 void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 {
 	setDirty(false);
-	
+
 	if (mModal != NULL)
 	{
 		//mModal->onDraw(renderer, area);
 		return;
 	}
-	
+
 	renderer.renderBackground(area);
 
 	/*for (const auto& node : mNetwork)
@@ -248,31 +285,31 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 			renderer.renderLine(nodeArea.x, nodeArea.y, neighborNodeArea.x, neighborNodeArea.y, Color(64,64,64));
 		}
 	}*/
-	
+
 	const ModularSynth& modularSynth = getModularSynth();
-	
+
 	for (int index = 0 ; index < ModularSynth::maxModules ; ++index)
 	{
 		const SynthModule *module = modularSynth.getModule(index);
-		
+
 		if (module != NULL)
 		{
 			SDL_Rect moduleArea = getModuleArea(index, area, true);
 			renderer.setClip(moduleArea);
 			renderer.renderRect(moduleArea, mSelectedModule == index ? Color(96,96,96) : Color(64,64,64));
-			
+
 			SDL_Rect textArea = {moduleArea.x + 2, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
 			renderer.renderText(textArea, Color(255,255,255), module->getName());
-			
+
 			for (int connectorType = 0 ; connectorType <= 1 ; connectorType++)
 			{
 				int c;
-				
+
 				if (connectorType == 0)
 					c = module->getNumInputs();
 				else
 					c = module->getNumOutputs();
-				
+
 				for (int i = 0 ; i < c ; ++i)
 				{
 					renderer.drawRect(getConnectorArea(index, connectorType, i, area), Color(0,0,0));
@@ -280,9 +317,9 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 			}
 		}
 	}
-	
+
 	renderer.setClip(area);
-	
+
 	Color palette[9];
 	palette[0] = Color(255,64,64);
 	palette[1] = Color(64,255,64);
@@ -293,43 +330,17 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 	palette[6] = Color(128,0,128);
 	palette[7] = Color(255,128,64);
 	palette[8] = Color(32,128,32);
-	
+
 	for (int i = 0 ; i < modularSynth.getNumConnections() ; ++i)
 	{
-		
-		const Color wireColor = palette[i % 9];
-		const SynthConnection& connection = modularSynth.getConnection(i);
-		if (mConnectionPath[i].size() > 1)
-		{
-			
-			const SDL_Point& node = mConnectionPath[i][0];
-			SDL_Rect prevArea = { node.x, node.y, 16, 16 };
-			for (int p = 0 ; p < mConnectionPath[i].size() ; ++p)
-			{
-				const SDL_Point& path = mConnectionPath[i][p];
-				SDL_Rect nodeArea = { path.x, path.y, 16, 16 };
-				renderer.renderLine(nodeArea.x, nodeArea.y, prevArea.x, prevArea.y, wireColor);
-				prevArea = nodeArea;
-			}
-		}
-		
-		{
-			const SDL_Point& node = mConnectionPath[i][0];
-			SDL_Rect nodeArea = { node.x, node.y, 16, 16 };
-			SDL_Rect fromModuleArea = getConnectorArea(connection.toModule, 0, connection.toInput, area);
-			drawAngledWire(renderer, fromModuleArea.x + fromModuleArea.w / 2, fromModuleArea.y + fromModuleArea.h / 2, nodeArea.x, nodeArea.y, nodeArea.y, wireColor);
-			renderer.renderRect(fromModuleArea, wireColor);
-		}
-		
-		{
-			const SDL_Point& node = mConnectionPath[i][(int)mConnectionPath[i].size() - 1];
-			SDL_Rect nodeArea = { node.x, node.y, 16, 16 };
-			SDL_Rect fromModuleArea = getConnectorArea(connection.fromModule, 1, connection.fromOutput, area);
-			drawAngledWire(renderer, fromModuleArea.x + fromModuleArea.w / 2, fromModuleArea.y + fromModuleArea.h / 2, nodeArea.x, nodeArea.y, nodeArea.y, wireColor);
-			renderer.renderRect(fromModuleArea, wireColor);
-		}
+		drawConnection(renderer, area, i, palette[i % 9]);
 	}
-	
+
+	if (mHoveredConnection != -1)
+	{
+		drawConnection(renderer, area, mHoveredConnection, Color(255, 255, 255));
+	}
+
 	if (mMode == CONNECTING_MODULE)
 	{
 		SDL_Rect moduleArea;
@@ -341,14 +352,14 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		{
 			moduleArea = getConnectorArea(mToModule, 0, mToInput, area);
 		}
-		
+
 		drawAngledWire(renderer, mMouseX, mMouseY, moduleArea.x + moduleArea.w / 2, moduleArea.y + moduleArea.h / 2, (mMouseY + moduleArea.y + moduleArea.h / 2) / 2, Color(255, 255, 255));
 	}
-	
+
 	if (mMode == MOVING_MODULE)
 	{
 		int moduleOut;
-		
+
 		if (pickModule(mMouseX, mMouseY, area, moduleOut, true))
 		{
 			SDL_Rect moduleArea = getModuleArea(moduleOut, area);
@@ -364,7 +375,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 	{
 		return mModal->onEvent(event);
 	}
-	
+
 	if (event.type == SDL_MOUSEBUTTONDOWN)
 	{
 		// Editor base class should probably do this when clicked
@@ -372,21 +383,21 @@ bool SynthGrid::onEvent(SDL_Event& event)
 
 		mMouseX = event.button.x / SCALE;
 		mMouseY = event.button.y / SCALE;
-		
+
 		int moduleOut, connectorType, connector;
-		
+
 		switch (event.button.button)
 		{
 			case SDL_BUTTON_LEFT:
-				
+
 				// Left button starts module connection mode or module move mode
 				// depending on if the user clicks the connector or just the module
 				// area.
-				
+
 				if (pickConnector(event.button.x / SCALE, event.button.y / SCALE, mThisArea, moduleOut, connectorType, connector))
 				{
 					ModularSynth& modularSynth = getModularSynth();
-					
+
 					if (mMode == CONNECTING_MODULE)
 					{
 						if ((connectorType == 0 && mToModule == -1) || (connectorType == 1 && mToModule != -1))
@@ -396,13 +407,14 @@ bool SynthGrid::onEvent(SDL_Event& event)
 								endConnect(moduleOut, connector);
 								rebuildWires();
 								mSelectedModule = -1;
+								mHoveredConnection = -1;
 							}
 						}
 					}
 					else if (mMode == IDLE || mMode == MOVING_MODULE)
 					{
-						// Abort moving if clicking on connectors 
-						
+						// Abort moving if clicking on connectors
+
 						if (connectorType == 0)
 						{
 							startConnect(-1, moduleOut, -1, connector);
@@ -415,7 +427,9 @@ bool SynthGrid::onEvent(SDL_Event& event)
 							modularSynth.detachConnection(moduleOut, 1, connector);
 							mSelectedModule = moduleOut;
 						}
-						
+
+						mHoveredConnection = -1;
+
 						rebuildWires();
 					}
 				}
@@ -436,12 +450,13 @@ bool SynthGrid::onEvent(SDL_Event& event)
 							}
 						}
 
-						mSelectedModule = moduleOut;						
+						mSelectedModule = moduleOut;
+						mHoveredConnection = -1;
 					}
 				}
-				
+
 				break;
-				
+
 			case SDL_BUTTON_RIGHT:
 				if (mMode == CONNECTING_MODULE || mMode == MOVING_MODULE)
 				{
@@ -450,7 +465,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				}
 				break;
 		}
-		
+
 		return true;
 	}
 	else if (event.type == SDL_MOUSEBUTTONUP)
@@ -463,28 +478,29 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				endMove(moduleOut);
 				rebuildWires();
 				mSelectedModule = -1;
+				mHoveredConnection = -1;
 			}
 			else
 			{
 				mMode = IDLE;
-			}	
+			}
 		}
-	}		
+	}
 	else if (event.type == SDL_MOUSEWHEEL)
 	{
 		int moduleOut;
-		
+
 		if (pickModule(mMouseX, mMouseY, mThisArea, moduleOut, false))
 		{
 			int dialSpeed = 1;
 			SDL_Keymod modState = SDL_GetModState();
-			
+
 			if (modState & KMOD_CTRL)
 				dialSpeed = 5;
-			
+
 			if (modState & KMOD_SHIFT)
 				dialSpeed *= 10;
-			
+
 			getModularSynth().getModule(moduleOut)->onDial(event.wheel.y < 0 ? -dialSpeed : dialSpeed);
 			setDirty(true);
 		}
@@ -496,21 +512,21 @@ bool SynthGrid::onEvent(SDL_Event& event)
 			case SDLK_F3:
 				copySynth();
 				break;
-				
+
 			case SDLK_F4:
 				pasteSynth();
 				break;
-			
+
 			case SDLK_DELETE:
 				ModularSynth& modularSynth = getModularSynth();
-				
+
 				if (mSelectedModule != -1 && modularSynth.getModule(mSelectedModule) != NULL)
 				{
 					modularSynth.removeModule(mSelectedModule);
 					rebuildWires();
 					mMode = IDLE;
 				}
-									
+
 				break;
 		}
 	}
@@ -518,7 +534,9 @@ bool SynthGrid::onEvent(SDL_Event& event)
 	{
 		mMouseX = event.motion.x / SCALE;
 		mMouseY = event.motion.y / SCALE;
-		
+		int previousHoveredConnection = mHoveredConnection;
+		mHoveredConnection = -1;
+
 		if (mMode == CONNECTING_MODULE)
 		{
 			setDirty(true);
@@ -530,10 +548,22 @@ bool SynthGrid::onEvent(SDL_Event& event)
 			{
 				SynthModule *module = getModularSynth().getModule(moduleOut);
 				showTooltip(getConnectorArea(moduleOut, connectorType, connector, mThisArea), connectorType == 1 ? module->getOutputName(connector) : module->getInputName(connector));
+
+				if (connectorType == 0)
+				{
+					mHoveredConnection = findConnectionTo(moduleOut, connector);
+				}
+				else
+				{
+					mHoveredConnection = findConnectionFrom(moduleOut, connector);
+				}
+
+				if (mHoveredConnection != previousHoveredConnection)
+					setDirty(true);
 			}
 		}
 	}
-	
+
 	return false;
 }
 
@@ -551,7 +581,7 @@ void SynthGrid::onFileSelectorEvent(const Editor& moduleSelector, bool accept)
 	{
 		getModularSynth().addModule(mSelectedModule, static_cast<const ModuleSelector&>(moduleSelector).getSelectedModuleId());
 	}
-		
+
 	setModal(NULL);
 }
 
@@ -574,31 +604,31 @@ void SynthGrid::initNetwork()
 	// Also store module X/Y location on network
 
 	mNetwork.resize(networkWidth * networkHeight);
-	
+
 	/* The network looks like this (M = module)
-	
+
 	0 1 2 3 4 ...
-	
+
 	1 |-------|
 	  |\|/|\|/|
 	2 |-M-|-M-| ... etc.
 	  |/|\|/|\|
 	3 ---------
-	
+
 	:
 	*/
-	
+
 	for (int y = 0 ; y < networkHeight ; ++y)
 	{
 		for (int x = 0 ; x < networkWidth ; ++x)
 		{
 			int networkLocation = x + y * networkWidth;
-			
+
 			mNetwork[networkLocation].x = x;
 			mNetwork[networkLocation].y = y;
-			
+
 			// Link to neighbors
-			
+
 			for (int dy = -1 ; dy <= 1 ; ++dy)
 			{
 				for (int dx = -1 ; dx <= 1 ; ++dx)
@@ -606,29 +636,29 @@ void SynthGrid::initNetwork()
 					// Skip connection to itself
 					if (dx == 0 && dy == 0)
 						continue;
-					
+
 					if (dx != 0 && dy != 0)
 						continue;
-					
+
 					if (dx != 0 && dy != 0 && ((x + y) & 1))
 						continue;
-					
+
 					// Skip vertical connectino for every other column
-					
+
 					//if (!(x & 1) && dx == 0)
 					//	continue;
-					
+
 					//if (!(x & 1) && && dx == 0)
 					//	continue;
-					
+
 					// Skip horizontal connection for every other row
-					
+
 					//if ((y & 1) && dy == 0)
 					//	continue;
-					
+
 					// Skip connections to outside the network
 					if (x + dx >= 0 && x + dx < networkWidth &&
-						y + dy >= 0 && y + dy < networkHeight) 
+						y + dy >= 0 && y + dy < networkHeight)
 					{
 						int neighborLocation = (x + dx)  + (y + dy) * networkWidth;
 						mNetwork[networkLocation].connections.push_back(PathFinder::Node::Connection(neighborLocation));
@@ -637,7 +667,7 @@ void SynthGrid::initNetwork()
 			}
 		}
 	}
-	
+
 	for (int y = 0 ; y < gridHeight ; ++y)
 	{
 		for (int x = 0 ; x < gridWidth ; ++x)
@@ -655,9 +685,9 @@ int SynthGrid::getConnectorNode(int moduleIndex, int type, int connectorIndex) c
 	int x = moduleIndex % gridWidth;
 	int y = moduleIndex / gridWidth;
 	int c, yOffset;
-	
+
 	const SynthModule *module = getModularSynth().getModule(moduleIndex);
-	
+
 	if (type == 0)
 	{
 		c = module->getNumInputs();
@@ -668,9 +698,9 @@ int SynthGrid::getConnectorNode(int moduleIndex, int type, int connectorIndex) c
 		c = module->getNumOutputs();
 		yOffset = gridResolution - 1;
 	}
-				
+
 	// moduleArea.x + moduleArea.w * (connectorIndex * 2 + 1) / (c * 2) - connectorSize / 2;
-	
+
 	return (x * gridResolution + gridResolution * (connectorIndex * 2 + 1) / (c * 2)) + (y * gridResolution + yOffset) * networkWidth;
 }
 
@@ -678,29 +708,29 @@ int SynthGrid::getConnectorNode(int moduleIndex, int type, int connectorIndex) c
 void SynthGrid::rebuildWires(bool fromInit)
 {
 	setDirty(true);
-	
+
 	// Unlock the player while the wires are rerouted...
 	// does not have any effect other than visual so we
-	// don't need the lock while it does its thing (which 
+	// don't need the lock while it does its thing (which
 	// could take >500 ms.
-	
+
 	// Also, from init we don't want to unlock this since
 	// It's not locked yet (the below .lock()) would cause
 	// a freeze.
-	
+
 	if (!fromInit)
 		mPlayer.unlock();
-								
-	
+
+
 	// Reset network cost
-	
+
 	for (auto& node : mNetwork)
 	{
 		node.resetCosts();
 	}
-	
+
 	// Make cost of the module node high
-	
+
 	for (int y = 0 ; y < gridHeight ; ++y)
 	{
 		for (int x = 0 ; x < gridWidth ; ++x)
@@ -718,25 +748,25 @@ void SynthGrid::rebuildWires(bool fromInit)
 			}
 		}
 	}
-	
+
 	// Update connection paths
-	
+
 	mConnectionPath.clear();
 	mConnectionPath.resize(getModularSynth().getNumConnections());
-	
+
 	PathFinder pathFinder;
-	
+
 	for (int i = 0 ; i < getModularSynth().getNumConnections() ; ++i)
 	{
 		pathFinder.setNetwork(mNetwork);
 		const SynthConnection& connection = getModularSynth().getConnection(i);
 		std::vector<int> path = pathFinder.findPath(getConnectorNode(connection.fromModule, 1, connection.fromOutput), getConnectorNode(connection.toModule, 0, connection.toInput));
-		
+
 		// Add some cost to nodes used by the connection
-		
+
 		int prevNode = -1;
 		mConnectionPath[i].clear();
-		
+
 		for (auto node : path)
 		{
 			mNetwork[node].cost += 1;
@@ -748,15 +778,15 @@ void SynthGrid::rebuildWires(bool fromInit)
 				nodeConnection.timesUsed += 1;
 			}
 			prevNode = node;
-			
+
 			SDL_Point point = { mNetwork[node].x * mThisArea.w / (networkWidth - 1) + mThisArea.x, mNetwork[node].y * mThisArea.h / (networkHeight - 1) + mThisArea.y};
 			mConnectionPath[i].push_back(point);
 		}
 	}
-	
+
 	// Lock it again since there could be something related
 	// to the audio happening later.
-	
+
 	if (!fromInit)
 		mPlayer.lock();
 }
@@ -770,17 +800,19 @@ void SynthGrid::onLoaded()
 
 void SynthGrid::onListenableChange(Listenable *listenable)
 {
+	mHoveredConnection = -1;
+	mSelectedModule = -1;
 	rebuildWires(true);
 }
 
-	
+
 void SynthGrid::copySynth()
 {
 	if (mCopyBuffer != NULL)
 		delete mCopyBuffer;
-	
+
 	mCopyBuffer = getModularSynth().clone();
-	
+
 	showMessageV(MessageInfo, "Synth layout copied");
 }
 
@@ -788,8 +820,40 @@ void SynthGrid::copySynth()
 void SynthGrid::pasteSynth()
 {
 	getModularSynth().copy(*mCopyBuffer);
-	
+
 	rebuildWires();
-	
+
 	showMessageV(MessageInfo, "Synth layout pasted");
+}
+
+
+int SynthGrid::findConnectionFrom(int fromModule, int fromOutput) const
+{
+	const ModularSynth& synth = getModularSynth();
+
+	for (int i = 0 ; i < synth.getNumConnections() ; ++i)
+	{
+		const SynthConnection& connection = synth.getConnection(i);
+
+		if (connection.fromModule == fromModule && connection.fromOutput == fromOutput)
+			return i;
+	}
+
+	return -1;
+}
+
+
+int SynthGrid::findConnectionTo(int toModule, int toInput) const
+{
+	const ModularSynth& synth = getModularSynth();
+
+	for (int i = 0 ; i < synth.getNumConnections() ; ++i)
+	{
+		const SynthConnection& connection = synth.getConnection(i);
+
+		if (connection.toModule == toModule && connection.toInput == toInput)
+			return i;
+	}
+
+	return -1;
 }
