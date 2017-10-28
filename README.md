@@ -7,9 +7,9 @@ Double click on synth area to add a new module. Left click to connect inputs/out
 ## Download
 
 See the [releases](https://github.com/kometbomb/prototracker-modular/releases) for binaries.
- 
+
 ## Building
 
-Simply do ```make mingw``` where "mingw" is your platform of choice. Do ```make``` to see the supported platforms. 
+Simply do ```make mingw``` where "mingw" is your platform of choice. Do ```make``` to see the supported platforms.
 
 The binary needs the files in the assets/ directory to work properly.
