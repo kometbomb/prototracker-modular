@@ -23,57 +23,62 @@ private:
 	ISynth& mSynth;
 	IPlayer& mPlayer;
 	ModuleSelector *mModuleSelector;
-	
+
 	virtual void onDraw(Renderer& renderer, const SDL_Rect& area);
 	void drawAngledWire(Renderer& renderer, int x1, int y1, int x2, int y2, int y3, const Color& color1) const;
-	SDL_Rect getModuleArea(int index, const SDL_Rect& parent, bool shrinkByMargin = false) const; 
-	
+	void drawConnection(Renderer& renderer, const SDL_Rect& area, int index, const Color& color);
+	SDL_Rect getModuleArea(int index, const SDL_Rect& parent, bool shrinkByMargin = false) const;
+
 	// type: 0 = input, 1 = output
 	SDL_Rect getConnectorArea(int moduleIndex, int type, int connectorIndex, const SDL_Rect& parent) const;
 	int getConnectorNode(int moduleIndex, int type, int connectorIndex) const;
-	
+
 	enum SynthGridMode
 	{
 		IDLE,
 		CONNECTING_MODULE,
 		MOVING_MODULE
 	};
-	
+
 	SynthGridMode mMode;
 	int mSelectedModule;
+	int mHoveredConnection;
 	int mFromModule, mFromOutput;
 	int mToModule, mToInput;
 	int mMouseX, mMouseY;
 	ModularSynth *mCopyBuffer;
-	
+
 	int mModuleLocation[gridWidth * gridHeight][2];
 	std::vector<PathFinder::Node> mNetwork;
 	std::vector<std::vector<SDL_Point> > mConnectionPath;
-	
+
 	void initNetwork();
-	void rebuildWires(bool fromInit = false);
-	
+	void rebuildWires();
+
+	int findConnectionFrom(int fromModule, int fromOutput) const;
+	int findConnectionTo(int toModule, int toOutput) const;
+
 	ModularSynth& getModularSynth();
 	const ModularSynth& getModularSynth() const;
-	
+
 	bool pickConnector(int x, int y, const SDL_Rect& area, int& module, int& connectorType, int& connector);
 	bool pickModule(int x, int y, const SDL_Rect& area, int& module, bool includeFree = false);
-	
+
 	void showNewModuleDialog();
-	
+
 	void startMove(int module);
 	void endMove(int targetModule);
 	void startConnect(int fromModule, int toModule, int fromOutput, int toInput);
 	void endConnect(int module, int connector);
-	
+
 	void copySynth();
 	void pasteSynth();
-	
+
 public:
-	
+
 	SynthGrid(EditorState& editorState, ISynth& synth, IPlayer& player);
 	virtual ~SynthGrid();
-	
+
 	virtual bool onEvent(SDL_Event& event);
 	virtual void onFileSelectorEvent(const Editor& moduleSelector, bool accept);
 	virtual void onListenableChange(Listenable *listenable);
