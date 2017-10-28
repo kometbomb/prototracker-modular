@@ -705,7 +705,7 @@ int SynthGrid::getConnectorNode(int moduleIndex, int type, int connectorIndex) c
 }
 
 
-void SynthGrid::rebuildWires(bool fromInit)
+void SynthGrid::rebuildWires()
 {
 	setDirty(true);
 
@@ -718,9 +718,7 @@ void SynthGrid::rebuildWires(bool fromInit)
 	// It's not locked yet (the below .lock()) would cause
 	// a freeze.
 
-	if (!fromInit)
-		mPlayer.unlock();
-
+	mPlayer.unlock();
 
 	// Reset network cost
 
@@ -787,14 +785,13 @@ void SynthGrid::rebuildWires(bool fromInit)
 	// Lock it again since there could be something related
 	// to the audio happening later.
 
-	if (!fromInit)
-		mPlayer.lock();
+	mPlayer.lock();
 }
 
 
 void SynthGrid::onLoaded()
 {
-	rebuildWires(true);
+	rebuildWires();
 }
 
 
@@ -802,7 +799,7 @@ void SynthGrid::onListenableChange(Listenable *listenable)
 {
 	mHoveredConnection = -1;
 	mSelectedModule = -1;
-	rebuildWires(true);
+	rebuildWires();
 }
 
 

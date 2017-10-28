@@ -53,7 +53,7 @@ private:
 	std::vector<std::vector<SDL_Point> > mConnectionPath;
 
 	void initNetwork();
-	void rebuildWires(bool fromInit = false);
+	void rebuildWires();
 
 	int findConnectionFrom(int fromModule, int fromOutput) const;
 	int findConnectionTo(int toModule, int toOutput) const;
