@@ -24,22 +24,22 @@ void PulseModule::cycle()
 {
 	if (getInput(1) > 0.5f && mPreviousSync <= 0.5f)
 		mAccumulator = 0;
-	
+
 	mPreviousSync = getInput(1);
-	
-	mAccumulator = fmod(mAccumulator + getInput(0) / mSampleRate * static_cast<float>(TUNING / 2), 1.0f);
+
+	mAccumulator = fmod(mAccumulator + getInput(0) / mSampleRate * 1000 / 2, 1.0f);
 	setOutput(0, mAccumulator < (getInput(2) * 0.5f + 0.5f) ? -1 : 1);
 }
 
 
-const char * PulseModule::getInputName(int input) const 
+const char * PulseModule::getInputName(int input) const
 {
 	static const char *names[] = {"Frequency", "Sync", "PW"};
 	return names[input];
 }
 
 
-const char * PulseModule::getOutputName(int output) const 
+const char * PulseModule::getOutputName(int output) const
 {
 	static const char *names[] = {"Output"};
 	return names[output];
