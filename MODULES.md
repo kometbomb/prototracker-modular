@@ -4,7 +4,7 @@ Modules are loosely divided in three categories: Control, Generators and Modifie
 
 Most modules output either in the -1..1 range (or similar), this means you can basically connect anything to anything. Experiment.
 
-Note that there is a delay in signal propagation: every connection between two modules results in a delay of one cycle. This might make things harder with e.g. the accumulator if the reset value is changed at the same time when the reset signal is sent and the signals won't arrive at the exact same cycle. 
+Note that there is a delay in signal propagation: every connection between two modules results in a delay of one cycle. This might make things harder with e.g. the accumulator if the reset value is changed at the same time when the reset signal is sent and the signals won't arrive at the exact same cycle.
 
 ## Control
 
@@ -60,7 +60,7 @@ Use this module to output sound.
 
 ### EG
 
-Generates a simple attack-decay envelope. Key down input 
+Generates a simple attack-decay envelope. Key down input
 
 | Input | Description  |
 |-------|--------------|
@@ -95,7 +95,7 @@ These modules are used to generate signals useful as audio.
 
 | Input | Description  |
 |-------|--------------|
-| 0 | Frequency in (rate at which the phase advances) |
+| 0 | Frequency in (rate at which the phase advances, in kHz) |
 | 1 | Sync (rising signal crossing 0.5 sets phase to zero) |
 | 2 | Phase add (add to current phase, use for FM) |
 
@@ -108,7 +108,7 @@ These modules are used to generate signals useful as audio.
 
 | Input | Description  |
 |-------|--------------|
-| 0 | Frequency in (rate at which the phase advances) |
+| 0 | Frequency in (rate at which the phase advances, in kHz) |
 | 1 | Sync (rising signal crossing 0.5 sets phase to zero) |
 | 2 | Pulse width (-1..1) |
 
