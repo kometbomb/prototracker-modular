@@ -124,7 +124,7 @@ SDL_Rect SynthGrid::getConnectorArea(int moduleIndex, int type, int connectorInd
 
 	if (module)
 	{
-		SDL_Rect moduleArea = getModuleArea(moduleIndex, parent, true);
+		SDL_Rect moduleArea = module->getModuleArea(getModuleArea(moduleIndex, parent, true));
 		return module->getConnectorArea(moduleArea, type, connectorIndex);
 	}
 	else
@@ -279,7 +279,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 
 		if (module != NULL)
 		{
-			SDL_Rect moduleArea = getModuleArea(index, area, true);
+			SDL_Rect moduleArea = module->getModuleArea(getModuleArea(index, area, true));
 			renderer.setClip(moduleArea);
 			module->render(renderer, moduleArea, mSelectedModule == index);
 
@@ -715,11 +715,21 @@ void SynthGrid::rebuildWires()
 	{
 		for (int x = 0 ; x < gridWidth ; ++x)
 		{
-			if (getModularSynth().getModule(x + y * gridWidth))
+			const SynthModule *module = getModularSynth().getModule(x + y * gridWidth);
+
+			if (module != NULL)
 			{
-				for (int dy = moduleMargin ; dy <= gridResolution - moduleMargin ; ++dy)
+				// Figure out the margin in pathfinder grid resolution
+				SDL_Rect cellArea = getModuleArea(x + y * gridWidth, mThisArea, true);
+				SDL_Rect moduleArea = module->getModuleArea(cellArea);
+
+				// Margin is relative to the module rect and the surrounding grid rect
+				int moduleMarginX = moduleMargin + (moduleArea.x - cellArea.x) * gridResolution / cellArea.w;
+				int moduleMarginY = moduleMargin + (moduleArea.y - cellArea.y) * gridResolution / cellArea.h;
+
+				for (int dy = moduleMarginY ; dy <= gridResolution - moduleMarginY ; ++dy)
 				{
-					for (int dx = moduleMargin ; dx <= gridResolution - moduleMargin ; ++dx)
+					for (int dx = moduleMarginX ; dx <= gridResolution - moduleMarginX ; ++dx)
 					{
 						int networkLocation = (x * gridResolution + dx) + (y * gridResolution + dy) * networkWidth;
 						mNetwork[networkLocation].cost = 9999;

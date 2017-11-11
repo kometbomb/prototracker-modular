@@ -132,3 +132,10 @@ SDL_Rect SynthModule::getConnectorArea(const SDL_Rect& moduleArea, int type, int
 
 	return area;
 }
+
+
+SDL_Rect SynthModule::getModuleArea(const SDL_Rect& gridCellArea) const
+{
+	// No adjustment
+	return gridCellArea;
+}

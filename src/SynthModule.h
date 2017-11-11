@@ -51,6 +51,7 @@ public:
 	virtual const char * getInputName(int input) const = 0;
 	virtual const char * getOutputName(int output) const = 0;
 
+	virtual SDL_Rect getModuleArea(const SDL_Rect& gridCellArea) const;
 	virtual void render(Renderer& renderer, const SDL_Rect& moduleArea, bool isSelected) const;
 	virtual SDL_Rect getConnectorArea(const SDL_Rect& moduleArea, int type, int connectorIndex) const;
 
