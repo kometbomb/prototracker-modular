@@ -122,31 +122,16 @@ SDL_Rect SynthGrid::getConnectorArea(int moduleIndex, int type, int connectorInd
 	const SynthModule* module = getModularSynth().getModule(moduleIndex);
 	const int connectorSize = 5;
 
-	SDL_Rect area = {0,0,connectorSize,connectorSize};
-
 	if (module)
 	{
 		SDL_Rect moduleArea = getModuleArea(moduleIndex, parent, true);
-		int c;
-
-		if (type == 0)
-			c = module->getNumInputs();
-		else
-			c = module->getNumOutputs();
-
-		if (c > 0)
-		{
-			area.x = moduleArea.x + moduleArea.w * (connectorIndex * 2 + 1) / (c * 2) - connectorSize / 2;
-			area.y = moduleArea.y;
-
-			if (type == 1)
-				area.y += moduleArea.h - area.h - 2;
-			else
-				area.y += 2;
-		}
+		return module->getConnectorArea(moduleArea, type, connectorIndex);
 	}
-
-	return area;
+	else
+	{
+		SDL_Rect area = {};
+		return area;
+	}
 }
 
 
@@ -296,10 +281,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		{
 			SDL_Rect moduleArea = getModuleArea(index, area, true);
 			renderer.setClip(moduleArea);
-			renderer.renderRect(moduleArea, mSelectedModule == index ? Color(96,96,96) : Color(64,64,64));
-
-			SDL_Rect textArea = {moduleArea.x + 2, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
-			renderer.renderText(textArea, Color(255,255,255), module->getName());
+			module->render(renderer, moduleArea, mSelectedModule == index);
 
 			for (int connectorType = 0 ; connectorType <= 1 ; connectorType++)
 			{
