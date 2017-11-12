@@ -9,6 +9,7 @@
 #include "ConstModule.h"
 #include "EffectModule.h"
 #include "EGModule.h"
+#include "RMSModule.h"
 #include "FilterModule.h"
 #include "SplitModule.h"
 #include "MixerModule.h"
@@ -35,6 +36,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(AddModule);
 	REGISTER(MulModule);
 	REGISTER(AbsModule);
+	REGISTER(RMSModule);
 	REGISTER(ConstModule);
 	REGISTER(EffectModule);
 	REGISTER(SplitModule);
@@ -63,7 +65,7 @@ SynthModule* ModuleFactory::createModule(int id, ModularSynth& synth) const
 	for (int i = 0 ; i < mModules.size() ; ++i)
 		if (mModules[i].id == id)
 			return mModules[i].createFunc(synth);
-			
+
 	return NULL;
 }
 
