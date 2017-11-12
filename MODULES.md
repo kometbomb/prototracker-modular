@@ -239,6 +239,18 @@ Use this to split signals.
 | 1 | Same as input |
 | 2 | Same as input |
 
+### RMS
+
+This module outputs the root mean square of the input (window size 20 milliseconds). This results in the amplitude of the input.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Input |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Amplitude (root mean square) |
+
 ### Mixer
 
 Splits input A two outputs based on input B. In other words, use this to create stereo panning (or, use for other purposes where you need a conditionally split signals).

@@ -13,7 +13,7 @@ void OscillatorModule::cycle()
 
 	mPreviousSync = getInput(1);
 
-	mAccumulator = fmod(mAccumulator + getInput(0) / mSampleRate * 1000 / 2, 1.0f);
+	mAccumulator = fmod(mAccumulator + getInput(0) / mSampleRate * 1000, 1.0f);
 	setOutput(0, sin((mAccumulator + getInput(2)) * (3.14157 * 2)));
 	setOutput(1, fmod(mAccumulator + getInput(2), 1.0f) * 2.0f - 1.0f);
 }
