@@ -4,7 +4,7 @@ Modules are loosely divided in three categories: Control, Generators and Modifie
 
 Most modules output either in the -1..1 range (or similar), this means you can basically connect anything to anything. Experiment.
 
-Note that there is a delay in signal propagation: every connection between two modules results in a delay of one cycle. This might make things harder with e.g. the accumulator if the reset value is changed at the same time when the reset signal is sent and the signals won't arrive at the exact same cycle. 
+Note that there is a delay in signal propagation: every connection between two modules results in a delay of one cycle. This might make things harder with e.g. the accumulator if the reset value is changed at the same time when the reset signal is sent and the signals won't arrive at the exact same cycle.
 
 ## Control
 
@@ -52,7 +52,7 @@ Use this module to output sound.
 
 ### EG
 
-Generates a simple attack-decay envelope. Key down input 
+Generates a simple attack-decay envelope. Key down input
 
 | Input | Description  |
 |-------|--------------|
@@ -230,6 +230,18 @@ Use this to split signals.
 | 0 | Same as input |
 | 1 | Same as input |
 | 2 | Same as input |
+
+### RMS
+
+This module outputs the root mean square of the input (window size 20 milliseconds). This results in the amplitude of the input.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Input |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Amplitude (root mean square) |
 
 ### Mixer
 
