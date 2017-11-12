@@ -27,7 +27,7 @@ void PulseModule::cycle()
 
 	mPreviousSync = getInput(1);
 
-	mAccumulator = fmod(mAccumulator + getInput(0) / mSampleRate * 1000 / 2, 1.0f);
+	mAccumulator = fmod(mAccumulator + getInput(0) / mSampleRate * 1000, 1.0f);
 	setOutput(0, mAccumulator < (getInput(2) * 0.5f + 0.5f) ? -1 : 1);
 }
 
