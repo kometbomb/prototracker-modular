@@ -34,5 +34,6 @@ prototracker.html.mem
 prototracker.js
 *.zip
 
-# Script
+# Project stuff
+.vscode/*
 node_modules/*
