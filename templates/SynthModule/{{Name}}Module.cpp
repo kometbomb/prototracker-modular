@@ -10,7 +10,7 @@
 void {{Name}}Module::cycle()
 {
 	// Passthru
-	setOutput(0, getInput0));
+	setOutput(0, getInput(0));
 }
 
 
