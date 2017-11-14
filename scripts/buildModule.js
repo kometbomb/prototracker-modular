@@ -32,7 +32,7 @@ new Scaffold({
   },
   render: mustache.render
 })
-.copy('templates/SynthModule', 'src')
+.copy('templates/SynthModule', 'src/modules')
 .then(() => {
   console.log(`${moduleName}Module generated with ID ${moduleId}. Please update ModuleFactory!`)
 })
