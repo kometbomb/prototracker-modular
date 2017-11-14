@@ -1,24 +1,27 @@
 #pragma once
 
-#include "SynthModule.h"
+#include "../SynthModule.h"
 
-class DistortionModule: public SynthModule
+class AbsModule: public SynthModule
 {
-	DistortionModule(ModularSynth& synth);
-	
-public:
-	virtual ~DistortionModule();
+	AbsModule(ModularSynth& synth);
+	int mMaxBufferSize;
+	int mHead;
+	float *mBuffer;
 
-	static const int moduleId = 17;
+public:
+	virtual ~AbsModule();
+
+	static const int moduleId = 21;
 	static const int maxInstances = -1;
-	static constexpr const char *moduleName = "Distortion";
+	static constexpr const char *moduleName = "Abs";
 
 	static SynthModule * createModule(ModularSynth& synth);
-	
+
 	virtual void cycle();
-	
+
 	virtual const char * getName() const;
 	virtual const char * getInputName(int input) const;
 	virtual const char * getOutputName(int output) const;
-};
 
+};

@@ -1,28 +1,25 @@
 #pragma once
 
-#include "SynthModule.h"
+#include "../SynthModule.h"
 
-class BitsModule: public SynthModule
+class PulseModule: public SynthModule
 {
-	BitsModule(ModularSynth& synth);
-	int mMaxBufferSize;
-	int mHead;
-	float *mBuffer;
-	
-public:
-	virtual ~BitsModule();
+	PulseModule(ModularSynth& synth);
 
-	static const int moduleId = 20;
+	float mAccumulator, mPreviousSync;
+
+public:
+	virtual ~PulseModule();
+
+	static const int moduleId = 19;
 	static const int maxInstances = -1;
-	static constexpr const char *moduleName = "Bits";
+	static constexpr const char *moduleName = "Pulse";
 
 	static SynthModule * createModule(ModularSynth& synth);
-	
+
 	virtual void cycle();
-	
+
 	virtual const char * getName() const;
 	virtual const char * getInputName(int input) const;
 	virtual const char * getOutputName(int output) const;
-	
 };
-

@@ -1,24 +1,22 @@
 #pragma once
 
-#include "SynthModule.h"
+#include "../SynthModule.h"
 
-class MixerModule: public SynthModule
+class SplitModule: public SynthModule
 {
-	MixerModule(ModularSynth& synth);
-	
-public:
-	virtual ~MixerModule();
+	SplitModule(ModularSynth& synth);
 
-	static const int moduleId = 23;
+public:
+	static const int moduleId = 8;
 	static const int maxInstances = -1;
-	static constexpr const char *moduleName = "Mixer";
+	static constexpr const char *moduleName = "Split";
 
 	static SynthModule * createModule(ModularSynth& synth);
-	
+
 	virtual void cycle();
-	
+
 	virtual const char * getName() const;
 	virtual const char * getInputName(int input) const;
 	virtual const char * getOutputName(int output) const;
-};
 
+};

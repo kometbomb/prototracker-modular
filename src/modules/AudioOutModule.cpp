@@ -1,5 +1,5 @@
 #include "AudioOutModule.h"
-#include "ModularSynth.h"
+#include "../ModularSynth.h"
 
 AudioOutModule::AudioOutModule(ModularSynth& synth)
 	:SynthModule(synth, moduleId, 3, 0, 0)
@@ -16,14 +16,14 @@ void AudioOutModule::cycle()
 }
 
 
-const char * AudioOutModule::getInputName(int input) const 
+const char * AudioOutModule::getInputName(int input) const
 {
 	static const char *names[] = {"L+R", "Left", "Right"};
 	return names[input];
 }
 
 
-const char * AudioOutModule::getOutputName(int output) const 
+const char * AudioOutModule::getOutputName(int output) const
 {
 	return "Output";
 }

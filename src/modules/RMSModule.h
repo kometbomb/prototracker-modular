@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SynthModule.h"
+#include "../SynthModule.h"
 
 class RMSModule: public SynthModule
 {
