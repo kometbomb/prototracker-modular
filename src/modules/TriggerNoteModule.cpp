@@ -1,5 +1,5 @@
 #include "TriggerNoteModule.h"
-#include "ModularSynth.h"
+#include "../ModularSynth.h"
 
 TriggerNoteModule::TriggerNoteModule(ModularSynth& synth)
 	:SynthModule(synth, moduleId, 0, 1, 0)
@@ -13,13 +13,13 @@ void TriggerNoteModule::cycle()
 
 
 
-const char * TriggerNoteModule::getInputName(int input) const 
+const char * TriggerNoteModule::getInputName(int input) const
 {
 	return "TriggerNote";
 }
 
 
-const char * TriggerNoteModule::getOutputName(int output) const 
+const char * TriggerNoteModule::getOutputName(int output) const
 {
 	return "Output";
 }

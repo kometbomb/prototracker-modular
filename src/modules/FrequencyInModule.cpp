@@ -1,5 +1,5 @@
 #include "FrequencyInModule.h"
-#include "ModularSynth.h"
+#include "../ModularSynth.h"
 
 #ifndef TUNING
 #define TUNING 440.0

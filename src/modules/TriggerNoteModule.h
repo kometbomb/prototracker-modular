@@ -1,24 +1,22 @@
 #pragma once
 
-#include "SynthModule.h"
+#include "../SynthModule.h"
 
-class AccumulatorModule: public SynthModule
+class TriggerNoteModule: public SynthModule
 {
-	AccumulatorModule(ModularSynth& synth);
-	float mAccumulator, mPreviousSync;
-	
+	TriggerNoteModule(ModularSynth& synth);
+
 public:
-	static const int moduleId = 11;
+	static const int moduleId = 9;
 	static const int maxInstances = -1;
-	static constexpr const char *moduleName = "Accumulator";
+	static constexpr const char *moduleName = "TriggerNote";
 
 	static SynthModule * createModule(ModularSynth& synth);
-	
+
 	virtual void cycle();
-	
+
 	virtual const char * getName() const;
 	virtual const char * getInputName(int input) const;
 	virtual const char * getOutputName(int output) const;
-	
-};
 
+};

@@ -1,5 +1,5 @@
 #include "EffectModule.h"
-#include "ModularSynth.h"
+#include "../ModularSynth.h"
 #include <cstdio>
 #include <cstring>
 
@@ -17,13 +17,13 @@ void EffectModule::cycle()
 
 
 
-const char * EffectModule::getInputName(int input) const 
+const char * EffectModule::getInputName(int input) const
 {
 	return "";
 }
 
 
-const char * EffectModule::getOutputName(int output) const 
+const char * EffectModule::getOutputName(int output) const
 {
 	static const char *names[] = {"Output"};
 	return names[output];
@@ -47,12 +47,12 @@ void EffectModule::onDial(int delta)
 	const char *allowedEffects = "0123456789abcdefghijklmnopqrstuvwxyz";
 	int effect = (static_cast<int>(static_cast<float>(delta) + mParams[0]) + 256) % 256;
 	int direction = delta < 0 ? -1 : 1;
-	
+
 	while (strchr(allowedEffects, effect) == NULL || effect == 0)
 	{
 		effect = (effect + direction + 256) % 256;
 	}
-	
+
 	setParam(0, effect);
 	sprintf(mLabel, "%cxx", effect);
 }
