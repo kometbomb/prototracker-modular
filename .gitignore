@@ -33,3 +33,6 @@ prototracker.html
 prototracker.html.mem
 prototracker.js
 *.zip
+
+# Script
+node_modules/*
