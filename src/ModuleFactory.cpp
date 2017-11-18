@@ -15,6 +15,7 @@
 #include "modules/MixerModule.h"
 #include "modules/ClampModule.h"
 #include "modules/DelayModule.h"
+#include "modules/ReverbModule.h"
 #include "modules/ShapeModule.h"
 #include "modules/BitsModule.h"
 #include "modules/DistortionModule.h"
@@ -46,6 +47,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(DistortionModule);
 	REGISTER(BitsModule);
 	REGISTER(DelayModule);
+	REGISTER(ReverbModule);
 	REGISTER(FilterModule);
 	REGISTER(AccumulatorModule);
 	REGISTER(FrequencyInModule);
