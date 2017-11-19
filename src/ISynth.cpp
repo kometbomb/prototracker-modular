@@ -1,10 +1,10 @@
+#include "Debug.h"
 #include "ISynth.h"
 #include "IOscillator.h"
 #include "SequenceRow.h"
 #include "Sample.h"
 #include "SDL.h"
 #include <algorithm>
-#include <cstdio>
 
 const int ISynth::oscillatorProbeLength;
 
@@ -51,7 +51,7 @@ ISynth::Thread::~Thread()
 
 void ISynth::Thread::start()
 {
-	printf("[%p] Starting thread\n", this);
+	debug("[%p] Starting thread", this);
 
 	thread = SDL_CreateThread(threadProc, "SynthThread", this);
 }
@@ -59,7 +59,7 @@ void ISynth::Thread::start()
 
 void ISynth::Thread::stop()
 {
-	printf("[%p] Stopping thread\n", this);
+	debug("[%p] Stopping thread", this);
 
 	SDL_AtomicSet(&done, 1);
 	SDL_SemPost(inSem);
