@@ -99,7 +99,7 @@ void SynthModule::setSampleRate(int newRate)
 
 void SynthModule::render(Renderer& renderer, const SDL_Rect& moduleArea, bool isSelected) const
 {
-	renderer.renderRect(moduleArea, isSelected ? Color(96,96,96) : Color(64,64,64));
+	renderer.renderRect(moduleArea, getModuleColor(isSelected));
 
 	SDL_Rect textArea = {moduleArea.x + 2, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
 	renderer.renderText(textArea, Color(255,255,255), getName());
@@ -138,4 +138,10 @@ SDL_Rect SynthModule::getModuleArea(const SDL_Rect& gridCellArea) const
 {
 	// No adjustment
 	return gridCellArea;
+}
+
+
+Color SynthModule::getModuleColor(bool isSelected) const
+{
+	return isSelected ? Color(96,96,96) : Color(64,64,64);
 }

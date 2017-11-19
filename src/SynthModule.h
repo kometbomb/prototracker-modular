@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SDL.h"
+#include "Color.h"
 
 struct ModularSynth;
 struct Renderer;
@@ -57,6 +58,7 @@ public:
 	// Optional custom render methods
 	virtual void render(Renderer& renderer, const SDL_Rect& moduleArea, bool isSelected) const;
 	virtual SDL_Rect getConnectorArea(const SDL_Rect& moduleArea, int type, int connectorIndex) const;
+	virtual Color getModuleColor(bool isSelected) const;
 
 	virtual void cycle() = 0;
 };
