@@ -9,6 +9,7 @@ class DistortionModule: public SynthModule
 public:
 	virtual ~DistortionModule();
 
+	static const ModuleClass moduleClass = ModuleClass::Modifier;
 	static const int moduleId = 17;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "Distortion";

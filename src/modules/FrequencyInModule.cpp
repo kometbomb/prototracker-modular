@@ -6,7 +6,7 @@
 #endif
 
 FrequencyInModule::FrequencyInModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 0, 1, 0)
+	:SynthModule(synth, moduleClass, moduleId, 0, 1, 0)
 {
 }
 

@@ -6,7 +6,7 @@
 #include "SDL.h"
 
 BitsModule::BitsModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 2, 1, 0)
+	:SynthModule(synth, moduleClass, moduleId, 2, 1, 0)
 {
 }
 
@@ -24,14 +24,14 @@ void BitsModule::cycle()
 
 
 
-const char * BitsModule::getInputName(int input) const 
+const char * BitsModule::getInputName(int input) const
 {
 	static const char *names[] = {"Input", "Bits"};
 	return names[input];
 }
 
 
-const char * BitsModule::getOutputName(int output) const 
+const char * BitsModule::getOutputName(int output) const
 {
 	return "Output";
 }

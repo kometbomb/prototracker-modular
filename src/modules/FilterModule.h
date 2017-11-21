@@ -22,6 +22,7 @@ class FilterModule: public SynthModule
 public:
 	virtual ~FilterModule();
 
+	static const ModuleClass moduleClass = ModuleClass::Modifier;
 	static const int moduleId = 16;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "Filter";

@@ -4,7 +4,7 @@
 #include <cstring>
 
 EffectModule::EffectModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 0, 1, 1)
+	:SynthModule(synth, moduleClass, moduleId, 0, 1, 1)
 {
 	setParam(0, '0');
 }

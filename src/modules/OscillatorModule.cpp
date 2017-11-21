@@ -2,7 +2,7 @@
 #include <cmath>
 
 OscillatorModule::OscillatorModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 3, 2, 0), mAccumulator(0.0f), mPreviousSync(0.0f)
+	:SynthModule(synth, moduleClass, moduleId, 3, 2, 0), mAccumulator(0.0f), mPreviousSync(0.0f)
 {
 }
 

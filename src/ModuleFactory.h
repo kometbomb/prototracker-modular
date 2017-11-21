@@ -10,16 +10,18 @@ class ModuleFactory
 {
 public:
 	struct Module {
-		int id, maxInstances;
+		const int id, maxInstances;
 		const char *name;
+		const SynthModule::ModuleClass moduleClass;
 		SynthModule::CreateModuleFunc createFunc;
-		
-		Module(int _id, const char *_name, SynthModule::CreateModuleFunc _create, int _maxInstances): id(_id), maxInstances(_maxInstances), name(_name), createFunc(_create) {}
+
+		Module(SynthModule::ModuleClass _moduleClass, int _id, const char *_name, SynthModule::CreateModuleFunc _create, int _maxInstances)
+			: id(_id), moduleClass(_moduleClass), maxInstances(_maxInstances), name(_name), createFunc(_create) {}
 	};
 private:
 	std::vector<Module> mModules;
-	void registerModule(int id, const char *name, SynthModule::CreateModuleFunc createFunc, int maxInstances);
-	
+	void registerModule(SynthModule::ModuleClass moduleClass, int id, const char *name, SynthModule::CreateModuleFunc createFunc, int maxInstances);
+
 public:
 	ModuleFactory();
 

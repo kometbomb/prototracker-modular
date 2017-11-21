@@ -6,7 +6,7 @@
 #include "SDL.h"
 
 DistortionModule::DistortionModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 2, 1, 0)
+	:SynthModule(synth, moduleClass, moduleId, 2, 1, 0)
 {
 }
 
@@ -23,14 +23,14 @@ void DistortionModule::cycle()
 }
 
 
-const char * DistortionModule::getInputName(int input) const 
+const char * DistortionModule::getInputName(int input) const
 {
 	static const char *names[] = {"Input", "Distortion"};
 	return names[input];
 }
 
 
-const char * DistortionModule::getOutputName(int output) const 
+const char * DistortionModule::getOutputName(int output) const
 {
 	return "Output";
 }

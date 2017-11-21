@@ -1,7 +1,7 @@
 #include "PassthruModule.h"
 
 PassthruModule::PassthruModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 1, 1, 0)
+	:SynthModule(synth, moduleClass, moduleId, 1, 1, 0)
 {
 }
 
@@ -13,13 +13,13 @@ void PassthruModule::cycle()
 
 
 
-const char * PassthruModule::getInputName(int input) const 
+const char * PassthruModule::getInputName(int input) const
 {
 	return "Input";
 }
 
 
-const char * PassthruModule::getOutputName(int output) const 
+const char * PassthruModule::getOutputName(int output) const
 {
 	return "Output";
 }

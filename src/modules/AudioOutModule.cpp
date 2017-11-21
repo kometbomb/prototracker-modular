@@ -2,7 +2,7 @@
 #include "../ModularSynth.h"
 
 AudioOutModule::AudioOutModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 3, 0, 0)
+	:SynthModule(synth, moduleClass, moduleId, 3, 0, 0)
 {
 }
 

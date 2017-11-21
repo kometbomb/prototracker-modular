@@ -9,6 +9,7 @@ class MixerModule: public SynthModule
 public:
 	virtual ~MixerModule();
 
+	static const ModuleClass moduleClass = ModuleClass::Modifier;
 	static const int moduleId = 23;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "Mixer";

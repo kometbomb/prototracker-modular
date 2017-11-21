@@ -10,7 +10,7 @@
 #endif
 
 PulseModule::PulseModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 3, 1, 0), mAccumulator(0), mPreviousSync(0)
+	:SynthModule(synth, moduleClass, moduleId, 3, 1, 0), mAccumulator(0), mPreviousSync(0)
 {
 }
 

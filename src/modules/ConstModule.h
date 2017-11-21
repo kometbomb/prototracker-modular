@@ -10,6 +10,7 @@ class ConstModule: public SynthModule
 	ConstModule(ModularSynth& synth);
 
 public:
+	static const ModuleClass moduleClass = ModuleClass::Source;
 	static const int moduleId = 7;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "Const";
@@ -24,5 +25,4 @@ public:
 	virtual const char * getName() const;
 	virtual const char * getInputName(int input) const;
 	virtual const char * getOutputName(int output) const;
-
 };

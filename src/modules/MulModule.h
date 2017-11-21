@@ -7,6 +7,7 @@ class MulModule: public SynthModule
 	MulModule(ModularSynth& synth);
 
 public:
+	static const ModuleClass moduleClass = ModuleClass::Arithmetic;
 	static const int moduleId = 6;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "Mul";

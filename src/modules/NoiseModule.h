@@ -16,6 +16,7 @@ class NoiseModule: public SynthModule
 public:
 	virtual ~NoiseModule();
 
+	static const ModuleClass moduleClass = ModuleClass::Generator;
 	static const int moduleId = 18;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "Noise";

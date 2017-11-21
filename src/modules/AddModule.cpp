@@ -1,7 +1,7 @@
 #include "AddModule.h"
 
 AddModule::AddModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 3, 1, 0)
+	:SynthModule(synth, moduleClass, moduleId, 3, 1, 0)
 {
 }
 
@@ -16,14 +16,14 @@ void AddModule::cycle()
 
 
 
-const char * AddModule::getInputName(int input) const 
+const char * AddModule::getInputName(int input) const
 {
 	static const char *names[] = {"A", "B", "C"};
 	return names[input];
 }
 
 
-const char * AddModule::getOutputName(int output) const 
+const char * AddModule::getOutputName(int output) const
 {
 	return "Output";
 }

@@ -8,6 +8,7 @@ class AccumulatorModule: public SynthModule
 	float mAccumulator, mPreviousSync;
 
 public:
+	static const ModuleClass moduleClass = ModuleClass::Control;
 	static const int moduleId = 11;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "Accumulator";

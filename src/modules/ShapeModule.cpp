@@ -2,7 +2,7 @@
 #include <cmath>
 
 ShapeModule::ShapeModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 2, 1, 0)
+	:SynthModule(synth, moduleClass, moduleId, 2, 1, 0)
 {
 }
 
@@ -15,14 +15,14 @@ void ShapeModule::cycle()
 
 
 
-const char * ShapeModule::getInputName(int input) const 
+const char * ShapeModule::getInputName(int input) const
 {
 	static const char *names[] = {"Input", "Shape"};
 	return names[input];
 }
 
 
-const char * ShapeModule::getOutputName(int output) const 
+const char * ShapeModule::getOutputName(int output) const
 {
 	return "Output";
 }

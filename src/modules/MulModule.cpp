@@ -1,7 +1,7 @@
 #include "MulModule.h"
 
 MulModule::MulModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 2, 1, 0)
+	:SynthModule(synth, moduleClass, moduleId, 2, 1, 0)
 {
 }
 
@@ -13,14 +13,14 @@ void MulModule::cycle()
 
 
 
-const char * MulModule::getInputName(int input) const 
+const char * MulModule::getInputName(int input) const
 {
 	static const char *names[] = {"A", "B", "C"};
 	return names[input];
 }
 
 
-const char * MulModule::getOutputName(int output) const 
+const char * MulModule::getOutputName(int output) const
 {
 	return "Output";
 }

@@ -15,19 +15,33 @@ public:
 	static const int maxOutputs = 8;
 	static const int maxParams = 8;
 
+	enum ModuleClass
+	{
+		Unknown,
+		Source,
+		Generator,
+		Modifier,
+		Control,
+		Arithmetic,
+		NumClasses
+	};
+
 protected:
 	ModularSynth& mSynth;
 	const int mSynthId;
+	const ModuleClass mModuleClass;
 	int mNumInputs, mNumOutputs, mNumParams;
 	float mInputs[maxInputs], mOutputs[maxOutputs], mParams[maxParams];
 	int mSampleRate;
 
 	void setOutput(int output, float value);
-	SynthModule(ModularSynth& synth, int synthId, int numInputs, int numOutputs, int numParams);
+	SynthModule(ModularSynth& synth, ModuleClass moduleClass, int synthId, int numInputs, int numOutputs, int numParams);
 
 public:
 
 	static const int maxInstances = -1;
+
+	static Color getClassColor(ModuleClass moduleClass);
 
 	virtual ~SynthModule();
 

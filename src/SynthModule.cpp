@@ -2,8 +2,8 @@
 #include "Renderer.h"
 #include "Color.h"
 
-SynthModule::SynthModule(ModularSynth& synth, int synthId, int numInputs, int numOutputs, int numParams)
-	: mSynth(synth), mSynthId(synthId), mNumInputs(numInputs), mNumOutputs(numOutputs), mNumParams(numParams)
+SynthModule::SynthModule(ModularSynth& synth, ModuleClass moduleClass, int synthId, int numInputs, int numOutputs, int numParams)
+	: mSynth(synth), mModuleClass(moduleClass), mSynthId(synthId), mNumInputs(numInputs), mNumOutputs(numOutputs), mNumParams(numParams)
 {
 	for (int i = 0 ; i < mNumInputs ; ++i)
 		mInputs[i] = 0.0f;
@@ -143,5 +143,21 @@ SDL_Rect SynthModule::getModuleArea(const SDL_Rect& gridCellArea) const
 
 Color SynthModule::getModuleColor(bool isSelected) const
 {
-	return isSelected ? Color(96,96,96) : Color(64,64,64);
+	return isSelected ? Color(96,96,96) : getClassColor(mModuleClass);
+}
+
+
+Color SynthModule::getClassColor(ModuleClass moduleClass)
+{
+	static const struct { int r, g, b; } colTab[NumClasses] =
+	{
+		{ 64, 64, 64 },
+		{ 64, 128, 64 },
+		{ 64, 96, 64 },
+		{ 128, 128, 64 },
+		{ 48, 48, 112 },
+		{ 112, 112, 48 },
+	};
+
+	return Color(colTab[static_cast<int>(moduleClass)].r, colTab[static_cast<int>(moduleClass)].g, colTab[static_cast<int>(moduleClass)].b);
 }

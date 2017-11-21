@@ -5,7 +5,7 @@
 #include "SDL.h"
 
 RMSModule::RMSModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 1, 1, 0), mBuffer(NULL), mSum(0), mHead(0)
+	:SynthModule(synth, moduleClass, moduleId, 1, 1, 0), mBuffer(NULL), mSum(0), mHead(0)
 {
 	initBuffer();
 }

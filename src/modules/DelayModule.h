@@ -12,6 +12,7 @@ class DelayModule: public SynthModule
 public:
 	virtual ~DelayModule();
 
+	static const ModuleClass moduleClass = ModuleClass::Modifier;
 	static const int maxBufferSizeMs = 2000;
 
 	static const int moduleId = 15;

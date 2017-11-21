@@ -7,6 +7,7 @@ class ShapeModule: public SynthModule
 	ShapeModule(ModularSynth& synth);
 
 public:
+	static const ModuleClass moduleClass = ModuleClass::Modifier;
 	static const int moduleId = 12;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "Shape";

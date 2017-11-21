@@ -5,7 +5,7 @@
 #include "SDL.h"
 
 AbsModule::AbsModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 1, 1, 0)
+	:SynthModule(synth, moduleClass, moduleId, 1, 1, 0)
 {
 }
 
@@ -22,14 +22,14 @@ void AbsModule::cycle()
 
 
 
-const char * AbsModule::getInputName(int input) const 
+const char * AbsModule::getInputName(int input) const
 {
 	static const char *names[] = {"Input"};
 	return names[input];
 }
 
 
-const char * AbsModule::getOutputName(int output) const 
+const char * AbsModule::getOutputName(int output) const
 {
 	return "Output";
 }

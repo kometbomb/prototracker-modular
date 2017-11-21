@@ -11,6 +11,7 @@ class PulseModule: public SynthModule
 public:
 	virtual ~PulseModule();
 
+	static const ModuleClass moduleClass = ModuleClass::Generator;
 	static const int moduleId = 19;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "Pulse";

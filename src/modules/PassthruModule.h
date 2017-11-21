@@ -7,6 +7,7 @@ class PassthruModule: public SynthModule
 	PassthruModule(ModularSynth& synth);
 
 public:
+	static const ModuleClass moduleClass = ModuleClass::Modifier;
 	static const int moduleId = 2;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "Passthru";

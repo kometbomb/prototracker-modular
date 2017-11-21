@@ -12,6 +12,7 @@ class BitsModule: public SynthModule
 public:
 	virtual ~BitsModule();
 
+	static const ModuleClass moduleClass = ModuleClass::Modifier;
 	static const int moduleId = 20;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "Bits";

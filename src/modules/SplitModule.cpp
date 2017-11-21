@@ -1,7 +1,7 @@
 #include "SplitModule.h"
 
 SplitModule::SplitModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 1, 3, 0)
+	:SynthModule(synth, moduleClass, moduleId, 1, 3, 0)
 {
 }
 
@@ -14,13 +14,13 @@ void SplitModule::cycle()
 
 
 
-const char * SplitModule::getInputName(int input) const 
+const char * SplitModule::getInputName(int input) const
 {
 	return "Input";
 }
 
 
-const char * SplitModule::getOutputName(int output) const 
+const char * SplitModule::getOutputName(int output) const
 {
 	static const char *names[] = {"A", "B", "C"};
 	return names[output];

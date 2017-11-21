@@ -16,6 +16,7 @@ class RMSModule: public SynthModule
 public:
 	virtual ~RMSModule();
 
+	static const ModuleClass moduleClass = ModuleClass::Modifier;
 	static const int moduleId = 24;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "RMS";

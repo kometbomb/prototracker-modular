@@ -7,6 +7,7 @@ class TriggerNoteModule: public SynthModule
 	TriggerNoteModule(ModularSynth& synth);
 
 public:
+	static const ModuleClass moduleClass = ModuleClass::Control;
 	static const int moduleId = 9;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "TriggerNote";
@@ -18,5 +19,4 @@ public:
 	virtual const char * getName() const;
 	virtual const char * getInputName(int input) const;
 	virtual const char * getOutputName(int output) const;
-
 };

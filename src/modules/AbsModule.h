@@ -12,6 +12,7 @@ class AbsModule: public SynthModule
 public:
 	virtual ~AbsModule();
 
+	static const ModuleClass moduleClass = ModuleClass::Arithmetic;
 	static const int moduleId = 21;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "Abs";

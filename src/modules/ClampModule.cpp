@@ -2,7 +2,7 @@
 #include <algorithm>
 
 ClampModule::ClampModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 3, 1, 0)
+	:SynthModule(synth, moduleClass, moduleId, 3, 1, 0)
 {
 }
 
@@ -14,14 +14,14 @@ void ClampModule::cycle()
 
 
 
-const char * ClampModule::getInputName(int input) const 
+const char * ClampModule::getInputName(int input) const
 {
 	static const char *names[] = {"Input", "Min", "Max"};
 	return names[input];
 }
 
 
-const char * ClampModule::getOutputName(int output) const 
+const char * ClampModule::getOutputName(int output) const
 {
 	return "Output";
 }

@@ -24,7 +24,7 @@
 #include "modules/TriggerNoteModule.h"
 #include <cstdlib>
 
-#define REGISTER(module) registerModule(module::moduleId, module::moduleName, &module::createModule, module::maxInstances)
+#define REGISTER(module) registerModule(module::moduleClass, module::moduleId, module::moduleName, &module::createModule, module::maxInstances)
 
 ModuleFactory::ModuleFactory()
 {
@@ -54,9 +54,9 @@ ModuleFactory::ModuleFactory()
 }
 
 
-void ModuleFactory::registerModule(int id, const char *name, SynthModule::CreateModuleFunc createModule, int maxInstances)
+void ModuleFactory::registerModule(SynthModule::ModuleClass moduleClass, int id, const char *name, SynthModule::CreateModuleFunc createModule, int maxInstances)
 {
-	mModules.push_back(Module(id, name, createModule, maxInstances));
+	mModules.push_back(Module(moduleClass, id, name, createModule, maxInstances));
 }
 
 
