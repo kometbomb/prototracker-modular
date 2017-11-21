@@ -2,7 +2,7 @@
 #include <cstdio>
 
 {{Name}}Module::{{Name}}Module(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 1, 1, 0)
+	:SynthModule(synth, moduleClass, moduleId, 1, 1, 0)
 {
 }
 

@@ -7,6 +7,7 @@ class {{Name}}Module: public SynthModule
 	{{Name}}Module(ModularSynth& synth);
 
 public:
+	static const ModuleClass moduleClass = ModuleClass::{{moduleClass}};
 	static const int moduleId = {{moduleId}};
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "{{Name}}";
