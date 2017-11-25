@@ -6,7 +6,7 @@
 #include "SDL.h"
 
 ReverbModule::ReverbModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 2, 1, 0), mHead(0), mBuffer(NULL)
+	:SynthModule(synth, moduleId, 2, 2, 0), mHead(0), mBuffer(NULL)
 {
 	Random rnd;
 	rnd.seed(rand());
@@ -32,7 +32,7 @@ void ReverbModule::cycle()
 {
 	mBuffer[mHead] = getInput(0);
 
-	float delay = std::max(0.0f, getInput(1));
+	float delay = std::min(static_cast<float>(maxBufferSizeMs) / 1000, std::max(0.0f, getInput(1)));
 	float sum = 0;
 
 	for (int i = 0 ; i < numTaps ; ++i)
@@ -41,9 +41,9 @@ void ReverbModule::cycle()
 	}
 
 	setOutput(0, sum);
+	setOutput(1, getInput(0));
 
 	++mHead;
-
 
 	if (mHead >= mMaxBufferSize)
 		mHead = 0;
@@ -53,14 +53,14 @@ void ReverbModule::cycle()
 
 const char * ReverbModule::getInputName(int input) const
 {
-	static const char *names[] = {"Input"};
+	static const char *names[] = {"Input", "Length"};
 	return names[input];
 }
 
 
 const char * ReverbModule::getOutputName(int output) const
 {
-	static const char *names[] = {"Output"};
+	static const char *names[] = {"Reverb out", "Dry out"};
 	return names[output];
 }
 
@@ -85,8 +85,6 @@ void ReverbModule::setSampleRate(int newRate)
 		delete[] mBuffer;
 
 	mMaxBufferSize = std::max(1, maxBufferSizeMs * newRate / 1000);
-
-	printf("mMaxBufferSize = %d\n", mMaxBufferSize);
 
 	mBuffer = new float[mMaxBufferSize];
 	SDL_memset(mBuffer, 0, mMaxBufferSize * sizeof(mBuffer[0]));
