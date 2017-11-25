@@ -5,7 +5,7 @@
 #include "SDL.h"
 
 DelayModule::DelayModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 2, 1, 0), mHead(0), mBuffer(NULL)
+	:SynthModule(synth, moduleId, 3, 2, 0), mHead(0), mBuffer(NULL)
 {
 }
 
@@ -22,12 +22,15 @@ void DelayModule::cycle()
 	if (mBuffer == NULL)
 		return;
 
-	mBuffer[mHead] = getInput(0);
-
 	int currentReadHead = static_cast<int>(getInput(1) * mSampleRate);
 	int a = std::min(currentReadHead, mPrevReadHead);
 	int b = std::max(currentReadHead, mPrevReadHead);
 	float avg = 0;
+
+	mBuffer[mHead] = getInput(0) + getInput(2) * mBuffer[(mHead - currentReadHead + mMaxBufferSize) % mMaxBufferSize];
+
+	// Dry out
+	setOutput(1, getInput(0));
 
 	for (int i = a ; i <= b ; ++i)
 	{
@@ -49,14 +52,15 @@ void DelayModule::cycle()
 
 const char * DelayModule::getInputName(int input) const
 {
-	static const char *names[] = {"Input", "Delay"};
+	static const char *names[] = {"Input", "Delay", "Feedback"};
 	return names[input];
 }
 
 
 const char * DelayModule::getOutputName(int output) const
 {
-	return "Output";
+	static const char *names[] = {"Delay out", "Dry out"};
+	return names[output];
 }
 
 

@@ -278,7 +278,9 @@ This module delays the signal.
 |-------|--------------|
 | 0 | Signal in |
 | 1 | Delay (in seconds) |
+| 2 | Self feedback |
 
 | Output | Description  |
 |--------|--------------|
 | 0 | Delayed output |
+| 1 | Dry output |
