@@ -141,16 +141,18 @@ Add inputs together and output the result.
 
 ### Mul
 
-Multiply inputs and output the result. Use as an amplifier.
+Multiply the two inputs and output the result. Use as an amplifier.
 
 | Input | Description  |
 |-------|--------------|
 | 0 | Input A |
-| 1 | Input B |
+| 1 | Multiplier |
+| 2 | Input B |
 
 | Output | Description  |
 |--------|--------------|
-| 0 | The product of inputs |
+| 0 | A multiplied by the multiplier |
+| 1 | B multiplied by the multiplier |
 
 ### Abs
 
