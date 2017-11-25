@@ -23,6 +23,7 @@
 #include "modules/AudioOutModule.h"
 #include "modules/FrequencyInModule.h"
 #include "modules/TriggerNoteModule.h"
+#include "modules/TickModule.h"
 #include <cstdlib>
 
 #define REGISTER(module) registerModule(module::moduleId, module::moduleName, &module::createModule, module::maxInstances)
@@ -38,6 +39,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(MulModule);
 	REGISTER(AbsModule);
 	REGISTER(RMSModule);
+	REGISTER(TickModule);
 	REGISTER(ConstModule);
 	REGISTER(EffectModule);
 	REGISTER(SplitModule);

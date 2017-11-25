@@ -6,18 +6,18 @@
 #include "SDL.h"
 #include <cstring>
 
-Synth::Synth()
+Synth::Synth(IPlayer& player)
 	: ISynth()
 {
-	/* 
-	
+	/*
+
 	Initialize the audio tracks.
-	
+
 	*/
-	
+
 	for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
 	{
-		mOscillator[i] = new ModularSynth();
+		mOscillator[i] = new ModularSynth(player);
 	}
 }
 
@@ -25,10 +25,10 @@ Synth::Synth()
 Synth::~Synth()
 {
 	/*
-	
+
 	NOTE: ~ISynth() will delete the Oscillator objects we initialized
 	above! No need to cleanup yourself.
-	
+
 	*/
 }
 
@@ -38,15 +38,15 @@ bool Synth::onFileSectionLoad(const FileSection& section, int& offset)
 	if (strcmp(section.getName(), "SYNT") == 0)
 	{
 		int synthCount = section.readByte(offset);
-		
+
 		if (synthCount == FileSection::invalidRead || synthCount > SequenceRow::maxTracks)
 			return false;
-		
+
 		for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
 		{
 			static_cast<ModularSynth*>(mOscillator[i])->readSynth(section, offset);
 		}
-		
+
 		return true;
 	}
 	else
@@ -61,7 +61,7 @@ void Synth::onFileSectionSave(FileSection& section)
 	if (strcmp(section.getName(), "SYNT") == 0)
 	{
 		section.writeByte(SequenceRow::maxTracks);
-		
+
 		for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
 		{
 			static_cast<ModularSynth*>(mOscillator[i])->writeSynth(section);
