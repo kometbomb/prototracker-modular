@@ -1,14 +1,14 @@
-#include "SemitoneModule.h"
+#include "TransposeModule.h"
 #include <cstdio>
 #include <cmath>
 
-SemitoneModule::SemitoneModule(ModularSynth& synth)
+TransposeModule::TransposeModule(ModularSynth& synth)
 	:SynthModule(synth, moduleId, 1, 1, 0)
 {
 }
 
 
-void SemitoneModule::cycle()
+void TransposeModule::cycle()
 {
 	static const float ratio = powf(2.0f, 1.0f/12.0f);
 	float frequency = powf(ratio, getInput(0));
@@ -19,27 +19,27 @@ void SemitoneModule::cycle()
 
 
 
-const char * SemitoneModule::getInputName(int input) const
+const char * TransposeModule::getInputName(int input) const
 {
 	static const char *names[] = {"Rel. note"};
 	return names[input];
 }
 
 
-const char * SemitoneModule::getOutputName(int output) const
+const char * TransposeModule::getOutputName(int output) const
 {
 	static const char *names[] = {"Ratio"};
 	return names[output];
 }
 
 
-const char * SemitoneModule::getName() const
+const char * TransposeModule::getName() const
 {
-	return "Semitone";
+	return "Transpose";
 }
 
 
-SynthModule * SemitoneModule::createModule(ModularSynth& synth)
+SynthModule * TransposeModule::createModule(ModularSynth& synth)
 {
-	return new SemitoneModule(synth);
+	return new TransposeModule(synth);
 }

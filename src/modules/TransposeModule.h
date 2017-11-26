@@ -2,9 +2,9 @@
 
 #include "../SynthModule.h"
 
-class SemitoneModule: public SynthModule
+class TransposeModule: public SynthModule
 {
-	SemitoneModule(ModularSynth& synth);
+	TransposeModule(ModularSynth& synth);
 
 public:
 	static const int moduleId = 27;

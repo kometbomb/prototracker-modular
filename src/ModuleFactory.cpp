@@ -21,7 +21,7 @@
 #include "modules/AccumulatorModule.h"
 #include "modules/AudioOutModule.h"
 #include "modules/FrequencyInModule.h"
-#include "modules/SemitoneModule.h"
+#include "modules/TransposeModule.h"
 #include "modules/TriggerNoteModule.h"
 #include <cstdlib>
 
@@ -50,7 +50,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(FilterModule);
 	REGISTER(AccumulatorModule);
 	REGISTER(FrequencyInModule);
-	REGISTER(SemitoneModule);
+	REGISTER(TransposeModule);
 	REGISTER(TriggerNoteModule);
 	REGISTER(AudioOutModule);
 }
