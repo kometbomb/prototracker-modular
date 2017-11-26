@@ -9,7 +9,7 @@ class TransposeModule: public SynthModule
 public:
 	static const int moduleId = 27;
 	static const int maxInstances = -1;
-	static constexpr const char *moduleName = "Semitone";
+	static constexpr const char *moduleName = "Transpose";
 
 	static SynthModule * createModule(ModularSynth& synth);
 
