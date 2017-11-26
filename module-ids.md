@@ -7,4 +7,5 @@ Here's a list of reserved module IDs.
 | 22 | automation |
 | 23 | stereo |
 | 24 | rms_module |
-| 25 | reverb |
+| 25, 26 | reverb |
+| 27 | semitone_module |
