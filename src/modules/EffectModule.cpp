@@ -4,7 +4,7 @@
 #include <cstring>
 
 EffectModule::EffectModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 0, 1, 1)
+	:SynthModule(synth, moduleId, 0, 2, 1)
 {
 	setParam(0, '0');
 }
@@ -12,7 +12,9 @@ EffectModule::EffectModule(ModularSynth& synth)
 
 void EffectModule::cycle()
 {
-	setOutput(0, static_cast<float>(mSynth.getEffectValue(static_cast<int>(mParams[0]) % 256)) / 64);
+	int value = mSynth.getEffectValue(static_cast<int>(mParams[0]) % 256);
+	setOutput(0, static_cast<float>(value) / 64);
+	setOutput(1, value);
 }
 
 
@@ -25,7 +27,7 @@ const char * EffectModule::getInputName(int input) const
 
 const char * EffectModule::getOutputName(int output) const
 {
-	static const char *names[] = {"Output"};
+	static const char *names[] = {"Norm. value", "Abs. value"};
 	return names[output];
 }
 
