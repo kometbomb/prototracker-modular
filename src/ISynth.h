@@ -28,7 +28,7 @@ class ISynth
 		Thread();
 		~Thread();
 
-		void render(IOscillator *oscillator, int numSamples);
+		void render(IOscillator *oscillator, Sample16 *buffer, int numSamples);
 
 		void start();
 		void stop();
@@ -39,8 +39,10 @@ class ISynth
 
 protected:
 	IOscillator **mOscillator;
+	Sample16 **mRenderBuffers;
 	Sample16 *mPreviousOscillatorOutput;
 	Thread *mThreads;
+	int mNumThreads;
 	int mProbePosition;
 
 public:
