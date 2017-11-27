@@ -1,3 +1,4 @@
+#include "Debug.h"
 #include "ISynth.h"
 #include "IOscillator.h"
 #include "SequenceRow.h"
@@ -11,9 +12,19 @@ ISynth::ISynth()
 	: mProbePosition(0)
 {
 	mOscillator = new IOscillator*[SequenceRow::maxTracks];
+	mRenderBuffers = new Sample16*[SequenceRow::maxTracks];
 	mPreviousOscillatorOutput = new Sample16[oscillatorProbeLength * SequenceRow::maxTracks];
-	mTempBuffer = new Sample16[2048];
-	
+
+	for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
+	{
+		mRenderBuffers[i] = new Sample16[2048];
+	}
+
+	mNumThreads = std::min(SDL_GetCPUCount(), SequenceRow::maxTracks);
+
+	debug("Starting %d threads (max %d threads)", mNumThreads, SDL_GetCPUCount());
+	mThreads = new Thread[mNumThreads];
+
 	SDL_memset(mPreviousOscillatorOutput, 0, sizeof(Sample16) * oscillatorProbeLength * SequenceRow::maxTracks);
 }
 
@@ -22,9 +33,87 @@ ISynth::~ISynth()
 {
 	for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
 		delete mOscillator[i];
-	
+
 	delete[] mOscillator;
+
+	for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
+		delete mRenderBuffers[i];
+
+	delete[] mRenderBuffers;
 	delete[] mPreviousOscillatorOutput;
+	delete[] mThreads;
+}
+
+
+ISynth::Thread::Thread()
+{
+	SDL_AtomicSet(&done, 0);
+	inSem = SDL_CreateSemaphore(0);
+	outSem = SDL_CreateSemaphore(0);
+	start();
+}
+
+
+ISynth::Thread::~Thread()
+{
+	stop();
+	SDL_DestroySemaphore(inSem);
+	SDL_DestroySemaphore(outSem);
+}
+
+
+void ISynth::Thread::start()
+{
+	debug("[%p] Starting thread", this);
+
+	thread = SDL_CreateThread(threadProc, "SynthThread", this);
+}
+
+
+void ISynth::Thread::stop()
+{
+	debug("[%p] Stopping thread", this);
+
+	SDL_AtomicSet(&done, 1);
+	SDL_SemPost(inSem);
+	SDL_WaitThread(thread, NULL);
+}
+
+
+void ISynth::Thread::wait()
+{
+	SDL_SemWait(outSem);
+}
+
+
+void ISynth::Thread::render(IOscillator *_oscillator, Sample16 *_buffer, int _numSamples)
+{
+	oscillator = _oscillator;
+	numSamples = _numSamples;
+	buffer = _buffer;
+	SDL_SemPost(inSem);
+}
+
+
+int ISynth::Thread::threadProc(void *data)
+{
+	Thread *thread = static_cast<Thread*>(data);
+
+	while (true)
+	{
+		SDL_SemWait(thread->inSem);
+
+		if (SDL_AtomicGet(&thread->done))
+		{
+			break;
+		}
+
+		SDL_memset(thread->buffer, 0, sizeof(Sample16) * thread->numSamples);
+		thread->oscillator->render(thread->buffer, thread->numSamples);
+		SDL_SemPost(thread->outSem);
+	}
+
+	return 0;
 }
 
 
@@ -50,23 +139,36 @@ void ISynth::update(int numSamples)
 void ISynth::render(Sample16 *buffer, int numSamples)
 {
 	SDL_memset(buffer, 0, sizeof(Sample16) * numSamples);
-	
+
 	int probeCount = std::min(numSamples, oscillatorProbeLength);
-	
+
+	for (int channel = 0 ; channel < SequenceRow::maxTracks ; )
+	{
+		// Run each thread/channel
+		for (int i = 0 ; i < mNumThreads && channel < SequenceRow::maxTracks ; ++i)
+		{
+			mThreads[i].render(mOscillator[channel++], mRenderBuffers[channel], numSamples);
+		}
+
+		// Wait for all threads
+		for (int i = 0 ; i < mNumThreads ; ++i)
+		{
+			mThreads[i].wait();
+		}
+	}
+
+	// Mix results from all threads
 	for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
 	{
-		SDL_memset(mTempBuffer, 0, sizeof(Sample16) * numSamples);
-		mOscillator[i]->render(mTempBuffer, numSamples);
-		
 		for (int p = 0 ; p < numSamples ; ++p)
 		{
-			buffer[p].left += mTempBuffer[p].left;
-			buffer[p].right += mTempBuffer[p].right;
+			buffer[p].left += mRenderBuffers[i][p].left;
+			buffer[p].right += mRenderBuffers[i][p].right;
 		}
-		
-		Sample16 *src = mTempBuffer + std::max(0, numSamples - oscillatorProbeLength);
+
+		Sample16 *src = mRenderBuffers[i] + std::max(0, numSamples - oscillatorProbeLength);
 		Sample16 *dest = mPreviousOscillatorOutput + oscillatorProbeLength * i;
-		
+
 		for (int p = 0 ; p < probeCount ; ++p)
 		{
 			Sample16& sample = dest[(p + mProbePosition) % oscillatorProbeLength];
@@ -75,7 +177,7 @@ void ISynth::render(Sample16 *buffer, int numSamples)
 			src++;
 		}
 	}
-	
+
 	mProbePosition += probeCount;
 }
 
