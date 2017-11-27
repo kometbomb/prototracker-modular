@@ -38,7 +38,8 @@ This outputs whatever value was used as a parameter for a pattern effect. Use mo
 
 | Output | Description |
 |--------|-------------|
-| 0 | Effect value (0x40 = 1.0, 0x80 = 2.0 etc.) |
+| 0 | Effect value (0x00 = 0, 0x40 = 1.0, 0x80 = 2.0 etc.) |
+| 1 | Effect value (0x00 = 0, 0x40 = 64, 0x80 = 128 etc.) |
 
 ### Automation
 
@@ -86,6 +87,18 @@ This module simply accumulates an internal register. Useful as some kind of rudi
 | Output | Description  |
 |--------|--------------|
 | 0 | Accumulator |
+
+### Semitone
+
+Use this module with Mul to transpose frequency. Especially useful with Effect.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Relative semitones |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Ratio of transpose (input of 0 semitones = 1.0, input +12 semis = 2.0) |
 
 ## Generators
 

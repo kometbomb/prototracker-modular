@@ -1,3 +1,4 @@
+#include "Debug.h"
 #include "MainEditor.h"
 #include "IPlayer.h"
 #include "PatternEditor.h"
@@ -733,7 +734,7 @@ bool MainEditor::loadElements(const Theme& theme)
 
 			case Theme::SequenceEditor:
 			{
-				sequenceRowEditor = new SequenceRowEditor(mEditorState, mSong);
+				sequenceRowEditor = new SequenceRowEditor(mEditorState, mPlayer, mSong);
 				sequenceRowEditor->setRowNumberMargin(element.parameters[4]);
 				sequenceRowEditor->setTrackMargin(element.parameters[5]);
 				addChild(sequenceRowEditor, element.parameters[0], element.parameters[1], element.parameters[2], element.parameters[3]);
@@ -840,7 +841,7 @@ bool MainEditor::exportSong()
 #ifndef __EMSCRIPTEN__
 	if (SDL_SetClipboardText(section->getBase64()))
 	{
-		printf("err: %s\n", SDL_GetError());
+		debug("SDL_GetError: %s", SDL_GetError());
 	}
 
 #else
