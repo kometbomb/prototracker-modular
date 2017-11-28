@@ -1,3 +1,4 @@
+#include "Debug.h"
 #include "MainEditor.h"
 #include "IPlayer.h"
 #include "PatternEditor.h"
@@ -832,7 +833,7 @@ bool MainEditor::exportSong()
 #ifndef __EMSCRIPTEN__
 	if (SDL_SetClipboardText(section->getBase64()))
 	{
-		printf("err: %s\n", SDL_GetError());
+		debug("SDL_GetError: %s", SDL_GetError());
 	}
 
 #else
