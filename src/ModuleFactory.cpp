@@ -11,6 +11,7 @@
 #include "modules/EGModule.h"
 #include "modules/RMSModule.h"
 #include "modules/FilterModule.h"
+#include "modules/GlideModule.h"
 #include "modules/SplitModule.h"
 #include "modules/MixerModule.h"
 #include "modules/ClampModule.h"
@@ -52,6 +53,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(DelayModule);
 	REGISTER(ReverbModule);
 	REGISTER(FilterModule);
+	REGISTER(GlideModule);
 	REGISTER(AccumulatorModule);
 	REGISTER(FrequencyInModule);
 	REGISTER(TransposeModule);
