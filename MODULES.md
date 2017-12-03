@@ -283,6 +283,19 @@ Splits input A two outputs based on input B. In other words, use this to create 
 | 0 | Low-pass output |
 | 1 | High-pass output |
 
+### Glide
+
+This module will follow the input signal at a constant speed.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Signal in |
+| 1 | Glide speed |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Output |
+
 ### Delay
 
 This module delays the signal.
