@@ -4,16 +4,32 @@
 
 class ReverbModule: public SynthModule
 {
-	static const int numTaps = 8;
+	struct Filter {
+		const int mLength;
+		int mHead;
+		float *mBuffer;
 
-	struct Tap {
-		float delay, gain;
+		Filter(int length);
+		~Filter();
 	};
 
+	struct CombFilter: public Filter {
+		float cycle(float input, float gain);
+		CombFilter(int length);
+	};
+
+	struct AllpassFilter: public Filter {
+		float cycle(float input, float gain);
+		AllpassFilter(int length);
+	};
+
+	static const int numAllpassFilters = 7;
+	static const int numCombFilters = 7;
+
+	CombFilter *mComb[numCombFilters];
+	AllpassFilter *mAllpass[numAllpassFilters];
+
 	ReverbModule(ModularSynth& synth);
-	Tap mTap[numTaps];
-	int mHead, mMaxBufferSize;
-	float *mBuffer;
 
 public:
 	virtual ~ReverbModule();

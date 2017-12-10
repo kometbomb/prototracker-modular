@@ -1,52 +1,102 @@
 #include "ReverbModule.h"
-#include "../Random.h"
 #include <algorithm>
 #include <cstdlib>
 #include <cstdio>
 #include "SDL.h"
 
 ReverbModule::ReverbModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 2, 2, 0), mHead(0), mBuffer(NULL)
+	:SynthModule(synth, moduleId, 2, 2, 0)
 {
-	Random rnd;
-	rnd.seed(rand());
+	for (int i = 0 ; i < numCombFilters ; ++i)
+		mComb[i ]= NULL;
 
-	for (int i = 0 ; i < numTaps ; ++i)
-	{
-		mTap[i].gain = 1.0f / (1 + i);
-		mTap[i].delay = static_cast<float>(i) / numTaps + rnd.rndf() * 0.9f / numTaps + 0.01f;
-	}
+	for (int i = 0 ; i < numAllpassFilters ; ++i)
+		mAllpass[i ]= NULL;
 }
 
 
 ReverbModule::~ReverbModule()
 {
-	if (mBuffer != NULL)
-	{
-		delete[] mBuffer;
-	}
+	for (int i = 0 ; i < numCombFilters ; ++i)
+		if (mComb[i] != NULL) delete mComb[i];
+
+	for (int i = 0 ; i < numAllpassFilters ; ++i)
+		if (mAllpass[i] != NULL) delete mAllpass[i];
+}
+
+
+ReverbModule::Filter::Filter(int length)
+	:mLength(length), mHead(0)
+{
+	mBuffer = new float[length];
+	SDL_memset(mBuffer, 0, sizeof(float) * length);
+}
+
+
+ReverbModule::Filter::~Filter()
+{
+	delete[] mBuffer;
+}
+
+
+ReverbModule::CombFilter::CombFilter(int length)
+	: Filter(length)
+{
+}
+
+
+ReverbModule::AllpassFilter::AllpassFilter(int length)
+	: Filter(length)
+{
+}
+
+
+float ReverbModule::CombFilter::cycle(float input, float gain)
+{
+	float output = mBuffer[mHead];
+	mBuffer[mHead] = output * gain + input;
+
+	if(++mHead >= mLength)
+		mHead = 0;
+
+	return output;
+}
+
+
+float ReverbModule::AllpassFilter::cycle(float input, float gain)
+{
+	float buffer = mBuffer[mHead];
+
+	mBuffer[mHead] = input + buffer * gain;
+	float output = -mBuffer[mHead] * gain + buffer;
+
+	if(++mHead >= mLength)
+		mHead = 0;
+
+	return output;
 }
 
 
 void ReverbModule::cycle()
 {
-	mBuffer[mHead] = getInput(0);
+	float input = getInput(0);
+	float combOut = 0;
+	float gain = getInput(1);
 
-	float delay = std::min(static_cast<float>(maxBufferSizeMs) / 1000, std::max(0.0f, getInput(1)));
-	float sum = 0;
-
-	for (int i = 0 ; i < numTaps ; ++i)
+	for (int i = 0 ; i < numCombFilters ; ++i)
 	{
-		sum += mBuffer[static_cast<int>(mHead - delay * mTap[i].delay * mSampleRate + mMaxBufferSize) % mMaxBufferSize] * mTap[i].gain;
+		combOut += mComb[i]->cycle(input, gain);
 	}
 
-	setOutput(0, sum);
-	setOutput(1, getInput(0));
+	float allpassOut = combOut;
 
-	++mHead;
+	for (int i = 0 ; i < numAllpassFilters ; ++i)
+	{
+		allpassOut = mAllpass[i]->cycle(allpassOut, gain);
+	}
 
-	if (mHead >= mMaxBufferSize)
-		mHead = 0;
+	setOutput(0, allpassOut);
+	setOutput(1, input);
 }
 
 
@@ -81,13 +131,22 @@ void ReverbModule::setSampleRate(int newRate)
 {
 	SynthModule::setSampleRate(newRate);
 
-	if (mBuffer != NULL)
-		delete[] mBuffer;
+	static const float combDelayLength[numCombFilters] = { 941, 911, 887, 797, 773, 191, 127 };
+	static const float allPassDelayLength[numAllpassFilters] = { 1051, 1033, 967, 751, 503, 313, 233 };
 
-	mMaxBufferSize = std::max(1, maxBufferSizeMs * newRate / 1000);
+	for (int i = 0 ; i < numCombFilters ; ++i)
+	{
+		if (mComb[i] != NULL)
+			delete mComb[i];
 
-	mBuffer = new float[mMaxBufferSize];
-	SDL_memset(mBuffer, 0, mMaxBufferSize * sizeof(mBuffer[0]));
+		mComb[i] = new CombFilter(combDelayLength[i] * newRate / 44100);
+	}
 
-	mHead = 0;
+	for (int i = 0 ; i < numAllpassFilters ; ++i)
+	{
+		if (mAllpass[i] != NULL)
+			delete mAllpass[i];
+
+		mAllpass[i] = new AllpassFilter(allPassDelayLength[i] * newRate / 44100);
+	}
 }
