@@ -131,8 +131,8 @@ void ReverbModule::setSampleRate(int newRate)
 {
 	SynthModule::setSampleRate(newRate);
 
-	static const float combDelayLength[numCombFilters] = { 941, 911, 887, 797, 773, 191, 127 };
-	static const float allPassDelayLength[numAllpassFilters] = { 1051, 1033, 967, 751, 503, 313, 233 };
+	static const float combDelayLength[numCombFilters] = { 941, 911, 887, 797, 773, 719, 701 };
+	static const float allPassDelayLength[numAllpassFilters] = { 1051, 1033, 1021, 1019, 1013, 1009, 997 };
 
 	for (int i = 0 ; i < numCombFilters ; ++i)
 	{
