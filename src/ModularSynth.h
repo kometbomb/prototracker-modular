@@ -2,11 +2,12 @@
 
 #include "SynthConnection.h"
 #include "IOscillator.h"
+#include "Lockable.h"
 
 struct SynthModule;
 struct FileSection;
 
-class ModularSynth: public IOscillator
+class ModularSynth: public IOscillator, public Lockable
 {
 public:
 	static const int maxModules = 32;
@@ -20,33 +21,33 @@ private:
 	float mFrequency, mVolume, mOutput[2];
 	bool mNoteTrigger;
 	int mEffectValues[256];
-	
+
 	void cycle();
-	
+
 public:
 	ModularSynth();
 	virtual ~ModularSynth();
 	ModularSynth* clone() const;
 	void copy(const ModularSynth& source);
-	
+
 	const SynthModule* getModule(int index) const;
 	SynthModule* getModule(int index);
 	const SynthConnection& getConnection(int index) const;
 	int getNumConnections() const;
-	
+
 	bool addModule(int index, int moduleId);
 	void removeModule(int index);
 	bool connectModules(int fromModule, int toModule, int fromOutput, int toInput);
 	void detachConnection(int moduleIndex, int type, int connectionIndex);
 	void removeConnection(int index);
 	void swapModules(int fromModule, int toModule);
-	
+
 	void clear();
-	
+
 	// Disk ops
 	void writeSynth(FileSection& section);
 	bool readSynth(const FileSection& section, int& offset);
-	
+
 	// For communication with SynthModules
 	float getFrequency() const;
 	bool getNoteTrigger() const;

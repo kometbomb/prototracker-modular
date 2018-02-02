@@ -13,9 +13,8 @@ Override ISynth() to initialize your own IOscillators.
 */
 
 #include "SDL.h"
-#include "Lockable.h"
 
-class ISynth: public Lockable
+class ISynth
 {
 	struct Thread
 	{

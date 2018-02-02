@@ -19,7 +19,7 @@ ModularSynth::ModularSynth()
 {
 	for (int i = 0 ; i < maxModules ; ++i)
 		mModules[i] = NULL;
-	
+
 	SDL_memset(mOutput, 0, sizeof(mOutput));
 }
 
@@ -33,50 +33,50 @@ ModularSynth::~ModularSynth()
 bool ModularSynth::addModule(int index, int moduleId)
 {
 	ModuleFactory moduleFactory;
-	
+
 	if (mModules[index] != NULL)
 		return false;
-	
+
 	mModules[index] = moduleFactory.createModule(moduleId, *this);
 	mModules[index]->setSampleRate(mSampleRate);
 	mModules[index]->onLoaded();
-	
+
 	return true;
 }
 
-	
+
 bool ModularSynth::connectModules(int fromModule, int toModule, int fromOutput, int toInput)
 {
 	if (mNumConnections >= maxConnections)
 		return false;
-	
+
 	for (int i = 0 ; i < mNumConnections ; ++i)
 	{
 		SynthConnection& connection = mConnections[i];
-		
+
 		if (connection.toModule == toModule && connection.toInput == toInput)
 			return false;
-		
+
 		if (connection.fromModule == fromModule && connection.fromOutput == fromOutput)
 			return false;
 	}
-	
+
 	SynthConnection& connection = mConnections[mNumConnections];
 	connection.fromModule = fromModule;
 	connection.toModule = toModule;
 	connection.fromOutput = fromOutput;
 	connection.toInput = toInput;
-	
+
 	mNumConnections++;
-	
+
 	return true;
 }
-	
+
 
 void ModularSynth::detachConnection(int moduleIndex, int type, int connectionIndex)
 {
 	int i;
-	
+
 	for (i = 0 ; i < mNumConnections ; ++i)
 	{
 		SynthConnection& connection = mConnections[i];
@@ -91,7 +91,7 @@ void ModularSynth::detachConnection(int moduleIndex, int type, int connectionInd
 				break;
 		}
 	}
-	
+
 	if (i < mNumConnections)
 	{
 		removeConnection(i);
@@ -106,7 +106,7 @@ void ModularSynth::removeConnection(int index)
 		SynthConnection& connection = mConnections[index];
 		if (mModules[connection.toModule] != NULL)
 			mModules[connection.toModule]->setInput(connection.toInput, 0.0f);
-		
+
 		mNumConnections--;
 		memmove(&mConnections[index], &mConnections[index + 1], sizeof(mConnections[index]) * (mNumConnections - index));
 	}
@@ -120,11 +120,11 @@ void ModularSynth::cycle()
 		SynthConnection& connection = mConnections[i];
 		mModules[connection.toModule]->setInput(connection.toInput, mModules[connection.fromModule]->getOutput(connection.fromOutput));
 	}
-	
+
 	for (int i = 0 ; i < maxModules ; ++i)
 		if (mModules[i] != NULL)
 			mModules[i]->cycle();
-	
+
 	// After all modules have had their change to see if note was triggered,
 	// reset the status
 	mNoteTrigger = false;
@@ -152,21 +152,25 @@ void ModularSynth::setVolume(int volume)
 void ModularSynth::update(int numSamples)
 {
 }
-	
+
 
 void ModularSynth::render(Sample16 *buffer, int numSamples, int offset)
 {
+	lock();
+
 	// No update or output if volume is zero, meaning the channel is muted
 	if (mVolume > 0.0f)
 	{
 		for (int i = offset ; i < numSamples ; ++i)
 		{
 			cycle();
-			
+
 			buffer[i].left += mOutput[0] * outputResolution;
 			buffer[i].right += mOutput[1] * outputResolution;
 		}
 	}
+
+	unlock();
 }
 
 
@@ -203,12 +207,12 @@ void ModularSynth::swapModules(int fromModule, int toModule)
 	for (int i = 0 ; i < mNumConnections ; ++i)
 	{
 		SynthConnection& connection = mConnections[i];
-		
+
 		if (connection.fromModule == toModule)
 			connection.fromModule = fromModule;
 		else if (connection.fromModule == fromModule)
 			connection.fromModule = toModule;
-		
+
 		if (connection.toModule == toModule)
 			connection.toModule = fromModule;
 		else if (connection.toModule == fromModule)
@@ -223,13 +227,13 @@ void ModularSynth::removeModule(int index)
 	{
 		delete mModules[index];
 		mModules[index] = NULL;
-		
+
 		// Remove any connections from/to this module
-		
+
 		for (int i = 0 ; i < mNumConnections ; )
 		{
 			SynthConnection& connection = mConnections[i];
-			
+
 			if (connection.fromModule == index || connection.toModule == index)
 				removeConnection(i);
 			else
@@ -250,76 +254,76 @@ static const int paramCenter = 0x4000000;
 bool ModularSynth::readSynth(const FileSection& section, int& offset)
 {
 	int countModules = section.readByte(offset);
-	
+
 	if (countModules == FileSection::invalidRead || countModules > maxModules)
 		return false;
-	
+
 	ModuleFactory moduleFactory;
-	
+
 	clear();
-	
+
 	for (int i = 0 ; i < countModules ; ++i)
 	{
 		int synthId = section.readByte(offset);
-		
+
 		if (synthId != 0)
 		{
 			SynthModule *module = moduleFactory.createModule(synthId, *this);
-			
+
 			if (!module)
 				return false;
-			
+
 			for (int p = 0 ; p < module->getNumParams() ; ++p)
 			{
 				int param = section.readDword(offset);
 				module->setParam(p, static_cast<float>(param - paramCenter) / paramScale);
 			}
-			
+
 			mModules[i] = module;
 			module->setSampleRate(mSampleRate);
 			module->onLoaded();
 		}
 	}
-	
+
 	int countConnections = section.readByte(offset);
-	
+
 	if (countConnections == FileSection::invalidRead || countConnections > maxConnections)
 		return false;
-	
+
 	mNumConnections = countConnections;
-	
+
 	for (int i = 0 ; i < mNumConnections ; ++i)
 	{
 		SynthConnection& connection = mConnections[i];
-		
+
 		int temp = section.readByte(offset);
-		
+
 		if (temp == FileSection::invalidRead || temp > maxModules)
 			return false;
-		
+
 		connection.fromModule = temp;
-		
+
 		temp = section.readByte(offset);
-		
+
 		if (temp == FileSection::invalidRead || temp > maxModules)
 			return false;
 		connection.toModule = temp;
-		
+
 		temp = section.readByte(offset);
-		
+
 		if (temp == FileSection::invalidRead || temp > maxModules)
 			return false;
-		
+
 		connection.fromOutput = temp;
-		
+
 		temp = section.readByte(offset);
-		
+
 		if (temp == FileSection::invalidRead || temp > maxModules)
 			return false;
-		
+
 		connection.toInput = temp;
 	}
-	
+
 	return true;
 }
 
@@ -327,15 +331,15 @@ bool ModularSynth::readSynth(const FileSection& section, int& offset)
 void ModularSynth::writeSynth(FileSection& section)
 {
 	// Write modules
-	
+
 	section.writeByte(maxModules);
-	
+
 	for (int i = 0 ; i < maxModules ; ++i)
 	{
 		if (mModules[i] != NULL)
 		{
 			section.writeByte(mModules[i]->getSynthId());
-		
+
 			for (int p = 0 ; p < mModules[i]->getNumParams() ; ++p)
 			{
 				section.writeDword(mModules[i]->getParam(p) * paramScale + paramCenter);
@@ -346,11 +350,11 @@ void ModularSynth::writeSynth(FileSection& section)
 			section.writeByte(0);
 		}
 	}
-	
+
 	// Write connections
-	
+
 	section.writeByte(mNumConnections);
-	
+
 	for (int i = 0 ; i < mNumConnections ; ++i)
 	{
 		SynthConnection& connection = mConnections[i];
@@ -373,7 +377,7 @@ void ModularSynth::clear()
 		}
 	}
 
-	mNumConnections = 0;	
+	mNumConnections = 0;
 }
 
 
@@ -387,11 +391,11 @@ void ModularSynth::setMasterOutput(int channel, float output)
 {
 	mOutput[channel] = output;
 }
-	
-	
+
+
 bool ModularSynth::getNoteTrigger() const
 {
-	if (mNoteTrigger) 
+	if (mNoteTrigger)
 		return 1.0f;
 	else
 		return 0.0f;
@@ -417,7 +421,7 @@ void ModularSynth::copy(const ModularSynth& source)
 		{
 			addModule(i, source.getModule(i)->getSynthId());
 			SynthModule *newModule = getModule(i);
-			
+
 			for (int p = 0 ; p < newModule->getNumParams() ; ++p)
 			{
 				newModule->setParam(p, source.getModule(i)->getParam(p));
@@ -429,9 +433,9 @@ void ModularSynth::copy(const ModularSynth& source)
 				removeModule(i);
 		}
 	}
-	
+
 	mNumConnections = 0;
-	
+
 	for (int i = 0 ; i < source.getNumConnections() ; ++i)
 	{
 		const SynthConnection& connection = source.getConnection(i);
@@ -443,9 +447,9 @@ void ModularSynth::copy(const ModularSynth& source)
 ModularSynth* ModularSynth::clone() const
 {
 	ModularSynth *newSynth = new ModularSynth();
-	
+
 	newSynth->copy(*this);
-	
+
 	return newSynth;
 }
 
