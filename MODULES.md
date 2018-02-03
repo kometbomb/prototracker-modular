@@ -11,9 +11,10 @@ Note that there is a delay in signal propagation: every connection between two m
 These modules are used to control other modules.
 
 ### FrequencyIn
+
 | Output | Description |
 |--------|-------------|
-| 0 | Keydown frequency (1.0 = 440 Hz, 2.0 = 880 Hz etc.)
+| 0 | Keydown frequency in kHz |
 
 ### TriggerNote
 
