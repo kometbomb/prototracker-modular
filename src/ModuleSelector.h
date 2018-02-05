@@ -1,43 +1,30 @@
 #pragma once
 
-#include <vector>
-#include "Editor.h"
+#include "GenericSelector.h"
 #include "ModuleFactory.h"
 
 struct Label;
 struct ModularSynth;
 
-class ModuleSelector: public Editor
+class ModuleSelector: public GenericSelector
 {
-	struct ModuleInfo {
+	struct ModuleInfo: public Item {
 		int id;
 		const char *name;
-		
+
 		ModuleInfo(int _id, const char *_name): id(_id), name(_name) {}
 	};
-	std::vector<ModuleInfo> mModules;
-	int mSelectedItem;
-	static const int titleSize = 256;
-	char mTitle[titleSize];
-	Label *mLabel;
-	
-	void renderItem(Renderer& renderer, const SDL_Rect& area, const ModuleInfo& item, bool isSelected);
-	void accept(bool isFinal = false);
-	void reject(bool isFinal = false);
-	void selectItem(int index);
-	
+
+	virtual void renderItem(Renderer& renderer, const SDL_Rect& area, const Item& item, bool isSelected);
+	virtual void accept(bool isFinal = false);
+	virtual void reject(bool isFinal = false);
+	virtual void onSelectItem(const Item& item);
+
 public:
 	ModuleSelector(EditorState& editorState);
 	virtual ~ModuleSelector();
-	
-	/* Set dialog title
-	 */
-	void setTitle(const char *title);
-	
+
 	void populate(const ModularSynth& modularSynth);
-	
+
 	int getSelectedModuleId() const;
-	
-	virtual bool onEvent(SDL_Event& event);
-	virtual void onDraw(Renderer& renderer, const SDL_Rect& area);
 };
