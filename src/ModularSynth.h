@@ -2,12 +2,13 @@
 
 #include "SynthConnection.h"
 #include "IOscillator.h"
+#include "Lockable.h"
 
 struct SynthModule;
 struct FileSection;
 struct IPlayer;
 
-class ModularSynth: public IOscillator
+class ModularSynth: public IOscillator, public Lockable
 {
 public:
 	static const int maxModules = 32;

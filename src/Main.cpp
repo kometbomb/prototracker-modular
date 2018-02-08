@@ -37,6 +37,9 @@ Context::Context()
 		return;
 	}
 
+	SDL_Rect area = {0, 0, theme.getWidth(), theme.getHeight()};
+	mainEditor.setArea(area);
+
 	if (!mainEditor.loadElements(theme))
 	{
 		return;

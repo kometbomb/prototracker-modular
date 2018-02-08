@@ -157,6 +157,8 @@ void ModularSynth::update(int numSamples)
 
 void ModularSynth::render(Sample16 *buffer, int numSamples, int offset)
 {
+	lock();
+
 	// No update or output if volume is zero, meaning the channel is muted
 	if (mVolume > 0.0f)
 	{
@@ -168,6 +170,8 @@ void ModularSynth::render(Sample16 *buffer, int numSamples, int offset)
 			buffer[i].right += mOutput[1] * outputResolution;
 		}
 	}
+
+	unlock();
 }
 
 
