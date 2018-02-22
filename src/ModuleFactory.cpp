@@ -24,6 +24,7 @@
 #include "modules/FrequencyInModule.h"
 #include "modules/TransposeModule.h"
 #include "modules/TriggerNoteModule.h"
+#include "modules/OscilloscopeModule.h"
 #include <cstdlib>
 
 #define REGISTER(module) registerModule(module::moduleId, module::moduleName, &module::createModule, module::maxInstances)
@@ -54,6 +55,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(FrequencyInModule);
 	REGISTER(TransposeModule);
 	REGISTER(TriggerNoteModule);
+	REGISTER(OscilloscopeModule);
 	REGISTER(AudioOutModule);
 }
 

@@ -52,6 +52,25 @@ Use this module to output sound.
 | 1 | Left channel out |
 | 2 | Right channel out |
 
+### Oscilloscope
+
+Use this to examine a signal. Put between two modules and let the signal pass thru.
+
+This module has two modes: auto sync and manual sync. Auto mode tries to display a single cycle of the signal and
+the manual mode can be triggered with the sync signal. E.g. use a saw wave signal at 50 Hz to trigger every 1/50th
+of a second or instead of a fixed frequency use FrequencyIn to sync to the played note.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Manual sync input |
+| 1 | Auto sync input |
+| 2 | Sync (rising signal crossing 0.5 triggers an update) |
+
+| Output | Description  |
+|-------|--------------|
+| 0 | Input 0 + Input 1 |
+
+
 ### EG
 
 Generates a simple attack-decay envelope. Key down input
