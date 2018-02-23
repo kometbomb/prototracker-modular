@@ -11,3 +11,4 @@ Here's a list of reserved module IDs.
 | 27 | semitone_module |
 | 28 | glide_module |
 | 30 | linear-module |
+| 29 | oscilloscope-module |
