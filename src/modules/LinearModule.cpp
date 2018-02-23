@@ -10,12 +10,20 @@ LinearModule::LinearModule(ModularSynth& synth)
 
 void LinearModule::cycle()
 {
-	float input = getInput(0);
-	float x = std::min(1.0f, std::max(0.0f, getInput(1)));
-	float y = std::min(1.0f, std::max(0.0f, getInput(2)));
+	float input = getInput(0) * 0.5f + 0.5f;
+	float x = std::min(1.0f, std::max(0.0f, getInput(1) * 0.5f + 0.5f));
+	float y = std::min(1.0f, std::max(0.0f, getInput(2) * 0.5f + 0.5f));
 	float amp;
 
-	if (input >= x)
+	if (x >= 1.0f)
+	{
+		amp = y;
+	}
+	if (x == 0.0f)
+	{
+		amp = y;
+	}
+	else if (input >= x)
 	{
 		amp = (1.0f - y) * (input - x) / (1.0f - x) + y;
 	}
@@ -24,7 +32,7 @@ void LinearModule::cycle()
 		amp = y * input / x;
 	}
 
-	setOutput(0, amp);
+	setOutput(0, amp * 2.0f - 1.0f);
 }
 
 
