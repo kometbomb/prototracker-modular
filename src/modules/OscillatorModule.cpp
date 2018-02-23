@@ -8,14 +8,16 @@ OscillatorModule::OscillatorModule(ModularSynth& synth)
 
 void OscillatorModule::cycle()
 {
+	float phase = getInput(2) * 0.5f;
+
 	if (getInput(1) > 0.5f && mPreviousSync <= 0.5f)
 		mAccumulator = 0;
 
 	mPreviousSync = getInput(1);
 
 	mAccumulator = fmod(mAccumulator + getInput(0) / mSampleRate * 1000, 1.0f);
-	setOutput(0, sin((mAccumulator + getInput(2)) * (3.14157 * 2)));
-	setOutput(1, fmod(mAccumulator + getInput(2), 1.0f) * 2.0f - 1.0f);
+	setOutput(0, sin((mAccumulator + phase) * (3.14157 * 2)));
+	setOutput(1, fmod(mAccumulator + phase, 1.0f) * 2.0f - 1.0f);
 }
 
 
