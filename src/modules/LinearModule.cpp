@@ -1,5 +1,6 @@
 #include "LinearModule.h"
 #include <cstdio>
+#include <algorithm>
 
 LinearModule::LinearModule(ModularSynth& synth)
 	:SynthModule(synth, moduleId, 3, 1, 0)
@@ -11,19 +12,19 @@ void LinearModule::cycle()
 {
 	float input = getInput(0);
 	float x = std::min(1.0f, std::max(0.0f, getInput(1)));
-	float y = std::min(1.0f, std::max(0.0f, getInput(1)));
+	float y = std::min(1.0f, std::max(0.0f, getInput(2)));
 	float amp;
 
 	if (input >= x)
 	{
-		amp = (input - y) * (input - x) + y;
+		amp = (1.0f - y) * (input - x) / (1.0f - x) + y;
 	}
 	else
 	{
-		amp = input * y / x;
+		amp = y * input / x;
 	}
 
-	setOutput(0, input * amp);
+	setOutput(0, amp);
 }
 
 
