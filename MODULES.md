@@ -223,6 +223,21 @@ Shape outputs input #1 to the power of input #2. Useful as a distortion and to s
 |--------|--------------|
 | 0 | Shaped output |
 
+### Linear
+
+This output shapes an input so that the linearity has a kink at (X,Y). Use for phase distortion
+synthesis by shaping a saw wave and feeding into the oscillator phase input.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Input |
+| 1 | Kink X position |
+| 1 | Kink Y position |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Shaped output |
+
 ### Clamp
 
 Clamps the input to set range.
