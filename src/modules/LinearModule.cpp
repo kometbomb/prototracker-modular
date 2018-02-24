@@ -11,17 +11,13 @@ LinearModule::LinearModule(ModularSynth& synth)
 void LinearModule::cycle()
 {
 	float input = getInput(0) * 0.5f + 0.5f;
-	float x = std::min(1.0f, std::max(0.0f, getInput(1) * 0.5f + 0.5f));
+	float x = getInput(1) * 0.5f + 0.5f;
 	float y = std::min(1.0f, std::max(0.0f, getInput(2) * 0.5f + 0.5f));
 	float amp;
 
-	if (x >= 1.0f)
+	if (input <= 0.0f || input >= 1.0f)
 	{
-		amp = y;
-	}
-	if (x == 0.0f)
-	{
-		amp = y;
+		amp = input;
 	}
 	else if (input >= x)
 	{
