@@ -232,7 +232,7 @@ synthesis by shaping a saw wave and feeding into the oscillator phase input.
 |-------|--------------|
 | 0 | Input |
 | 1 | Kink X position |
-| 1 | Kink Y position |
+| 2 | Kink Y position |
 
 | Output | Description  |
 |--------|--------------|
