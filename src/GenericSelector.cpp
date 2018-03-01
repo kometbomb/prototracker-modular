@@ -76,8 +76,18 @@ bool GenericSelector::onEvent(SDL_Event& event)
 				return true;
 			}
 
+			int countVisible = (mThisArea.h - 8 - 8 - 8) / 8;
+
 			switch (event.key.keysym.sym)
 			{
+				case SDLK_PAGEUP:
+					selectItem(mSelectedItem - countVisible / 2);
+					return true;
+
+				case SDLK_PAGEDOWN:
+					selectItem(mSelectedItem + countVisible / 2);
+					return true;
+
 				case SDLK_UP:
 					selectItem(mSelectedItem - 1);
 					return true;
@@ -127,9 +137,15 @@ void GenericSelector::onDraw(Renderer& renderer, const SDL_Rect& area)
 
 	for (int row = firstVisible ; row <= lastVisible ; ++row)
 	{
-		SDL_Rect textArea = {area.x, (row - firstVisible) * 8 + area.y + 16, area.w, 8};
+		SDL_Rect textArea = {area.x, (row - firstVisible) * 8 + area.y + 16, area.w - 4, 8};
 		renderItem(renderer, textArea, *mItems[row], row == mSelectedItem);
 	}
+
+	int areaHeight = area.h - 8 - 8 - 4;
+	int scrollbarTop = areaHeight * firstVisible / static_cast<int>(mItems.size());
+	int scrollbarBottom = areaHeight * (lastVisible + 1) / static_cast<int>(mItems.size());
+	SDL_Rect scrollbarArea = {area.x + area.w - 3, area.y + 16 + scrollbarTop, 2, scrollbarBottom - scrollbarTop};
+	renderer.clearRect(scrollbarArea, Color());
 }
 
 
