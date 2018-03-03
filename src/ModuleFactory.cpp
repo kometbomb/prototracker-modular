@@ -28,6 +28,7 @@
 #include "modules/TickModule.h"
 #include "modules/LinearModule.h"
 #include "modules/OscilloscopeModule.h"
+#include "modules/VUMeterModule.h"
 #include <cstdlib>
 
 #define REGISTER(module) registerModule(module::moduleId, module::moduleName, &module::createModule, module::maxInstances)
@@ -62,6 +63,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(TransposeModule);
 	REGISTER(TriggerNoteModule);
 	REGISTER(OscilloscopeModule);
+	REGISTER(VUMeterModule);
 	REGISTER(AudioOutModule);
 }
 
