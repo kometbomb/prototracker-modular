@@ -52,6 +52,25 @@ Use this module to output sound.
 | 1 | Left channel out |
 | 2 | Right channel out |
 
+### Oscilloscope
+
+Use this to examine a signal. Put between two modules and let the signal pass thru.
+
+This module has two modes: auto sync and manual sync. Auto mode tries to display a single cycle of the signal and
+the manual mode can be triggered with the sync signal. E.g. use a saw wave signal at 50 Hz to trigger every 1/50th
+of a second or instead of a fixed frequency use FrequencyIn to sync to the played note.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Manual sync input |
+| 1 | Auto sync input |
+| 2 | Sync (rising signal crossing 0.5 triggers an update) |
+
+| Output | Description  |
+|-------|--------------|
+| 0 | Input 0 + Input 1 |
+
+
 ### EG
 
 Generates a simple attack-decay envelope. Key down input
@@ -201,6 +220,21 @@ Shape outputs input #1 to the power of input #2. Useful as a distortion and to s
 |-------|--------------|
 | 0 | Input |
 | 1 | Shape |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Shaped output |
+
+### Linear
+
+This output shapes an input so that the linearity has a kink at (X,Y). Use for phase distortion
+synthesis by shaping a saw wave and feeding into the oscillator phase input.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Input |
+| 1 | Kink X position |
+| 2 | Kink Y position |
 
 | Output | Description  |
 |--------|--------------|

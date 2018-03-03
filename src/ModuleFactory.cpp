@@ -26,6 +26,8 @@
 #include "modules/TransposeModule.h"
 #include "modules/TriggerNoteModule.h"
 #include "modules/TickModule.h"
+#include "modules/LinearModule.h"
+#include "modules/OscilloscopeModule.h"
 #include <cstdlib>
 
 #define REGISTER(module) registerModule(module::moduleId, module::moduleName, &module::createModule, module::maxInstances)
@@ -48,6 +50,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(MixerModule);
 	REGISTER(ClampModule);
 	REGISTER(ShapeModule);
+	REGISTER(LinearModule);
 	REGISTER(DistortionModule);
 	REGISTER(BitsModule);
 	REGISTER(DelayModule);
@@ -58,6 +61,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(FrequencyInModule);
 	REGISTER(TransposeModule);
 	REGISTER(TriggerNoteModule);
+	REGISTER(OscilloscopeModule);
 	REGISTER(AudioOutModule);
 }
 
