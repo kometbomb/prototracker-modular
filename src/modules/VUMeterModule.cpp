@@ -2,7 +2,6 @@
 #include "../Renderer.h"
 #include <cstdio>
 #include <algorithm>
-#include <cmath>
 
 VUMeterModule::VUMeterModule(ModularSynth& synth)
 	:SynthModule(synth, moduleId, 1, 1, 1), mInputValue(0), mType(0)
