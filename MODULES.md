@@ -70,6 +70,20 @@ of a second or instead of a fixed frequency use FrequencyIn to sync to the playe
 |-------|--------------|
 | 0 | Input 0 + Input 1 |
 
+### VUMeter
+
+Use this to examine a signal. Put between two modules and let the signal pass thru.
+
+This module has two modes (selectable with the mousewheel): one to visualize values between 0 and 1 and another
+to visualize values between -1 and 1.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Input |
+
+| Output | Description  |
+|-------|--------------|
+| 0 | Passthru |
 
 ### EG
 

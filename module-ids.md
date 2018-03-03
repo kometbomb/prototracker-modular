@@ -12,3 +12,4 @@ Here's a list of reserved module IDs.
 | 28 | glide_module |
 | 30 | linear-module |
 | 29 | oscilloscope-module |
+| 31 | vu-meter |
