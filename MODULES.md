@@ -349,15 +349,19 @@ This module will follow the input signal at a constant speed.
 
 ### Delay
 
-This module delays the signal.
+This module delays the input signal. Optionally, the signal can be fed back in the
+delay buffer via input #3 (connect from output 1 to input 3) which gets amplified
+by input #2. Input gain controls the delay amplitude and also the feedback ratio
+if the signal is fed back.
 
 | Input | Description  |
 |-------|--------------|
 | 0 | Signal in |
 | 1 | Delay (in seconds) |
-| 2 | Self feedback |
+| 2 | Input gain |
+| 3 | Feedback input |
 
 | Output | Description  |
 |--------|--------------|
-| 0 | Delayed output |
-| 1 | Dry output |
+| 0 | Combined output |
+| 1 | Wet output |

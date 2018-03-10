@@ -5,7 +5,7 @@
 #include "SDL.h"
 
 DelayModule::DelayModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 3, 2, 0), mHead(0), mBuffer(NULL)
+	:SynthModule(synth, moduleId, 4, 2, 0), mHead(0), mBuffer(NULL)
 {
 }
 
@@ -22,23 +22,32 @@ void DelayModule::cycle()
 	if (mBuffer == NULL)
 		return;
 
-	int currentReadHead = static_cast<int>(getInput(1) * mSampleRate);
+	int currentReadHead = std::max(0, std::min(mMaxBufferSize - 1, static_cast<int>(getInput(1) * mSampleRate)));
 	int a = std::min(currentReadHead, mPrevReadHead);
 	int b = std::max(currentReadHead, mPrevReadHead);
 	float avg = 0;
 
-	mBuffer[mHead] = getInput(0) + getInput(2) * mBuffer[(mHead - currentReadHead + mMaxBufferSize) % mMaxBufferSize];
+	// Feed input #3 and
+	mBuffer[mHead] = getInput(2) * (getInput(0) + getInput(3));
 
-	// Dry out
-	setOutput(1, getInput(0));
+	int readHead = (mHead - a + mMaxBufferSize) % mMaxBufferSize;
 
 	for (int i = a ; i <= b ; ++i)
 	{
-		int readHead = (mHead - i + mMaxBufferSize) % mMaxBufferSize;
 		avg += mBuffer[readHead];
+
+		if (++readHead >= mMaxBufferSize)
+		{
+			readHead = 0;
+		}
 	}
 
-	setOutput(0, avg / (b - a + 1));
+	// Wet out
+	float wetOut = avg / (b - a + 1);
+	setOutput(1, wetOut);
+
+	// Combined out
+	setOutput(0, wetOut + getInput(0));
 
 	++mHead;
 
@@ -52,14 +61,14 @@ void DelayModule::cycle()
 
 const char * DelayModule::getInputName(int input) const
 {
-	static const char *names[] = {"Input", "Delay", "Feedback"};
+	static const char *names[] = {"Input", "Delay", "Feedback ratio", "Feedback in"};
 	return names[input];
 }
 
 
 const char * DelayModule::getOutputName(int output) const
 {
-	static const char *names[] = {"Delay out", "Dry out"};
+	static const char *names[] = {"Combined out", "Wet out"};
 	return names[output];
 }
 
