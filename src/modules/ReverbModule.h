@@ -13,9 +13,11 @@ class ReverbModule: public SynthModule
 		~Filter();
 	};
 
-	struct CombFilter: public Filter {
-		float cycle(float input, float gain);
-		CombFilter(int length);
+	struct DelayFilter: public Filter {
+		float mOutput;
+		float cycle(float input);
+		float getOutput() const;
+		DelayFilter(int length);
 	};
 
 	struct AllpassFilter: public Filter {
@@ -23,10 +25,12 @@ class ReverbModule: public SynthModule
 		AllpassFilter(int length);
 	};
 
-	static const int numAllpassFilters = 7;
-	static const int numCombFilters = 7;
+	static const int numAllpassFiltersPerRow = 2;
+	static const int numRows = 4;
+	static const int numDelays = numRows;
+	static const int numAllpassFilters = numAllpassFiltersPerRow * numRows;
 
-	CombFilter *mComb[numCombFilters];
+	DelayFilter *mDelay[numDelays];
 	AllpassFilter *mAllpass[numAllpassFilters];
 
 	ReverbModule(ModularSynth& synth);

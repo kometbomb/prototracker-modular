@@ -7,18 +7,18 @@
 ReverbModule::ReverbModule(ModularSynth& synth)
 	:SynthModule(synth, moduleId, 2, 2, 0)
 {
-	for (int i = 0 ; i < numCombFilters ; ++i)
-		mComb[i ]= NULL;
+	for (int i = 0 ; i < numDelays ; ++i)
+		mDelay[i]= NULL;
 
 	for (int i = 0 ; i < numAllpassFilters ; ++i)
-		mAllpass[i ]= NULL;
+		mAllpass[i]= NULL;
 }
 
 
 ReverbModule::~ReverbModule()
 {
-	for (int i = 0 ; i < numCombFilters ; ++i)
-		if (mComb[i] != NULL) delete mComb[i];
+	for (int i = 0 ; i < numDelays ; ++i)
+		if (mDelay[i] != NULL) delete mDelay[i];
 
 	for (int i = 0 ; i < numAllpassFilters ; ++i)
 		if (mAllpass[i] != NULL) delete mAllpass[i];
@@ -39,78 +39,89 @@ ReverbModule::Filter::~Filter()
 }
 
 
-ReverbModule::CombFilter::CombFilter(int length)
-	: Filter(length)
-{
-}
-
-
 ReverbModule::AllpassFilter::AllpassFilter(int length)
 	: Filter(length)
 {
 }
 
 
-float ReverbModule::CombFilter::cycle(float input, float gain)
+float ReverbModule::AllpassFilter::cycle(float input, float gain)
 {
-	float output = mBuffer[mHead];
-	mBuffer[mHead] = output * gain + input;
+	float buffer = mBuffer[mHead];
+	float output = input * gain + buffer;
+	mBuffer[mHead] = input + output * -gain;
 
 	if(++mHead >= mLength)
-		mHead = 0;
+  		mHead = 0;
 
 	return output;
 }
 
 
-float ReverbModule::AllpassFilter::cycle(float input, float gain)
+ReverbModule::DelayFilter::DelayFilter(int length)
+	: Filter(length), mOutput(0.0f)
 {
-	float buffer = mBuffer[mHead];
+}
 
-	mBuffer[mHead] = input + buffer * gain;
-	float output = -mBuffer[mHead] * gain + buffer;
+
+float ReverbModule::DelayFilter::cycle(float input)
+{
+	float output = mBuffer[mHead];
+	mBuffer[mHead] = input;
 
 	if(++mHead >= mLength)
-		mHead = 0;
+  		mHead = 0;
+
+	mOutput = output;
 
 	return output;
+}
+
+
+float ReverbModule::DelayFilter::getOutput() const
+{
+	return mOutput;
 }
 
 
 void ReverbModule::cycle()
 {
 	float input = getInput(0);
-	float combOut = 0;
-	float gain = getInput(1);
+	float Krt = getInput(1);
 
-	for (int i = 0 ; i < numCombFilters ; ++i)
+	float output = 0.0f;
+	float amp = mDelay[numDelays - 1]->getOutput() * Krt;
+	int allPassIdx = 0;
+
+	for (int row = 0 ; row < numRows ; ++row)
 	{
-		combOut += mComb[i]->cycle(input, gain);
+		amp += input;
+
+		for (int allpass = 0 ; allpass < numAllpassFiltersPerRow ; ++allpass)
+		{
+			amp = mAllpass[allPassIdx++]->cycle(amp, 0.5f);
+		}
+
+		amp = mDelay[row]->cycle(amp) * Krt;
+		output += amp;
 	}
 
-	float allpassOut = combOut;
-
-	for (int i = 0 ; i < numAllpassFilters ; ++i)
-	{
-		allpassOut = mAllpass[i]->cycle(allpassOut, gain);
-	}
-
-	setOutput(0, allpassOut);
-	setOutput(1, input);
+	setOutput(0, input + output / numRows);
+	setOutput(1, output / numRows);
 }
 
 
 
 const char * ReverbModule::getInputName(int input) const
 {
-	static const char *names[] = {"Input", "Length"};
+	static const char *names[] = {"Input", "Reverb time"};
 	return names[input];
 }
 
 
 const char * ReverbModule::getOutputName(int output) const
 {
-	static const char *names[] = {"Reverb out", "Dry out"};
+	static const char *names[] = {"Combined out", "Wet out"};
 	return names[output];
 }
 
@@ -118,6 +129,7 @@ const char * ReverbModule::getOutputName(int output) const
 const char * ReverbModule::getName() const
 {
 	return "Reverb";
+
 }
 
 
@@ -131,15 +143,15 @@ void ReverbModule::setSampleRate(int newRate)
 {
 	SynthModule::setSampleRate(newRate);
 
-	static const float combDelayLength[numCombFilters] = { 941, 911, 887, 797, 773, 719, 701 };
-	static const float allPassDelayLength[numAllpassFilters] = { 1051, 1033, 1021, 1019, 1013, 1009, 997 };
+	static const float delayLength[numDelays] = { 0.00733f, 0.00683f, 0.00757f, 0.00743f };
+	static const float allPassDelayLength[numAllpassFilters] = { 0.04591f, 0.06337f, 0.04597f, 0.05479f, 0.04651f, 0.03217f, 0.04643f, 0.06521f };
 
-	for (int i = 0 ; i < numCombFilters ; ++i)
+	for (int i = 0 ; i < numDelays ; ++i)
 	{
-		if (mComb[i] != NULL)
-			delete mComb[i];
+		if (mDelay[i] != NULL)
+			delete mDelay[i];
 
-		mComb[i] = new CombFilter(combDelayLength[i] * newRate / 44100);
+		mDelay[i] = new DelayFilter(delayLength[i] * mSampleRate);
 	}
 
 	for (int i = 0 ; i < numAllpassFilters ; ++i)
@@ -147,6 +159,6 @@ void ReverbModule::setSampleRate(int newRate)
 		if (mAllpass[i] != NULL)
 			delete mAllpass[i];
 
-		mAllpass[i] = new AllpassFilter(allPassDelayLength[i] * newRate / 44100);
+		mAllpass[i] = new AllpassFilter(allPassDelayLength[i] * mSampleRate);
 	}
 }

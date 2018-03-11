@@ -365,3 +365,18 @@ if the signal is fed back.
 |--------|--------------|
 | 0 | Combined output |
 | 1 | Wet output |
+
+### Reverb
+
+Adds reverberation to input signal. Reverb time is the feedback gain inside
+the reverb, so it should be set -0.999..0.999 to avoid distortion.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Signal in |
+| 1 | Reverb time |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Combined output |
+| 1 | Wet output |
