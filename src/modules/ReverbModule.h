@@ -40,7 +40,6 @@ public:
 
 	static const int moduleId = 25;
 	static const int maxInstances = -1;
-	static const int maxBufferSizeMs = 2000;
 	static constexpr const char *moduleName = "Reverb";
 
 	static SynthModule * createModule(ModularSynth& synth);
