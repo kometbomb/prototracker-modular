@@ -16,6 +16,7 @@
 #include "modules/MixerModule.h"
 #include "modules/ClampModule.h"
 #include "modules/DelayModule.h"
+#include "modules/ReverbModule.h"
 #include "modules/ShapeModule.h"
 #include "modules/BitsModule.h"
 #include "modules/DistortionModule.h"
@@ -24,6 +25,7 @@
 #include "modules/FrequencyInModule.h"
 #include "modules/TransposeModule.h"
 #include "modules/TriggerNoteModule.h"
+#include "modules/TickModule.h"
 #include "modules/LinearModule.h"
 #include "modules/OscilloscopeModule.h"
 #include "modules/VUMeterModule.h"
@@ -42,6 +44,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(MulModule);
 	REGISTER(AbsModule);
 	REGISTER(RMSModule);
+	REGISTER(TickModule);
 	REGISTER(ConstModule);
 	REGISTER(EffectModule);
 	REGISTER(SplitModule);
@@ -52,6 +55,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(DistortionModule);
 	REGISTER(BitsModule);
 	REGISTER(DelayModule);
+	REGISTER(ReverbModule);
 	REGISTER(FilterModule);
 	REGISTER(GlideModule);
 	REGISTER(AccumulatorModule);

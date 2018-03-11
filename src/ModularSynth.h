@@ -6,6 +6,7 @@
 
 struct SynthModule;
 struct FileSection;
+struct IPlayer;
 
 class ModularSynth: public IOscillator, public Lockable
 {
@@ -15,6 +16,7 @@ public:
 	static const int outputResolution = 4096;
 
 private:
+	IPlayer& mPlayer;
 	SynthModule *mModules[maxModules];
 	SynthConnection mConnections[maxConnections];
 	int mNumConnections;
@@ -25,7 +27,7 @@ private:
 	void cycle();
 
 public:
-	ModularSynth();
+	ModularSynth(IPlayer& player);
 	virtual ~ModularSynth();
 	ModularSynth* clone() const;
 	void copy(const ModularSynth& source);
@@ -53,6 +55,7 @@ public:
 	bool getNoteTrigger() const;
 	void setMasterOutput(int channel, float output);
 	int getEffectValue(int effect) const;
+	int getSongRate() const;
 
 	// IOscillator virtual methods
 	virtual void triggerNote();

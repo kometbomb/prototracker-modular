@@ -6,7 +6,7 @@ class DelayModule: public SynthModule
 {
 	DelayModule(ModularSynth& synth);
 	int mMaxBufferSize;
-	int mHead;
+	int mHead, mPrevReadHead;
 	float *mBuffer;
 
 public:

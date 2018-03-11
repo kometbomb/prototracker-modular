@@ -4,6 +4,7 @@
 #include "FileSection.h"
 #include "ModuleFactory.h"
 #include "TrackState.h"
+#include "IPlayer.h"
 #include "SDL.h"
 #include <cstdio>
 #include <cstdlib>
@@ -14,8 +15,8 @@
 #define TUNING 440.0
 #endif
 
-ModularSynth::ModularSynth()
-	:mNumConnections(0), mFrequency(0), mVolume(0), mNoteTrigger(false)
+ModularSynth::ModularSynth(IPlayer& player)
+	: mPlayer(player), mNumConnections(0), mFrequency(0), mVolume(0), mNoteTrigger(false)
 {
 	for (int i = 0 ; i < maxModules ; ++i)
 		mModules[i] = NULL;
@@ -446,7 +447,7 @@ void ModularSynth::copy(const ModularSynth& source)
 
 ModularSynth* ModularSynth::clone() const
 {
-	ModularSynth *newSynth = new ModularSynth();
+	ModularSynth *newSynth = new ModularSynth(mPlayer);
 
 	newSynth->copy(*this);
 
@@ -464,4 +465,10 @@ void ModularSynth::handleTrackState(ITrackState& _trackState)
 int ModularSynth::getEffectValue(int effect) const
 {
 	return mEffectValues[effect];
+}
+
+
+int ModularSynth::getSongRate() const
+{
+	return mPlayer.getPlayerState().songRate;
 }

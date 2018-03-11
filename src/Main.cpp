@@ -23,7 +23,7 @@ Context* _context;
 #endif
 
 Context::Context()
-	: ready(false), done(false), themeLoaded(false), song(), player(song), synth(), mixer(player, synth), editorState(), mainEditor(editorState, player, player.getPlayerState(), song, synth)
+	: ready(false), done(false), themeLoaded(false), song(), player(song), synth(player), mixer(player, synth), editorState(), mainEditor(editorState, player, player.getPlayerState(), song, synth)
 {
 	Theme theme;
 
@@ -47,7 +47,7 @@ Context::Context()
 
 	themeLoaded = true;
 	previousTick = SDL_GetTicks();
-	
+
 	song.addSectionListener("SYNT", &synth, SectionListener::Save|SectionListener::Load);
 }
 
