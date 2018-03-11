@@ -48,7 +48,7 @@ public:
 	int getPatternLength() const;
 
 	virtual void reset();
-	
+
 	virtual bool onFileSectionLoad(const FileSection& section, int& offset);
 	virtual void onFileSectionSave(FileSection& section);
 };

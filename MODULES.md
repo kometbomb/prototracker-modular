@@ -78,6 +78,20 @@ of a second or instead of a fixed frequency use FrequencyIn to sync to the playe
 |-------|--------------|
 | 0 | Input 0 + Input 1 |
 
+### VUMeter
+
+Use this to examine a signal. Put between two modules and let the signal pass thru.
+
+This module has two modes (selectable with the mousewheel): one to visualize values between 0 and 1 and another
+to visualize values between -1 and 1.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Input |
+
+| Output | Description  |
+|-------|--------------|
+| 0 | Passthru |
 
 ### EG
 
@@ -182,16 +196,19 @@ Add inputs together and output the result.
 
 ### Mul
 
-Multiply inputs and output the result. Use as an amplifier.
+Multiply the two inputs and output the result. Use as an amplifier. Connect e.g. an EG to input 1
+and use it to multiple the two separate inputs to synchronize.
 
 | Input | Description  |
 |-------|--------------|
 | 0 | Input A |
-| 1 | Input B |
+| 1 | Multiplier |
+| 2 | Input B |
 
 | Output | Description  |
 |--------|--------------|
-| 0 | The product of inputs |
+| 0 | A multiplied by the multiplier |
+| 1 | B multiplied by the multiplier |
 
 ### Abs
 
@@ -341,13 +358,34 @@ This module will follow the input signal at a constant speed.
 
 ### Delay
 
-This module delays the signal.
+This module delays the input signal. Optionally, the signal can be fed back in the
+delay buffer via input #3 (connect from output 1 to input 3) which gets amplified
+by input #2. Input gain controls the delay amplitude and also the feedback ratio
+if the signal is fed back.
 
 | Input | Description  |
 |-------|--------------|
 | 0 | Signal in |
 | 1 | Delay (in seconds) |
+| 2 | Input gain |
+| 3 | Feedback input |
 
 | Output | Description  |
 |--------|--------------|
-| 0 | Delayed output |
+| 0 | Combined output |
+| 1 | Wet output |
+
+### Reverb
+
+Adds reverberation to input signal. Reverb time is the feedback gain inside
+the reverb, so it should be set -0.999..0.999 to avoid distortion.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Signal in |
+| 1 | Reverb time |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Combined output |
+| 1 | Wet output |

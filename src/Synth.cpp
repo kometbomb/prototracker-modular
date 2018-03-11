@@ -26,15 +26,15 @@ Synth::Synth(IPlayer& player, const Song& song)
 
 	initAutomation();
 
-	/* 
-	
+	/*
+
 	Initialize the audio tracks.
-	
+
 	*/
-	
+
 	for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
 	{
-		mOscillator[i] = new ModularSynth(*this);
+		mOscillator[i] = new ModularSynth(*this, player);
 	}
 }
 
@@ -42,10 +42,10 @@ Synth::Synth(IPlayer& player, const Song& song)
 Synth::~Synth()
 {
 	/*
-	
+
 	NOTE: ~ISynth() will delete the Oscillator objects we initialized
 	above! No need to cleanup yourself.
-	
+
 	*/
 }
 
@@ -57,15 +57,15 @@ bool Synth::onFileSectionLoad(const FileSection& section, int& offset)
 		// Synth layout
 
 		int synthCount = section.readByte(offset);
-		
+
 		if (synthCount == FileSection::invalidRead || synthCount > SequenceRow::maxTracks)
 			return false;
-		
+
 		for (int i = 0 ; i < synthCount ; ++i)
 		{
 			static_cast<ModularSynth*>(mOscillator[i])->readSynth(section, offset);
 		}
-		
+
 		return true;
 	}
 	else if (strcmp(section.getName(), "AUTO") == 0)
@@ -119,7 +119,7 @@ void Synth::onFileSectionSave(FileSection& section)
 	if (strcmp(section.getName(), "SYNT") == 0)
 	{
 		section.writeByte(SequenceRow::maxTracks);
-		
+
 		for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
 		{
 			static_cast<ModularSynth*>(mOscillator[i])->writeSynth(section);
@@ -152,9 +152,9 @@ void Synth::reset()
 }
 
 
-void Synth::initAutomation() 
+void Synth::initAutomation()
 {
-	for (int i = 0 ; i < maxAutomationTracks ; ++i) 
+	for (int i = 0 ; i < maxAutomationTracks ; ++i)
 	{
 		mAutomationTrack[i].numNodes = 0;
 	}
@@ -173,7 +173,7 @@ float Synth::getAutomationValue(int channel) const
 		return 0.0f;
 	}
 
-	if (time <= track.nodes[0].time) 
+	if (time <= track.nodes[0].time)
 	{
 		// Return the first value for OOB
 		return track.nodes[0].value;
@@ -210,7 +210,7 @@ const Synth::AutomationNode& Synth::AutomationTrack::getNode(int index) const
 }
 
 
-Synth::AutomationNode& Synth::AutomationTrack::getNode(int index) 
+Synth::AutomationNode& Synth::AutomationTrack::getNode(int index)
 {
 	return nodes[index];
 }
@@ -226,7 +226,7 @@ int Synth::AutomationTrack::addNode(int time, float value)
 	int index = 0;
 	while (index < numNodes)
 	{
-		if (nodes[index].time > time) 
+		if (nodes[index].time > time)
 		{
 			break;
 		}
@@ -253,7 +253,7 @@ int Synth::AutomationTrack::addNode(int time, float value)
 
 void Synth::AutomationTrack::removeNode(int index)
 {
-	if (index >= numNodes) 
+	if (index >= numNodes)
 	{
 		return;
 	}

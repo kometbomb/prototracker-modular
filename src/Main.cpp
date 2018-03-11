@@ -47,7 +47,7 @@ Context::Context()
 
 	themeLoaded = true;
 	previousTick = SDL_GetTicks();
-	
+
 	song.addSectionListener("SYNT", &synth, SectionListener::Save|SectionListener::Load);
 	song.addSectionListener("AUTO", &synth, SectionListener::Save|SectionListener::Load);
 }
