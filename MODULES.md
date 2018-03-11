@@ -188,7 +188,8 @@ Add inputs together and output the result.
 
 ### Mul
 
-Multiply the two inputs and output the result. Use as an amplifier.
+Multiply the two inputs and output the result. Use as an amplifier. Connect e.g. an EG to input 1
+and use it to multiple the two separate inputs to synchronize.
 
 | Input | Description  |
 |-------|--------------|
