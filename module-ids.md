@@ -9,3 +9,6 @@ Here's a list of reserved module IDs.
 | 24 | rms_module |
 | 25, 26 | reverb |
 | 27 | semitone_module |
+| 28 | glide_module |
+| 30 | linear-module |
+| 29 | oscilloscope-module |

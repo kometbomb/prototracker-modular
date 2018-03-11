@@ -59,7 +59,10 @@ void SynthGrid::endMove(int targetModule)
 
 	mMode = IDLE;
 
-	getModularSynth().swapModules(mFromModule, targetModule);
+	ModularSynth& synth = getModularSynth();
+	synth.lock();
+	synth.swapModules(mFromModule, targetModule);
+	synth.unlock();
 }
 
 
@@ -415,12 +418,18 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					{
 						if ((connectorType == 0 && mToModule == -1) || (connectorType == 1 && mToModule != -1))
 						{
+							modularSynth.lock();
 							if (modularSynth.connectModules(mFromModule != -1 ? mFromModule : moduleOut, mToModule != -1 ? mToModule : moduleOut, mFromOutput != -1 ? mFromOutput : connector, mToInput != -1 ? mToInput : connector))
 							{
 								endConnect(moduleOut, connector);
+								modularSynth.unlock();
 								rebuildWires();
 								mSelectedModule = -1;
 								mHoveredConnection = -1;
+							}
+							else
+							{
+								modularSynth.unlock();
 							}
 						}
 					}
@@ -431,13 +440,17 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						if (connectorType == 0)
 						{
 							startConnect(-1, moduleOut, -1, connector);
+							modularSynth.lock();
 							modularSynth.detachConnection(moduleOut, 0, connector);
+							modularSynth.unlock();
 							mSelectedModule = moduleOut;
 						}
 						else
 						{
 							startConnect(moduleOut, -1, connector, -1);
+							modularSynth.lock();
 							modularSynth.detachConnection(moduleOut, 1, connector);
+							modularSynth.unlock();
 							mSelectedModule = moduleOut;
 						}
 
@@ -514,7 +527,10 @@ bool SynthGrid::onEvent(SDL_Event& event)
 			if (modState & KMOD_SHIFT)
 				dialSpeed *= 10;
 
-			getModularSynth().getModule(moduleOut)->onDial(event.wheel.y < 0 ? -dialSpeed : dialSpeed);
+			ModularSynth& synth = getModularSynth();
+			synth.lock();
+			synth.getModule(moduleOut)->onDial(event.wheel.y < 0 ? -dialSpeed : dialSpeed);
+			synth.unlock();
 			setDirty(true);
 		}
 	}
@@ -535,7 +551,9 @@ bool SynthGrid::onEvent(SDL_Event& event)
 
 				if (mSelectedModule != -1 && modularSynth.getModule(mSelectedModule) != NULL)
 				{
+					modularSynth.lock();
 					modularSynth.removeModule(mSelectedModule);
+					modularSynth.unlock();
 					rebuildWires();
 					mMode = IDLE;
 				}
@@ -592,7 +610,10 @@ void SynthGrid::onFileSelectorEvent(const Editor& moduleSelector, bool accept)
 {
 	if (accept)
 	{
-		getModularSynth().addModule(mSelectedModule, static_cast<const ModuleSelector&>(moduleSelector).getSelectedModuleId());
+		ModularSynth& synth = getModularSynth();
+		synth.lock();
+		synth.addModule(mSelectedModule, static_cast<const ModuleSelector&>(moduleSelector).getSelectedModuleId());
+		synth.unlock();
 	}
 
 	setModal(NULL);
@@ -839,7 +860,10 @@ void SynthGrid::copySynth()
 
 void SynthGrid::pasteSynth()
 {
-	getModularSynth().copy(*mCopyBuffer);
+	ModularSynth& synth = getModularSynth();
+	synth.lock();
+	synth.copy(*mCopyBuffer);
+	synth.unlock();
 
 	rebuildWires();
 

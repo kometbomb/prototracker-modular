@@ -10,17 +10,14 @@
 #include <cstdio>
 
 IPlayer::IPlayer(Song& song)
-	: mSong(song), mLockCounter(0), state()
+	: Lockable(), mSong(song), state()
 {
-	mMutex = SDL_CreateMutex();
 	trackState = new ITrackState*[SequenceRow::maxTracks];
 }
 
 
 IPlayer::~IPlayer()
 {
-	SDL_DestroyMutex(mMutex);
-
 	for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
 		delete trackState[i];
 
@@ -207,7 +204,9 @@ void IPlayer::triggerNoteWithReset(int track, int note, int macro)
 		trackState[track]->macro = macro;
 
 	triggerNote(track, note);
-	state.tick = 0;
+
+	if (!state.isPlaying())
+		state.tick = 0;
 }
 
 
@@ -319,24 +318,6 @@ void IPlayer::setPatternRow(int row)
 PlayerState& IPlayer::getPlayerState()
 {
 	return state;
-}
-
-
-void IPlayer::lock()
-{
-	if (++mLockCounter > 0)
-	{
-		SDL_LockMutex(mMutex);
-	}
-}
-
-
-void IPlayer::unlock()
-{
-	if (mLockCounter-- > 0)
-	{
-		SDL_UnlockMutex(mMutex);
-	}
 }
 
 

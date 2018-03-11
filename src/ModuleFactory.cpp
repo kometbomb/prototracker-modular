@@ -12,6 +12,7 @@
 #include "modules/EGModule.h"
 #include "modules/RMSModule.h"
 #include "modules/FilterModule.h"
+#include "modules/GlideModule.h"
 #include "modules/SplitModule.h"
 #include "modules/MixerModule.h"
 #include "modules/ClampModule.h"
@@ -24,6 +25,8 @@
 #include "modules/FrequencyInModule.h"
 #include "modules/TransposeModule.h"
 #include "modules/TriggerNoteModule.h"
+#include "modules/LinearModule.h"
+#include "modules/OscilloscopeModule.h"
 #include <cstdlib>
 
 #define REGISTER(module) registerModule(module::moduleId, module::moduleName, &module::createModule, module::maxInstances)
@@ -46,14 +49,17 @@ ModuleFactory::ModuleFactory()
 	REGISTER(MixerModule);
 	REGISTER(ClampModule);
 	REGISTER(ShapeModule);
+	REGISTER(LinearModule);
 	REGISTER(DistortionModule);
 	REGISTER(BitsModule);
 	REGISTER(DelayModule);
 	REGISTER(FilterModule);
+	REGISTER(GlideModule);
 	REGISTER(AccumulatorModule);
 	REGISTER(FrequencyInModule);
 	REGISTER(TransposeModule);
 	REGISTER(TriggerNoteModule);
+	REGISTER(OscilloscopeModule);
 	REGISTER(AudioOutModule);
 }
 
