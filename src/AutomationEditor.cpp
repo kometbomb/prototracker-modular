@@ -245,10 +245,6 @@ bool AutomationEditor::onEvent(SDL_Event& event)
 					);
 				}
 			}
-			else
-			{
-
-			}
 		}
 	}
 	else if (event.type == SDL_MOUSEWHEEL)
