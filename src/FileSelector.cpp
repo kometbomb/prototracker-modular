@@ -111,10 +111,12 @@ void FileSelector::renderItem(Renderer& renderer, const SDL_Rect& area, const It
 
 	renderer.clearRect(area, Color(0, 0, 0));
 
+	int width = area.w / 8 - 10;
+
 	if (fileItem.isDirectory)
-		renderer.renderTextV(area, color, "<%-25s>     DIR", fileItem.path.c_str());
+		renderer.renderTextV(area, color, "<%*s>     DIR", -width, fileItem.path.c_str());
 	else
-		renderer.renderTextV(area, color, "%-25s %9s", fileItem.path.c_str(), FileItem::formatSize(fileItem.size));
+		renderer.renderTextV(area, color, "%*s %9s", -width, fileItem.path.c_str(), FileItem::formatSize(fileItem.size));
 }
 
 
@@ -260,4 +262,12 @@ void FileSelector::onSelectItem(const Item& item)
 bool FileSelector::onEvent(SDL_Event& event)
 {
 	return GenericSelector::onEvent(event) || mNameField->onEvent(event);
+}
+
+
+void FileSelector::onModalStatusChange(bool isNowModal)
+{
+	// Make sure text field will receive SDL_TEXTINPUTs
+	// and disables them after dialog close
+	mNameField->setIsEditing(isNowModal);
 }

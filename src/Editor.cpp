@@ -4,6 +4,7 @@
 #include "Color.h"
 #include <cstdio>
 
+#define MODAL_BORDER 2
 
 Editor::Editor(EditorState& editorState, bool wantsFocus)
 	: mEditorState(editorState), mFocus(NULL), mModal(NULL), mIsDirty(true), mRedraw(true), mParent(NULL), mNumChildren(0), mWantsFocus(wantsFocus)
@@ -188,17 +189,16 @@ void Editor::drawModal(Renderer& renderer)
 		if (mModal->shouldRedrawBackground())
 		{
 			// Draw plain black background with white border
-			renderer.clearRect(mModal->getArea(), Color(0, 0, 0));
-			renderer.drawRect(mModal->getArea(), Color(255, 255, 255));
+			SDL_Rect modalBorder = mModal->getArea();
+			modalBorder.x -= MODAL_BORDER;
+			modalBorder.y -= MODAL_BORDER;
+			modalBorder.w += MODAL_BORDER * 2;
+			modalBorder.h += MODAL_BORDER * 2;
+			renderer.clearRect(modalBorder, Color(0, 0, 0));
+			renderer.drawRect(modalBorder, Color(255, 255, 255));
 		}
 
-		SDL_Rect modalContent = mModal->getArea();
-		modalContent.x += 2;
-		modalContent.y += 2;
-		modalContent.w -= 4;
-		modalContent.h -= 4;
-
-		mModal->draw(renderer, modalContent);
+		mModal->draw(renderer, mModal->getArea());
 	}
 }
 
@@ -206,15 +206,20 @@ void Editor::drawModal(Renderer& renderer)
 void Editor::setModal(Editor *modal)
 {
 	if (mModal != NULL)
+	{
+		mModal->onModalStatusChange(false);
 		mModal->mParent = NULL;
+	}
 
 	mModal = modal;
 
 	if (mModal != NULL)
 	{
 		mModal->mParent = this;
-		SDL_Rect modalArea = { mThisArea.x + 16, mThisArea.y + 16, mThisArea.w - 32, mThisArea.h - 32 };
+		SDL_Rect modalArea = { mThisArea.x + 16, mThisArea.y + 16,
+			mThisArea.w - 32, mThisArea.h - 32 };
 		mModal->setArea(modalArea);
+		mModal->onModalStatusChange(true);
 	}
 
 	invalidateAll();
@@ -253,12 +258,10 @@ void Editor::draw(Renderer& renderer, const SDL_Rect& area)
 
 	invalidateAll();
 
-	if (mModal == NULL)
-	{
-		this->onDraw(renderer, area);
-		drawChildren(renderer, area);
-	}
-	else
+	this->onDraw(renderer, area);
+	drawChildren(renderer, area);
+
+	if (mModal != NULL)
 	{
 		drawModal(renderer);
 	}
@@ -389,4 +392,10 @@ void Editor::childAreaChanged(Editor *child)
 		if (mChildren[index] == child)
 			mChildrenArea[index] = child->getArea();
 	}
+}
+
+
+void Editor::onModalStatusChange(bool isNowModal)
+{
+
 }
