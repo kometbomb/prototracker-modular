@@ -771,27 +771,33 @@ void SynthGrid::rebuildWires()
 	{
 		pathFinder.setNetwork(mNetwork);
 		const SynthConnection& connection = getModularSynth().getConnection(i);
-		std::vector<int> path = pathFinder.findPath(getConnectorNode(connection.fromModule, 1, connection.fromOutput), getConnectorNode(connection.toModule, 0, connection.toInput));
 
-		// Add some cost to nodes used by the connection
-
-		int prevNode = -1;
-		mConnectionPath[i].clear();
-
-		for (auto node : path)
+		// Skip unloaded modules
+		if (getModularSynth().getModule(connection.fromModule) != NULL &&
+			getModularSynth().getModule(connection.toModule) != NULL)
 		{
-			mNetwork[node].cost += 1;
-			if (prevNode != -1)
-			{
-				PathFinder::Node::Connection& prevConnection = mNetwork[prevNode].findConnectionTo(node);
-				prevConnection.timesUsed += 1;
-				PathFinder::Node::Connection& nodeConnection = mNetwork[node].findConnectionTo(prevNode);
-				nodeConnection.timesUsed += 1;
-			}
-			prevNode = node;
+			std::vector<int> path = pathFinder.findPath(getConnectorNode(connection.fromModule, 1, connection.fromOutput), getConnectorNode(connection.toModule, 0, connection.toInput));
 
-			SDL_Point point = { mNetwork[node].x * mThisArea.w / (networkWidth - 1) + mThisArea.x, mNetwork[node].y * mThisArea.h / (networkHeight - 1) + mThisArea.y};
-			mConnectionPath[i].push_back(point);
+			// Add some cost to nodes used by the connection
+
+			int prevNode = -1;
+			mConnectionPath[i].clear();
+
+			for (auto node : path)
+			{
+				mNetwork[node].cost += 1;
+				if (prevNode != -1)
+				{
+					PathFinder::Node::Connection& prevConnection = mNetwork[prevNode].findConnectionTo(node);
+					prevConnection.timesUsed += 1;
+					PathFinder::Node::Connection& nodeConnection = mNetwork[node].findConnectionTo(prevNode);
+					nodeConnection.timesUsed += 1;
+				}
+				prevNode = node;
+
+				SDL_Point point = { mNetwork[node].x * mThisArea.w / (networkWidth - 1) + mThisArea.x, mNetwork[node].y * mThisArea.h / (networkHeight - 1) + mThisArea.y};
+				mConnectionPath[i].push_back(point);
+			}
 		}
 	}
 

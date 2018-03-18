@@ -70,6 +70,13 @@ void Synth::onFileSectionSave(FileSection& section)
 }
 
 
+void Synth::onSongClear()
+{
+	for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
+		static_cast<ModularSynth*>(mOscillator[i])->clear();
+}
+
+
 void Synth::reset()
 {
 	for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)

@@ -15,4 +15,5 @@ public:
 
 	virtual bool onFileSectionLoad(const FileSection& section, int& offset);
 	virtual void onFileSectionSave(FileSection& section);
+	virtual void onSongClear();
 };
