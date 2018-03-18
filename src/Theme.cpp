@@ -142,6 +142,7 @@ bool Theme::loadDefinition(const std::string& path)
 		"TouchRegion",
 		"SynthGrid",
 		"AutomationEditor",
+		"AutomationTrack",
 		NULL
 	};
 

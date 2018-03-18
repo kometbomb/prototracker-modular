@@ -17,7 +17,7 @@
 
 
 AutomationEditor::AutomationEditor(EditorState& editorState, ISynth& synth, IPlayer& player)
-	:Editor(editorState, true), mSynth(synth), mSelectedNode(-1), mSelectedTrack(0)
+	:Editor(editorState, true), mSynth(synth), mSelectedNode(-1)
 {
 	mEditorState.patternEditor.currentRow.addListener(this);
 	mEditorState.sequenceEditor.currentRow.addListener(this);
@@ -81,7 +81,7 @@ void AutomationEditor::onDraw(Renderer& renderer, const SDL_Rect& area)
 
 	for (int track = 0 ; track < Synth::maxAutomationTracks ; ++track)
 	{
-		if (track == mSelectedTrack)
+		if (track == mEditorState.automationTrack)
 		{
 			continue;
 		}
@@ -98,7 +98,7 @@ void AutomationEditor::onDraw(Renderer& renderer, const SDL_Rect& area)
 				int x = nodeArea.x + nodeArea.w / 2;
 				int y = nodeArea.y + nodeArea.h / 2;
 
-				renderer.renderLine(px, py, x, y, track == mSelectedTrack ? Color(255, 255, 255) : Color(64, 64, 64));
+				renderer.renderLine(px, py, x, y, track == mEditorState.automationTrack ? Color(255, 255, 255) : Color(64, 64, 64));
 
 				px = x;
 				py = y;
@@ -131,9 +131,6 @@ void AutomationEditor::onDraw(Renderer& renderer, const SDL_Rect& area)
 			renderer.clearRect(nodeArea, mSelectedNode == i ? Color(255, 255, 255) : Color(255, 0, 0));
 		}
 	}
-
-	const SDL_Rect textArea = { area.x + area.w - renderer.getFontWidth() * 2 - 1, area.y + 1, 16, 16 };
-	renderer.renderTextV(textArea, Color(192, 140, 32), "%02d", mSelectedTrack);
 }
 
 
@@ -249,7 +246,7 @@ bool AutomationEditor::onEvent(SDL_Event& event)
 	}
 	else if (event.type == SDL_MOUSEWHEEL)
 	{
-		mSelectedTrack = (mSelectedTrack + (event.wheel.y < 0 ? -1 : 1) + Synth::maxAutomationTracks) % Synth::maxAutomationTracks;
+		mEditorState.automationTrack = (mEditorState.automationTrack + (event.wheel.y < 0 ? -1 : 1) + Synth::maxAutomationTracks) % Synth::maxAutomationTracks;
 		mSelectedNode = -1;
 		setDirty(true);
 	}
@@ -300,7 +297,7 @@ Synth& AutomationEditor::getSynth()
 
 Synth::AutomationTrack& AutomationEditor::getAutomationTrack()
 {
-	return getSynth().getAutomationTrack(mSelectedTrack);
+	return getSynth().getAutomationTrack(mEditorState.automationTrack);
 }
 
 
@@ -312,7 +309,7 @@ const Synth& AutomationEditor::getSynth() const
 
 const Synth::AutomationTrack& AutomationEditor::getAutomationTrack() const
 {
-	return getSynth().getAutomationTrack(mSelectedTrack);
+	return getSynth().getAutomationTrack(mEditorState.automationTrack);
 }
 
 

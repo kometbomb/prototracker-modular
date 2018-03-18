@@ -10,7 +10,7 @@ class AutomationEditor: public Editor
 {
 private:
 	ISynth& mSynth;
-	int mSelectedNode, mSelectedTrack, mMouseX, mMouseY;
+	int mSelectedNode, mMouseX, mMouseY;
 
 	int getScrollPosition() const;
 	bool pickNode(int x, int y, const SDL_Rect& area, int& nodeOut) const;
