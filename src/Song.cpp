@@ -379,7 +379,7 @@ Song::UnpackError Song::unpack(const FileSection& section)
 				{
 					if ((mListeners[i].flags & SectionListener::Load) && strcmp(mListeners[i].sectionId, sectionName) == 0)
 					{
-						bool processed = true;
+						processed = true;
 
 						if (!mListeners[i].listener->onFileSectionLoad(*subSection, subOffset))
 						{
