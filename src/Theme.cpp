@@ -141,6 +141,8 @@ bool Theme::loadDefinition(const std::string& path)
 		"OctaveNumber",
 		"TouchRegion",
 		"SynthGrid",
+		"AutomationEditor",
+		"AutomationTrack",
 		NULL
 	};
 

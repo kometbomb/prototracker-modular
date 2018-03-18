@@ -6,6 +6,7 @@
 #include "modules/AddModule.h"
 #include "modules/MulModule.h"
 #include "modules/AbsModule.h"
+#include "modules/AutomationModule.h"
 #include "modules/ConstModule.h"
 #include "modules/EffectModule.h"
 #include "modules/EGModule.h"
@@ -47,6 +48,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(TickModule);
 	REGISTER(ConstModule);
 	REGISTER(EffectModule);
+	REGISTER(AutomationModule);
 	REGISTER(SplitModule);
 	REGISTER(MixerModule);
 	REGISTER(ClampModule);

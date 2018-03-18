@@ -318,6 +318,37 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 
 	for (int i = 0 ; i < modularSynth.getNumConnections() ; ++i)
 	{
+		const Color wireColor = palette[i % 9];
+		const SynthConnection& connection = modularSynth.getConnection(i);
+		if (mConnectionPath.size() > i && mConnectionPath[i].size() > 1)
+		{
+
+			const SDL_Point& node = mConnectionPath[i][0];
+			SDL_Rect prevArea = { node.x, node.y, 16, 16 };
+			for (int p = 0 ; p < mConnectionPath[i].size() ; ++p)
+			{
+				const SDL_Point& path = mConnectionPath[i][p];
+				SDL_Rect nodeArea = { path.x, path.y, 16, 16 };
+				renderer.renderLine(nodeArea.x, nodeArea.y, prevArea.x, prevArea.y, wireColor);
+				prevArea = nodeArea;
+			}
+		}
+
+		{
+			const SDL_Point& node = mConnectionPath[i][0];
+			SDL_Rect nodeArea = { node.x, node.y, 16, 16 };
+			SDL_Rect fromModuleArea = getConnectorArea(connection.toModule, 0, connection.toInput, area);
+			drawAngledWire(renderer, fromModuleArea.x + fromModuleArea.w / 2, fromModuleArea.y + fromModuleArea.h / 2, nodeArea.x, nodeArea.y, nodeArea.y, wireColor);
+			renderer.renderRect(fromModuleArea, wireColor);
+		}
+
+		{
+			const SDL_Point& node = mConnectionPath[i][(int)mConnectionPath[i].size() - 1];
+			SDL_Rect nodeArea = { node.x, node.y, 16, 16 };
+			SDL_Rect fromModuleArea = getConnectorArea(connection.fromModule, 1, connection.fromOutput, area);
+			drawAngledWire(renderer, fromModuleArea.x + fromModuleArea.w / 2, fromModuleArea.y + fromModuleArea.h / 2, nodeArea.x, nodeArea.y, nodeArea.y, wireColor);
+			renderer.renderRect(fromModuleArea, wireColor);
+		}
 		drawConnection(renderer, area, i, palette[i % 9]);
 	}
 

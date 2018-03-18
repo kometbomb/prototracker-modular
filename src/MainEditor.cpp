@@ -30,6 +30,8 @@
 #include "MessageManager.h"
 #include "MessageDisplayer.h"
 #include "SynthGrid.h"
+#include "AutomationEditor.h"
+#include "AutomationTrackInfo.h"
 #include "TooltipManager.h"
 #include "TooltipDisplayer.h"
 #include "App.h"
@@ -804,6 +806,20 @@ bool MainEditor::loadElements(const Theme& theme)
 			{
 				SynthGrid *grid = new SynthGrid(mEditorState, mSynth, mPlayer);
 				addChild(grid, element.parameters[0], element.parameters[1], element.parameters[2], element.parameters[3]);
+			}
+			break;
+
+			case Theme::AutomationEditor:
+			{
+				AutomationEditor *editor = new AutomationEditor(mEditorState, mSynth, mPlayer);
+				addChild(editor, element.parameters[0], element.parameters[1], element.parameters[2], element.parameters[3]);
+			}
+			break;
+
+			case Theme::AutomationTrack:
+			{
+				AutomationTrackInfo *trackInfo = new AutomationTrackInfo(mEditorState);
+				addChild(trackInfo, element.parameters[0], element.parameters[1], element.parameters[2], element.parameters[3]);
 			}
 			break;
 
