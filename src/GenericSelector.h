@@ -18,14 +18,17 @@ class GenericSelector: public Editor
 	int mId;
 	char mTitle[titleSize];
 	Label *mLabel;
-	int mSelectedItem;
+	int mSelectedItem, mScrollPosition;
 
 protected:
 	struct Item {
 	};
 
 	void selectItem(int index);
+	void setScrollPosition(int position);
 	const Item& getSelectedItem() const;
+	int getVisibleCount() const;
+	void getVisibleItems(int& first, int& last) const;
 
 	virtual void renderItem(Renderer& renderer, const SDL_Rect& area, const Item& item, bool isSelected) = 0;
 	virtual void accept(bool isFinal = false) = 0;
@@ -36,6 +39,7 @@ protected:
 	void addItem(Item* newItem);
 	void clearItems();
 	void sortItems(bool (*comparator)(const Item* a, const Item* b));
+	int findClickedItem(int x, int y) const;
 
 private:
 	std::vector<Item*> mItems;
