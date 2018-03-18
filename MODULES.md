@@ -44,7 +44,7 @@ This outputs whatever value was used as a parameter for a pattern effect. Use mo
 
 ### Automation
 
-This module outputs the value from the automation timeline. Use mousewheel to select the automation track.
+This module outputs the value from the automation timeline at the current song position. Use mousewheel to select the automation track.
 
 | Output | Description |
 |--------|-------------|
