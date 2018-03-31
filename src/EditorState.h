@@ -2,6 +2,7 @@
 
 #include "Value.h"
 #include "CopyBuffer.h"
+#include <string>
 
 struct FileSection;
 
@@ -31,10 +32,10 @@ struct EditorState
 	TrackEditorState macroEditor;
 
 	Value automationTrack;
-
 	CopyBuffer copyBuffer;
 
 	bool followPlayPosition;
+	std::string audioDevice;
 
 	EditorState();
 

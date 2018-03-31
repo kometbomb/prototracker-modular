@@ -41,6 +41,8 @@ FileSection * EditorState::pack()
 	state->writeSection(*trState);
 	delete trState;
 
+	state->writeString(audioDevice.c_str());
+
 	state->writeDword(automationTrack);
 
 	return state;
@@ -128,6 +130,11 @@ bool EditorState::unpack(const FileSection& section)
 
 	delete trState;
 
+	const char *tempAudioDevice = section.readString(offset);
+
+	if (!tempAudioDevice)
+		return false;
+
 	unsigned int automationTrackNr = section.readDword(offset);
 
 	if (automationTrackNr == FileSection::invalidRead)
@@ -138,6 +145,7 @@ bool EditorState::unpack(const FileSection& section)
 	editMode = editModeNr;
 	followPlayPosition = followNr;
 	automationTrack = automationTrackNr;
+	audioDevice = tempAudioDevice;
 
 	return true;
 }
@@ -226,4 +234,5 @@ void EditorState::reset()
 	octave = 4;
 	editMode = 0;
 	automationTrack = 0;
+	audioDevice = "";
 }
