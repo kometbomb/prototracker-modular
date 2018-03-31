@@ -5,7 +5,7 @@
 #include "SDL.h"
 
 ReverbModule::ReverbModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 2, 2, 0)
+	:SynthModule(synth, moduleId, 3, 2, 0), mDelayOffset(-1)
 {
 	for (int i = 0 ; i < numDelays ; ++i)
 		mDelay[i]= NULL;
@@ -89,6 +89,16 @@ void ReverbModule::cycle()
 	float input = getInput(0);
 	float Krt = getInput(1);
 
+	float newOffset = std::max(0.0f, std::min(1.0f, getInput(2)));
+
+	// Reinit delays if delay offset changes
+
+	if (mDelayOffset != newOffset)
+	{
+		mDelayOffset = newOffset;
+		initDelays(mDelayOffset);
+	}
+
 	float output = 0.0f;
 	float amp = mDelay[numDelays - 1]->getOutput() * Krt;
 	int allPassIdx = 0;
@@ -114,7 +124,7 @@ void ReverbModule::cycle()
 
 const char * ReverbModule::getInputName(int input) const
 {
-	static const char *names[] = {"Input", "Reverb time"};
+	static const char *names[] = {"Input", "Reverb time", "Delay offset"};
 	return names[input];
 }
 
@@ -139,10 +149,8 @@ SynthModule * ReverbModule::createModule(ModularSynth& synth)
 }
 
 
-void ReverbModule::setSampleRate(int newRate)
+void ReverbModule::initDelays(float offsetTime)
 {
-	SynthModule::setSampleRate(newRate);
-
 	static const float delayLength[numDelays] = { 0.00733f, 0.00683f, 0.00757f, 0.00743f };
 	static const float allPassDelayLength[numAllpassFilters] = { 0.04591f, 0.06337f, 0.04597f, 0.05479f, 0.04651f, 0.03217f, 0.04643f, 0.06521f };
 
@@ -159,6 +167,15 @@ void ReverbModule::setSampleRate(int newRate)
 		if (mAllpass[i] != NULL)
 			delete mAllpass[i];
 
-		mAllpass[i] = new AllpassFilter(allPassDelayLength[i] * mSampleRate);
+		mAllpass[i] = new AllpassFilter((allPassDelayLength[i] + offsetTime) * mSampleRate);
 	}
+}
+
+
+void ReverbModule::setSampleRate(int newRate)
+{
+	SynthModule::setSampleRate(newRate);
+
+	if (mDelayOffset >= 0.0f)
+		initDelays(mDelayOffset);
 }
