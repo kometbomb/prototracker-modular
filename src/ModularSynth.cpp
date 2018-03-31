@@ -461,9 +461,15 @@ void ModularSynth::copy(const ModularSynth& source)
 }
 
 
+ModularSynth* ModularSynth::createEmpty() const
+{
+	return new ModularSynth(mSynth, mPlayer);
+}
+
+
 ModularSynth* ModularSynth::clone() const
 {
-	ModularSynth *newSynth = new ModularSynth(mSynth, mPlayer);
+	ModularSynth *newSynth = createEmpty();
 	newSynth->copy(*this);
 
 	return newSynth;

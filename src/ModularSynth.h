@@ -31,6 +31,7 @@ private:
 public:
 	ModularSynth(Synth& synth, IPlayer& player);
 	virtual ~ModularSynth();
+	ModularSynth* createEmpty() const;
 	ModularSynth* clone() const;
 	void copy(const ModularSynth& source);
 

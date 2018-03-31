@@ -393,3 +393,8 @@ creating stereo reverb effects.
 |--------|--------------|
 | 0 | Combined output |
 | 1 | Wet output |
+
+### Container
+
+This can be used to host another whole synth inside a synth. The inputs
+and outputs depend on the contained input/output modules.
