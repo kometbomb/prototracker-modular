@@ -2,8 +2,9 @@
 #include "Renderer.h"
 #include "Color.h"
 
-SynthModule::SynthModule(ModularSynth& synth, int synthId, int numInputs, int numOutputs, int numParams)
-	: mSynth(synth), mSynthId(synthId), mNumInputs(numInputs), mNumOutputs(numOutputs), mNumParams(numParams), mSampleRate(0)
+SynthModule::SynthModule(ModularSynth& synth, int synthId, int numInputs, int numOutputs, int numParams, bool hasData)
+	: mSynth(synth), mSynthId(synthId), mNumInputs(numInputs), mNumOutputs(numOutputs), mNumParams(numParams),
+	mHasData(hasData), mSampleRate(0)
 {
 	for (int i = 0 ; i < mNumInputs ; ++i)
 		mInputs[i] = 0.0f;
@@ -144,4 +145,21 @@ SDL_Rect SynthModule::getModuleArea(const SDL_Rect& gridCellArea) const
 Color SynthModule::getModuleColor(bool isSelected) const
 {
 	return isSelected ? Color(96,96,96) : Color(64,64,64);
+}
+
+
+void SynthModule::onDataLoad(const FileSection& section)
+{
+	// Called if mHasData is set
+}
+
+
+void SynthModule::onDataSave(FileSection& section)
+{
+}
+
+
+bool SynthModule::getHasData() const
+{
+	return mHasData;
 }
