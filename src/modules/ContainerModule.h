@@ -22,7 +22,7 @@ public:
 	virtual const char * getInputName(int input) const;
 	virtual const char * getOutputName(int output) const;
 
-	virtual void onDataLoad(const FileSection& section);
+	virtual bool onDataLoad(const FileSection& section);
 	virtual void onDataSave(FileSection& section);
 
 };

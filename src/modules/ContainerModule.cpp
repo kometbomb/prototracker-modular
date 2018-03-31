@@ -49,10 +49,10 @@ SynthModule * ContainerModule::createModule(ModularSynth& synth)
 }
 
 
-void ContainerModule::onDataLoad(const FileSection& section)
+bool ContainerModule::onDataLoad(const FileSection& section)
 {
 	int offset = 0;
-	mContainerSynth->readSynth(section, offset);
+	return mContainerSynth->readSynth(section, offset);
 }
 
 
