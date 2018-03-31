@@ -32,8 +32,11 @@ class ReverbModule: public SynthModule
 
 	DelayFilter *mDelay[numDelays];
 	AllpassFilter *mAllpass[numAllpassFilters];
+	float mDelayOffset;
 
 	ReverbModule(ModularSynth& synth);
+
+	void initDelays(float offsetTime);
 
 public:
 	virtual ~ReverbModule();

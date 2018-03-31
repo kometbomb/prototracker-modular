@@ -380,10 +380,14 @@ if the signal is fed back.
 Adds reverberation to input signal. Reverb time is the feedback gain inside
 the reverb, so it should be set -0.999..0.999 to avoid distortion.
 
+Input #2 can be used to adjust the delay loop lengths which is useful when
+creating stereo reverb effects.
+
 | Input | Description  |
 |-------|--------------|
 | 0 | Signal in |
 | 1 | Reverb time |
+| 2 | Delay offset |
 
 | Output | Description  |
 |--------|--------------|
