@@ -148,9 +148,11 @@ Color SynthModule::getModuleColor(bool isSelected) const
 }
 
 
-void SynthModule::onDataLoad(const FileSection& section)
+bool SynthModule::onDataLoad(const FileSection& section)
 {
-	// Called if mHasData is set
+	// Called if mHasData is set, return true if load succeeded
+
+	return true;
 }
 
 

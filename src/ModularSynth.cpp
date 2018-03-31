@@ -284,8 +284,14 @@ bool ModularSynth::readSynth(const FileSection& section, int& offset)
 			if (module->getHasData())
 			{
 				FileSection *moduleData = section.readSection(offset);
-				module->onDataLoad(*moduleData);
+				bool loadStatus = module->onDataLoad(*moduleData);
 				delete moduleData;
+
+				if (!loadStatus)
+				{
+					delete module;
+					return false;
+				}
 			}
 
 			mModules[i] = module;

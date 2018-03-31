@@ -54,7 +54,7 @@ public:
 	virtual void onDial(int delta);
 
 	// These get called when the module needs to save any internal data
-	virtual void onDataLoad(const FileSection& section);
+	virtual bool onDataLoad(const FileSection& section);
 	virtual void onDataSave(FileSection& section);
 
 	bool getHasData() const;
