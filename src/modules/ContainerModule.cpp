@@ -1,5 +1,7 @@
 #include "ContainerModule.h"
 #include "../ModularSynth.h"
+#include "ExtInModule.h"
+#include "ExtOutModule.h"
 #include "../SynthGrid.h"
 #include <cstdio>
 
@@ -7,6 +9,7 @@ ContainerModule::ContainerModule(ModularSynth& synth)
 	:SynthModule(synth, moduleId, 1, 1, 0, true)
 {
 	mContainerSynth = synth.createEmpty();
+	mContainerSynth->setName(moduleName);
 }
 
 
@@ -16,31 +19,44 @@ ContainerModule::~ContainerModule()
 }
 
 
-void ContainerModule::cycle()
+void ContainerModule::setSampleRate(int newRate)
 {
-	// Passthru
-	setOutput(0, getInput(0));
+	SynthModule::setSampleRate(newRate);
+	mContainerSynth->setSampleRate(newRate);
 }
 
+
+void ContainerModule::cycle()
+{
+	for (int index = 0 ; index < ModularSynth::numExtConnections ; ++index)
+		mContainerSynth->setExtInput(index, getInput(index));
+
+	mContainerSynth->cycle();
+
+	for (int index = 0 ; index < ModularSynth::numExtConnections ; ++index)
+		setOutput(index, mContainerSynth->getExtOutput(index));
+}
 
 
 const char * ContainerModule::getInputName(int input) const
 {
-	static const char *names[] = {"Input"};
-	return names[input];
+	static char name[50];
+	snprintf(name, sizeof(name), "ExtIn%d", input);
+	return name;
 }
 
 
 const char * ContainerModule::getOutputName(int output) const
 {
-	static const char *names[] = {"Output"};
-	return names[output];
+	static char name[50];
+	snprintf(name, sizeof(name), "ExtOut%d", output);
+	return name;
 }
 
 
 const char * ContainerModule::getName() const
 {
-	return "Container";
+	return mContainerSynth->getName();
 }
 
 
@@ -79,4 +95,35 @@ void ContainerModule::copy(const SynthModule& source)
 const ModularSynth& ContainerModule::getModularSynth() const
 {
 	return *mContainerSynth;
+}
+
+
+void ContainerModule::updateExtConnectionCounts()
+{
+	mNumInputs = 0;
+	mNumOutputs = 0;
+	for (int i = 0 ; i < ModularSynth::maxModules ; ++i)
+	{
+		const SynthModule *module = mContainerSynth->getModule(i);
+
+		if (module != NULL)
+		{
+			if (module->getSynthId() == ExtInModule::moduleId)
+				mNumInputs++;
+			else if (module->getSynthId() == ExtOutModule::moduleId)
+				mNumOutputs++;
+		}
+	}
+}
+
+
+void ContainerModule::onLoaded()
+{
+	updateExtConnectionCounts();
+}
+
+
+void ContainerModule::onShow()
+{
+	updateExtConnectionCounts();
 }

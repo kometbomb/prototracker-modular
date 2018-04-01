@@ -9,6 +9,8 @@ class ContainerModule: public SynthModule
 
 	ModularSynth *mContainerSynth;
 
+	void updateExtConnectionCounts();
+
 protected:
 	const ModularSynth& getModularSynth() const;
 
@@ -18,6 +20,8 @@ public:
 	static constexpr const char *moduleName = "Container";
 
 	static SynthModule * createModule(ModularSynth& synth);
+
+	virtual void setSampleRate(int newRate);
 
 	virtual void cycle();
 
@@ -29,6 +33,8 @@ public:
 
 	virtual bool onDataLoad(const FileSection& section);
 	virtual void onDataSave(FileSection& section);
+	virtual void onLoaded();
+	virtual void onShow();
 
 	virtual void copy(const SynthModule& source);
 };

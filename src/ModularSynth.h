@@ -15,22 +15,30 @@ public:
 	static const int maxModules = 32;
 	static const int maxConnections = 128;
 	static const int outputResolution = 4096;
+	static const int numExtConnections = 8;
+	static const int nameLength = 16;
 
 private:
+	char mName[nameLength + 1];
 	Synth& mSynth;
 	IPlayer& mPlayer;
 	SynthModule *mModules[maxModules];
 	SynthConnection mConnections[maxConnections];
 	int mNumConnections;
 	float mFrequency, mVolume, mOutput[2];
+	float mExtInput[numExtConnections], mExtOutput[numExtConnections];
 	bool mNoteTrigger;
 	int mEffectValues[256];
-
-	void cycle();
 
 public:
 	ModularSynth(Synth& synth, IPlayer& player);
 	virtual ~ModularSynth();
+
+	const char *getName() const;
+	void setName(const char *name);
+
+	void cycle();
+
 	ModularSynth* createEmpty() const;
 	ModularSynth* clone() const;
 	void copy(const ModularSynth& source);
@@ -40,12 +48,18 @@ public:
 	const SynthConnection& getConnection(int index) const;
 	int getNumConnections() const;
 
+	void setExtInput(int index, float value);
+	float getExtInput(int index) const;
+	void setExtOutput(int index, float value);
+	float getExtOutput (int index) const;
+
 	bool addModule(int index, int moduleId);
 	void removeModule(int index);
 	bool connectModules(int fromModule, int toModule, int fromOutput, int toInput);
 	void detachConnection(int moduleIndex, int type, int connectionIndex);
 	void removeConnection(int index);
 	void swapModules(int fromModule, int toModule);
+	void onShow();
 
 	void clear();
 

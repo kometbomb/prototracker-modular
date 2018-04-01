@@ -53,7 +53,11 @@ public:
 
 	virtual void copy(const SynthModule& source);
 
+	// After synth has been created
 	virtual void onLoaded();
+
+	// When SynthGrid displays a new synth layout
+	virtual void onShow();
 
 	// Mousewheel
 	virtual void onDial(int delta);

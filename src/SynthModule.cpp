@@ -180,3 +180,9 @@ void SynthModule::copy(const SynthModule& source)
 		setParam(p, source.getParam(p));
 	}
 }
+
+
+void SynthModule::onShow()
+{
+
+}

@@ -869,6 +869,7 @@ void SynthGrid::setModularSynth(ModularSynth& synth)
 	mSelectedModule = -1;
 	mHoveredConnection = -1;
 	mMode = IDLE;
+	synth.onShow();
 	rebuildWires();
 	invalidateAll();
 }

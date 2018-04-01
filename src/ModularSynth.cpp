@@ -19,6 +19,8 @@
 ModularSynth::ModularSynth(Synth& synth, IPlayer& player)
 	: mSynth(synth), mPlayer(player), mNumConnections(0), mFrequency(0), mVolume(0), mNoteTrigger(false)
 {
+	strcpy(mName, "");
+
 	for (int i = 0 ; i < maxModules ; ++i)
 		mModules[i] = NULL;
 
@@ -255,6 +257,13 @@ static const int paramCenter = 0x4000000;
 
 bool ModularSynth::readSynth(const FileSection& section, int& offset)
 {
+	const char *name = section.readString(offset);
+
+	if (!name)
+		return false;
+
+	strncpy(mName, name, sizeof(mName));
+
 	int countModules = section.readByte(offset);
 
 	if (countModules == FileSection::invalidRead || countModules > maxModules)
@@ -345,6 +354,8 @@ bool ModularSynth::readSynth(const FileSection& section, int& offset)
 
 void ModularSynth::writeSynth(FileSection& section)
 {
+	section.writeString(mName);
+
 	// Write modules
 
 	section.writeByte(maxModules);
@@ -501,4 +512,51 @@ float ModularSynth::getAutomationValue(int track) const
 int ModularSynth::getSongRate() const
 {
 	return mPlayer.getPlayerState().songRate;
+}
+
+
+float ModularSynth::getExtInput(int index) const
+{
+	return mExtInput[index];
+}
+
+
+void ModularSynth::setExtOutput(int index, float value)
+{
+	mExtOutput[index] = value;
+}
+
+
+float ModularSynth::getExtOutput(int index) const
+{
+	return mExtOutput[index];
+}
+
+
+void ModularSynth::setExtInput(int index, float value)
+{
+	mExtInput[index] = value;
+}
+
+
+const char * ModularSynth::getName() const
+{
+	return mName;
+}
+
+
+void ModularSynth::setName(const char *name)
+{
+	strncpy(mName, name, sizeof(mName));
+}
+
+
+void ModularSynth::onShow()
+{
+	for (int i = 0 ; i < maxModules ; ++i)
+	{
+		SynthModule *module = getModule(i);
+		if (module != NULL)
+			module->onShow();
+	}
 }
