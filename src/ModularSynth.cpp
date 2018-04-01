@@ -262,8 +262,6 @@ bool ModularSynth::readSynth(const FileSection& section, int& offset)
 	if (!name)
 		return false;
 
-	strncpy(mName, name, sizeof(mName));
-
 	int countModules = section.readByte(offset);
 
 	if (countModules == FileSection::invalidRead || countModules > maxModules)
@@ -272,6 +270,7 @@ bool ModularSynth::readSynth(const FileSection& section, int& offset)
 	ModuleFactory moduleFactory;
 
 	clear();
+	strncpy(mName, name, sizeof(mName));
 
 	for (int i = 0 ; i < countModules ; ++i)
 	{
@@ -451,6 +450,8 @@ void ModularSynth::setSampleRate(int rate)
 
 void ModularSynth::copy(const ModularSynth& source)
 {
+	strncpy(mName, source.getName(), sizeof(mName));
+
 	for (int i = 0 ; i < maxModules ; ++i)
 	{
 		const SynthModule *oldModule = source.getModule(i);
