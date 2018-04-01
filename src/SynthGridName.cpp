@@ -9,6 +9,7 @@
 SynthGridName::SynthGridName(EditorState& editorState, SynthGrid& synthGrid)
 	: TextEditor(editorState), mSynthGrid(synthGrid)
 {
+	setSolidBackground(false);
 	synthGrid.addListener(this);
 }
 
