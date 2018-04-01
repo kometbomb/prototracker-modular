@@ -5,6 +5,7 @@
 #include "ModularSynth.h"
 #include "PathFinder.h"
 #include "Listenable.h"
+#include <stack>
 
 class ISynth;
 class IPlayer;
@@ -25,6 +26,7 @@ private:
 	IPlayer& mPlayer;
 	ModuleSelector *mModuleSelector;
 	ModularSynth *mCurrentModularSynth;
+	std::stack<ModularSynth*> mParentSynth;
 
 	virtual void onDraw(Renderer& renderer, const SDL_Rect& area);
 	void drawAngledWire(Renderer& renderer, int x1, int y1, int x2, int y2, int y3, const Color& color1) const;
@@ -72,13 +74,14 @@ private:
 
 	void copySynth();
 	void pasteSynth();
+	void gotoParentSynth();
 
 public:
 
 	SynthGrid(EditorState& editorState, ISynth& synth, IPlayer& player);
 	virtual ~SynthGrid();
 
-	void setModularSynth(ModularSynth& synth);
+	void setModularSynth(ModularSynth& synth, bool rememberParent = false);
 	ModularSynth& getModularSynth();
 	const ModularSynth& getModularSynth() const;
 

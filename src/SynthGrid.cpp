@@ -548,6 +548,10 @@ bool SynthGrid::onEvent(SDL_Event& event)
 	{
 		switch (event.key.keysym.sym)
 		{
+			case SDLK_BACKSPACE:
+				gotoParentSynth();
+				break;
+
 			case SDLK_F3:
 				copySynth();
 				break;
@@ -860,12 +864,18 @@ void SynthGrid::onListenableChange(Listenable *listenable)
 {
 	mHoveredConnection = -1;
 	mSelectedModule = -1;
+	mParentSynth = std::stack<ModularSynth*>();
 	setModularSynth(static_cast<ModularSynth&>(mSynth.getOscillator(mEditorState.patternEditor.currentTrack)));
 }
 
 
-void SynthGrid::setModularSynth(ModularSynth& synth)
+void SynthGrid::setModularSynth(ModularSynth& synth, bool rememberParent)
 {
+	if (rememberParent)
+	{
+		mParentSynth.push(mCurrentModularSynth);
+	}
+
 	mCurrentModularSynth = &synth;
 	mSelectedModule = -1;
 	mHoveredConnection = -1;
@@ -932,4 +942,15 @@ int SynthGrid::findConnectionTo(int toModule, int toInput) const
 	}
 
 	return -1;
+}
+
+
+void SynthGrid::gotoParentSynth()
+{
+	if (!mParentSynth.empty())
+	{
+		ModularSynth* prev = mParentSynth.top();
+		mParentSynth.pop();
+		setModularSynth(*prev);
+	}
 }

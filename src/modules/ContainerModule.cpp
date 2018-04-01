@@ -81,7 +81,7 @@ void ContainerModule::onDataSave(FileSection& section)
 
 void ContainerModule::onAction(SynthGrid& synthGrid)
 {
-	synthGrid.setModularSynth(*mContainerSynth);
+	synthGrid.setModularSynth(*mContainerSynth, true);
 }
 
 
