@@ -102,6 +102,10 @@ void ContainerModule::updateExtConnectionCounts()
 {
 	mNumInputs = 0;
 	mNumOutputs = 0;
+
+	// Find the highest param 0 for ExtIn/Out modules which tells the number of
+	// inputs/outputs to display
+
 	for (int i = 0 ; i < ModularSynth::maxModules ; ++i)
 	{
 		const SynthModule *module = mContainerSynth->getModule(i);
@@ -109,9 +113,9 @@ void ContainerModule::updateExtConnectionCounts()
 		if (module != NULL)
 		{
 			if (module->getSynthId() == ExtInModule::moduleId)
-				mNumInputs++;
+				mNumInputs = std::max(mNumInputs, static_cast<int>(module->getParam(0)) + 1);
 			else if (module->getSynthId() == ExtOutModule::moduleId)
-				mNumOutputs++;
+				mNumOutputs = std::max(mNumOutputs, static_cast<int>(module->getParam(0)) + 1);
 		}
 	}
 }
