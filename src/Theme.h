@@ -23,6 +23,7 @@ public:
 		SynthGrid,
 		AutomationEditor,
 		AutomationTrack,
+		SynthGridName,
 		Unknown
 	};
 

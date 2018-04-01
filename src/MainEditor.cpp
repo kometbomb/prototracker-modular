@@ -32,6 +32,7 @@
 #include "MessageManager.h"
 #include "MessageDisplayer.h"
 #include "SynthGrid.h"
+#include "SynthGridName.h"
 #include "AutomationEditor.h"
 #include "AutomationTrackInfo.h"
 #include "TooltipManager.h"
@@ -55,7 +56,8 @@
 #endif
 
 MainEditor::MainEditor(EditorState& editorState, IPlayer& player, PlayerState& playerState, Song& song, ISynth& synth, Mixer& mixer)
-	: Editor(editorState), mPlayer(player), mPlayerState(playerState), mSong(song), mSynth(synth), mMixer(mixer), mIsDragging(false)
+	: Editor(editorState), mPlayer(player), mPlayerState(playerState), mSong(song), mSynth(synth), mMixer(mixer), mIsDragging(false),
+	synthGrid()
 {
 	mOscillatorsProbePos = new Value();
 
@@ -826,8 +828,22 @@ bool MainEditor::loadElements(const Theme& theme)
 
 			case Theme::SynthGrid:
 			{
-				SynthGrid *grid = new SynthGrid(mEditorState, mSynth, mPlayer);
-				addChild(grid, element.parameters[0], element.parameters[1], element.parameters[2], element.parameters[3]);
+				synthGrid = new SynthGrid(mEditorState, mSynth, mPlayer);
+				addChild(synthGrid, element.parameters[0], element.parameters[1], element.parameters[2], element.parameters[3]);
+			}
+			break;
+
+			case Theme::SynthGridName:
+			{
+				if (synthGrid != NULL)
+				{
+					SynthGridName *synthGridNameEditor = new SynthGridName(mEditorState, *synthGrid);
+					addChild(synthGridNameEditor, element.parameters[0], element.parameters[1], element.parameters[2], element.parameters[3]);
+				}
+				else
+				{
+					debug("SynthGrid has to be defined before SynthGridName");
+				}
 			}
 			break;
 

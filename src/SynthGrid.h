@@ -4,13 +4,14 @@
 #include "SDL.h"
 #include "ModularSynth.h"
 #include "PathFinder.h"
+#include "Listenable.h"
 
 class ISynth;
 class IPlayer;
 struct Color;
 class ModuleSelector;
 
-class SynthGrid: public Editor
+class SynthGrid: public Editor, public Listenable
 {
 public:
 	static const int gridWidth = 4;
@@ -59,9 +60,6 @@ private:
 	int findConnectionFrom(int fromModule, int fromOutput) const;
 	int findConnectionTo(int toModule, int toOutput) const;
 
-	ModularSynth& getModularSynth();
-	const ModularSynth& getModularSynth() const;
-
 	bool pickConnector(int x, int y, const SDL_Rect& area, int& module, int& connectorType, int& connector);
 	bool pickModule(int x, int y, const SDL_Rect& area, int& module, bool includeFree = false);
 
@@ -81,6 +79,8 @@ public:
 	virtual ~SynthGrid();
 
 	void setModularSynth(ModularSynth& synth);
+	ModularSynth& getModularSynth();
+	const ModularSynth& getModularSynth() const;
 
 	virtual bool onEvent(SDL_Event& event);
 	virtual void onFileSelectorEvent(const Editor& moduleSelector, bool accept);

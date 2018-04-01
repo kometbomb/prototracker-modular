@@ -852,6 +852,7 @@ void SynthGrid::rebuildWires()
 void SynthGrid::onLoaded()
 {
 	rebuildWires();
+	notify();
 }
 
 
@@ -872,6 +873,7 @@ void SynthGrid::setModularSynth(ModularSynth& synth)
 	synth.onShow();
 	rebuildWires();
 	invalidateAll();
+	notify();
 }
 
 
@@ -896,6 +898,8 @@ void SynthGrid::pasteSynth()
 	rebuildWires();
 
 	showMessageV(MessageInfo, "Synth layout pasted");
+
+	notify();
 }
 
 

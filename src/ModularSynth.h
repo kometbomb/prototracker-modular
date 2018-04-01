@@ -35,6 +35,7 @@ public:
 	virtual ~ModularSynth();
 
 	const char *getName() const;
+	char *getName();
 	void setName(const char *name);
 
 	void cycle();

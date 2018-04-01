@@ -402,6 +402,8 @@ void ModularSynth::writeSynth(FileSection& section)
 
 void ModularSynth::clear()
 {
+	strcpy(mName, "");
+
 	for (int i = 0 ; i < maxModules ; ++i)
 	{
 		if (mModules[i] != NULL)
@@ -540,6 +542,12 @@ void ModularSynth::setExtInput(int index, float value)
 
 
 const char * ModularSynth::getName() const
+{
+	return mName;
+}
+
+
+char * ModularSynth::getName()
 {
 	return mName;
 }

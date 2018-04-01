@@ -19,6 +19,7 @@ struct MessageDisplayer;
 struct TooltipManager;
 struct TooltipDisplayer;
 struct AudioDeviceSelector;
+struct SynthGrid;
 
 class MainEditor: public Editor
 {
@@ -32,6 +33,7 @@ class MainEditor: public Editor
 	SequenceRowEditor *sequenceRowEditor;
 	TextEditor *songNameEditor;
 	TextEditor *macroNameEditor;
+	SynthGrid *synthGrid;
 	FileSelector *fileSelector;
 	AudioDeviceSelector *audioDeviceSelector;
 	MessageManager *mMessageManager;
