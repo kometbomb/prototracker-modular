@@ -1,5 +1,6 @@
 #include "ContainerModule.h"
 #include "../ModularSynth.h"
+#include "../SynthGrid.h"
 #include <cstdio>
 
 ContainerModule::ContainerModule(ModularSynth& synth)
@@ -59,4 +60,23 @@ bool ContainerModule::onDataLoad(const FileSection& section)
 void ContainerModule::onDataSave(FileSection& section)
 {
 	mContainerSynth->writeSynth(section);
+}
+
+
+void ContainerModule::onAction(SynthGrid& synthGrid)
+{
+	synthGrid.setModularSynth(*mContainerSynth);
+}
+
+
+void ContainerModule::copy(const SynthModule& source)
+{
+	SynthModule::copy(source);
+	mContainerSynth->copy(static_cast<const ContainerModule&>(source).getModularSynth());
+}
+
+
+const ModularSynth& ContainerModule::getModularSynth() const
+{
+	return *mContainerSynth;
 }

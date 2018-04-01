@@ -23,6 +23,7 @@ private:
 	ISynth& mSynth;
 	IPlayer& mPlayer;
 	ModuleSelector *mModuleSelector;
+	ModularSynth *mCurrentModularSynth;
 
 	virtual void onDraw(Renderer& renderer, const SDL_Rect& area);
 	void drawAngledWire(Renderer& renderer, int x1, int y1, int x2, int y2, int y3, const Color& color1) const;
@@ -78,6 +79,8 @@ public:
 
 	SynthGrid(EditorState& editorState, ISynth& synth, IPlayer& player);
 	virtual ~SynthGrid();
+
+	void setModularSynth(ModularSynth& synth);
 
 	virtual bool onEvent(SDL_Event& event);
 	virtual void onFileSelectorEvent(const Editor& moduleSelector, bool accept);

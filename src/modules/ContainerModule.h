@@ -9,6 +9,9 @@ class ContainerModule: public SynthModule
 
 	ModularSynth *mContainerSynth;
 
+protected:
+	const ModularSynth& getModularSynth() const;
+
 public:
 	static const int moduleId = 32;
 	static const int maxInstances = -1;
@@ -22,7 +25,10 @@ public:
 	virtual const char * getInputName(int input) const;
 	virtual const char * getOutputName(int output) const;
 
+	virtual void onAction(SynthGrid& synthGrid);
+
 	virtual bool onDataLoad(const FileSection& section);
 	virtual void onDataSave(FileSection& section);
 
+	virtual void copy(const SynthModule& source);
 };

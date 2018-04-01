@@ -440,15 +440,12 @@ void ModularSynth::copy(const ModularSynth& source)
 {
 	for (int i = 0 ; i < maxModules ; ++i)
 	{
-		if (source.getModule(i) != NULL)
+		const SynthModule *oldModule = source.getModule(i);
+		if (oldModule != NULL)
 		{
 			addModule(i, source.getModule(i)->getSynthId());
 			SynthModule *newModule = getModule(i);
-
-			for (int p = 0 ; p < newModule->getNumParams() ; ++p)
-			{
-				newModule->setParam(p, source.getModule(i)->getParam(p));
-			}
+			newModule->copy(*oldModule);
 		}
 		else
 		{

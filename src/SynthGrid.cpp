@@ -21,6 +21,7 @@ SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth, IPlayer& player)
 {
 	mModuleSelector = new ModuleSelector(editorState);
 	editorState.patternEditor.currentTrack.addListener(this);
+	setModularSynth(static_cast<ModularSynth&>(mSynth.getOscillator(0)));
 	initNetwork();
 }
 
@@ -463,10 +464,22 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				{
 					if (mMode == IDLE)
 					{
-						const ModularSynth& modularSynth = getModularSynth();
-						if (modularSynth.getModule(moduleOut) != NULL)
+						mSelectedModule = moduleOut;
+						mHoveredConnection = -1;
+
+						ModularSynth& modularSynth = getModularSynth();
+						SynthModule *module = modularSynth.getModule(moduleOut);
+
+						if (module != NULL)
 						{
-							startMove(moduleOut);
+							if (event.button.clicks == 1)
+							{
+								startMove(moduleOut);
+							}
+							else if (event.button.clicks == 2)
+							{
+								module->onAction(*this);
+							}
 						}
 						else
 						{
@@ -475,9 +488,6 @@ bool SynthGrid::onEvent(SDL_Event& event)
 								showNewModuleDialog();
 							}
 						}
-
-						mSelectedModule = moduleOut;
-						mHoveredConnection = -1;
 					}
 				}
 
@@ -622,13 +632,13 @@ void SynthGrid::onFileSelectorEvent(const Editor& moduleSelector, bool accept)
 
 ModularSynth& SynthGrid::getModularSynth()
 {
-	return static_cast<ModularSynth&>(mSynth.getOscillator(mEditorState.patternEditor.currentTrack));
+	return *mCurrentModularSynth;
 }
 
 
 const ModularSynth& SynthGrid::getModularSynth() const
 {
-	return static_cast<ModularSynth&>(mSynth.getOscillator(mEditorState.patternEditor.currentTrack));
+	return *mCurrentModularSynth;
 }
 
 
@@ -849,7 +859,18 @@ void SynthGrid::onListenableChange(Listenable *listenable)
 {
 	mHoveredConnection = -1;
 	mSelectedModule = -1;
+	setModularSynth(static_cast<ModularSynth&>(mSynth.getOscillator(mEditorState.patternEditor.currentTrack)));
+}
+
+
+void SynthGrid::setModularSynth(ModularSynth& synth)
+{
+	mCurrentModularSynth = &synth;
+	mSelectedModule = -1;
+	mHoveredConnection = -1;
+	mMode = IDLE;
 	rebuildWires();
+	invalidateAll();
 }
 
 

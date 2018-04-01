@@ -165,3 +165,18 @@ bool SynthModule::getHasData() const
 {
 	return mHasData;
 }
+
+
+void SynthModule::onAction(SynthGrid& synthGrid)
+{
+
+}
+
+
+void SynthModule::copy(const SynthModule& source)
+{
+	for (int p = 0 ; p < source.getNumParams() ; ++p)
+	{
+		setParam(p, source.getParam(p));
+	}
+}
