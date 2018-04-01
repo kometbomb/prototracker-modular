@@ -281,6 +281,19 @@ bool ModularSynth::readSynth(const FileSection& section, int& offset)
 				module->setParam(p, static_cast<float>(param - paramCenter) / paramScale);
 			}
 
+			if (module->getHasData())
+			{
+				FileSection *moduleData = section.readSection(offset);
+				bool loadStatus = module->onDataLoad(*moduleData);
+				delete moduleData;
+
+				if (!loadStatus)
+				{
+					delete module;
+					return false;
+				}
+			}
+
 			mModules[i] = module;
 			module->setSampleRate(mSampleRate);
 			module->onLoaded();
@@ -345,6 +358,14 @@ void ModularSynth::writeSynth(FileSection& section)
 			for (int p = 0 ; p < mModules[i]->getNumParams() ; ++p)
 			{
 				section.writeDword(mModules[i]->getParam(p) * paramScale + paramCenter);
+			}
+
+			if (mModules[i]->getHasData())
+			{
+				FileSection *moduleData = FileSection::createSection("DATA");
+				mModules[i]->onDataSave(*moduleData);
+				section.writeSection(*moduleData);
+				delete moduleData;
 			}
 		}
 		else

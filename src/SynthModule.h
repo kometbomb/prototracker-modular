@@ -5,6 +5,7 @@
 
 struct ModularSynth;
 struct Renderer;
+struct FileSection;
 
 class SynthModule
 {
@@ -18,12 +19,16 @@ public:
 protected:
 	ModularSynth& mSynth;
 	const int mSynthId;
-	int mNumInputs, mNumOutputs, mNumParams;
+	int mNumInputs, mNumOutputs;
+	const int mNumParams;
+	// If the loader should call onDataLoad()/onDataSave()
+	const bool mHasData;
 	float mInputs[maxInputs], mOutputs[maxOutputs], mParams[maxParams];
 	int mSampleRate;
 
 	void setOutput(int output, float value);
-	SynthModule(ModularSynth& synth, int synthId, int numInputs, int numOutputs, int numParams);
+	SynthModule(ModularSynth& synth, int synthId, int numInputs, int numOutputs,
+		int numParams, bool hasData = false);
 
 public:
 
@@ -47,6 +52,12 @@ public:
 
 	virtual void onLoaded();
 	virtual void onDial(int delta);
+
+	// These get called when the module needs to save any internal data
+	virtual bool onDataLoad(const FileSection& section);
+	virtual void onDataSave(FileSection& section);
+
+	bool getHasData() const;
 
 	virtual const char * getName() const = 0;
 	virtual const char * getInputName(int input) const = 0;
