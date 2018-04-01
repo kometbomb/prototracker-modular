@@ -19,6 +19,8 @@
 ModularSynth::ModularSynth(Synth& synth, IPlayer& player)
 	: mSynth(synth), mPlayer(player), mNumConnections(0), mFrequency(0), mVolume(0), mNoteTrigger(false)
 {
+	strcpy(mName, "");
+
 	for (int i = 0 ; i < maxModules ; ++i)
 		mModules[i] = NULL;
 
@@ -255,6 +257,11 @@ static const int paramCenter = 0x4000000;
 
 bool ModularSynth::readSynth(const FileSection& section, int& offset)
 {
+	const char *name = section.readString(offset);
+
+	if (!name)
+		return false;
+
 	int countModules = section.readByte(offset);
 
 	if (countModules == FileSection::invalidRead || countModules > maxModules)
@@ -263,6 +270,7 @@ bool ModularSynth::readSynth(const FileSection& section, int& offset)
 	ModuleFactory moduleFactory;
 
 	clear();
+	strncpy(mName, name, sizeof(mName));
 
 	for (int i = 0 ; i < countModules ; ++i)
 	{
@@ -345,6 +353,8 @@ bool ModularSynth::readSynth(const FileSection& section, int& offset)
 
 void ModularSynth::writeSynth(FileSection& section)
 {
+	section.writeString(mName);
+
 	// Write modules
 
 	section.writeByte(maxModules);
@@ -391,6 +401,8 @@ void ModularSynth::writeSynth(FileSection& section)
 
 void ModularSynth::clear()
 {
+	strcpy(mName, "");
+
 	for (int i = 0 ; i < maxModules ; ++i)
 	{
 		if (mModules[i] != NULL)
@@ -438,17 +450,16 @@ void ModularSynth::setSampleRate(int rate)
 
 void ModularSynth::copy(const ModularSynth& source)
 {
+	strncpy(mName, source.getName(), sizeof(mName));
+
 	for (int i = 0 ; i < maxModules ; ++i)
 	{
-		if (source.getModule(i) != NULL)
+		const SynthModule *oldModule = source.getModule(i);
+		if (oldModule != NULL)
 		{
 			addModule(i, source.getModule(i)->getSynthId());
 			SynthModule *newModule = getModule(i);
-
-			for (int p = 0 ; p < newModule->getNumParams() ; ++p)
-			{
-				newModule->setParam(p, source.getModule(i)->getParam(p));
-			}
+			newModule->copy(*oldModule);
 		}
 		else
 		{
@@ -467,9 +478,15 @@ void ModularSynth::copy(const ModularSynth& source)
 }
 
 
+ModularSynth* ModularSynth::createEmpty() const
+{
+	return new ModularSynth(mSynth, mPlayer);
+}
+
+
 ModularSynth* ModularSynth::clone() const
 {
-	ModularSynth *newSynth = new ModularSynth(mSynth, mPlayer);
+	ModularSynth *newSynth = createEmpty();
 	newSynth->copy(*this);
 
 	return newSynth;
@@ -498,4 +515,57 @@ float ModularSynth::getAutomationValue(int track) const
 int ModularSynth::getSongRate() const
 {
 	return mPlayer.getPlayerState().songRate;
+}
+
+
+float ModularSynth::getExtInput(int index) const
+{
+	return mExtInput[index];
+}
+
+
+void ModularSynth::setExtOutput(int index, float value)
+{
+	mExtOutput[index] = value;
+}
+
+
+float ModularSynth::getExtOutput(int index) const
+{
+	return mExtOutput[index];
+}
+
+
+void ModularSynth::setExtInput(int index, float value)
+{
+	mExtInput[index] = value;
+}
+
+
+const char * ModularSynth::getName() const
+{
+	return mName;
+}
+
+
+char * ModularSynth::getName()
+{
+	return mName;
+}
+
+
+void ModularSynth::setName(const char *name)
+{
+	strncpy(mName, name, sizeof(mName));
+}
+
+
+void ModularSynth::onShow()
+{
+	for (int i = 0 ; i < maxModules ; ++i)
+	{
+		SynthModule *module = getModule(i);
+		if (module != NULL)
+			module->onShow();
+	}
 }

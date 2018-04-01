@@ -21,6 +21,7 @@ SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth, IPlayer& player)
 {
 	mModuleSelector = new ModuleSelector(editorState);
 	editorState.patternEditor.currentTrack.addListener(this);
+	setModularSynth(static_cast<ModularSynth&>(mSynth.getOscillator(0)));
 	initNetwork();
 }
 
@@ -463,10 +464,22 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				{
 					if (mMode == IDLE)
 					{
-						const ModularSynth& modularSynth = getModularSynth();
-						if (modularSynth.getModule(moduleOut) != NULL)
+						mSelectedModule = moduleOut;
+						mHoveredConnection = -1;
+
+						ModularSynth& modularSynth = getModularSynth();
+						SynthModule *module = modularSynth.getModule(moduleOut);
+
+						if (module != NULL)
 						{
-							startMove(moduleOut);
+							if (event.button.clicks == 1)
+							{
+								startMove(moduleOut);
+							}
+							else if (event.button.clicks == 2)
+							{
+								module->onAction(*this);
+							}
 						}
 						else
 						{
@@ -475,9 +488,6 @@ bool SynthGrid::onEvent(SDL_Event& event)
 								showNewModuleDialog();
 							}
 						}
-
-						mSelectedModule = moduleOut;
-						mHoveredConnection = -1;
 					}
 				}
 
@@ -538,6 +548,10 @@ bool SynthGrid::onEvent(SDL_Event& event)
 	{
 		switch (event.key.keysym.sym)
 		{
+			case SDLK_BACKSPACE:
+				gotoParentSynth();
+				break;
+
 			case SDLK_F3:
 				copySynth();
 				break;
@@ -622,13 +636,13 @@ void SynthGrid::onFileSelectorEvent(const Editor& moduleSelector, bool accept)
 
 ModularSynth& SynthGrid::getModularSynth()
 {
-	return static_cast<ModularSynth&>(mSynth.getOscillator(mEditorState.patternEditor.currentTrack));
+	return *mCurrentModularSynth;
 }
 
 
 const ModularSynth& SynthGrid::getModularSynth() const
 {
-	return static_cast<ModularSynth&>(mSynth.getOscillator(mEditorState.patternEditor.currentTrack));
+	return *mCurrentModularSynth;
 }
 
 
@@ -842,6 +856,7 @@ void SynthGrid::rebuildWires()
 void SynthGrid::onLoaded()
 {
 	rebuildWires();
+	notify();
 }
 
 
@@ -849,7 +864,26 @@ void SynthGrid::onListenableChange(Listenable *listenable)
 {
 	mHoveredConnection = -1;
 	mSelectedModule = -1;
+	mParentSynth = std::stack<ModularSynth*>();
+	setModularSynth(static_cast<ModularSynth&>(mSynth.getOscillator(mEditorState.patternEditor.currentTrack)));
+}
+
+
+void SynthGrid::setModularSynth(ModularSynth& synth, bool rememberParent)
+{
+	if (rememberParent)
+	{
+		mParentSynth.push(mCurrentModularSynth);
+	}
+
+	mCurrentModularSynth = &synth;
+	mSelectedModule = -1;
+	mHoveredConnection = -1;
+	mMode = IDLE;
+	synth.onShow();
 	rebuildWires();
+	invalidateAll();
+	notify();
 }
 
 
@@ -874,6 +908,8 @@ void SynthGrid::pasteSynth()
 	rebuildWires();
 
 	showMessageV(MessageInfo, "Synth layout pasted");
+
+	notify();
 }
 
 
@@ -906,4 +942,15 @@ int SynthGrid::findConnectionTo(int toModule, int toInput) const
 	}
 
 	return -1;
+}
+
+
+void SynthGrid::gotoParentSynth()
+{
+	if (!mParentSynth.empty())
+	{
+		ModularSynth* prev = mParentSynth.top();
+		mParentSynth.pop();
+		setModularSynth(*prev);
+	}
 }

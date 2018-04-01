@@ -30,6 +30,9 @@
 #include "modules/LinearModule.h"
 #include "modules/OscilloscopeModule.h"
 #include "modules/VUMeterModule.h"
+#include "modules/ContainerModule.h"
+#include "modules/ExtInModule.h"
+#include "modules/ExtOutModule.h"
 #include <cstdlib>
 
 #define REGISTER(module) registerModule(module::moduleId, module::moduleName, &module::createModule, module::maxInstances)
@@ -67,6 +70,9 @@ ModuleFactory::ModuleFactory()
 	REGISTER(OscilloscopeModule);
 	REGISTER(VUMeterModule);
 	REGISTER(AudioOutModule);
+	REGISTER(ContainerModule);
+	REGISTER(ExtInModule);
+	REGISTER(ExtOutModule);
 }
 
 

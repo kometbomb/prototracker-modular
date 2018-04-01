@@ -6,6 +6,7 @@
 struct ModularSynth;
 struct Renderer;
 struct FileSection;
+struct SynthGrid;
 
 class SynthModule
 {
@@ -50,8 +51,19 @@ public:
 	int getNumOutputs() const;
 	int getNumParams() const;
 
+	virtual void copy(const SynthModule& source);
+
+	// After synth has been created
 	virtual void onLoaded();
+
+	// When SynthGrid displays a new synth layout
+	virtual void onShow();
+
+	// Mousewheel
 	virtual void onDial(int delta);
+
+	// Doubleclick, grid that called is passed
+	virtual void onAction(SynthGrid& synthGrid);
 
 	// These get called when the module needs to save any internal data
 	virtual bool onDataLoad(const FileSection& section);

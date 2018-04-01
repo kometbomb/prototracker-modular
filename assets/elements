@@ -13,6 +13,7 @@ PatternEditor	3 	78	232	160	4	4
 MacroEditor		241	78 	76 	160	4 	4
 SequenceEditor	234	3 	82 	40	2 	0
 SynthGrid 		320	16	160	224
+SynthGridName 	336	8	128 8
 AutomationEditor    1	241 478	78
 AutomationTrack    462	242 16	8
 

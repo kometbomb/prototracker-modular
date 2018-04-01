@@ -143,6 +143,7 @@ bool Theme::loadDefinition(const std::string& path)
 		"SynthGrid",
 		"AutomationEditor",
 		"AutomationTrack",
+		"SynthGridName",
 		NULL
 	};
 

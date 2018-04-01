@@ -393,3 +393,16 @@ creating stereo reverb effects.
 |--------|--------------|
 | 0 | Combined output |
 | 1 | Wet output |
+
+### Container
+
+This can be used to host another whole synth inside a synth. The inputs
+and outputs depend on the contained input/output modules.
+
+### ExtIn/ExtOut
+
+These modules act as the interface between the Container module and the
+host synth. Looking from outside the Container, these show up as normal
+module inputs and outputs on the Container.
+
+Use the mouse wheel to select which input or output the modules connect to.

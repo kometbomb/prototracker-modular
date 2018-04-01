@@ -4,13 +4,15 @@
 #include "SDL.h"
 #include "ModularSynth.h"
 #include "PathFinder.h"
+#include "Listenable.h"
+#include <stack>
 
 class ISynth;
 class IPlayer;
 struct Color;
 class ModuleSelector;
 
-class SynthGrid: public Editor
+class SynthGrid: public Editor, public Listenable
 {
 public:
 	static const int gridWidth = 4;
@@ -23,6 +25,8 @@ private:
 	ISynth& mSynth;
 	IPlayer& mPlayer;
 	ModuleSelector *mModuleSelector;
+	ModularSynth *mCurrentModularSynth;
+	std::stack<ModularSynth*> mParentSynth;
 
 	virtual void onDraw(Renderer& renderer, const SDL_Rect& area);
 	void drawAngledWire(Renderer& renderer, int x1, int y1, int x2, int y2, int y3, const Color& color1) const;
@@ -58,9 +62,6 @@ private:
 	int findConnectionFrom(int fromModule, int fromOutput) const;
 	int findConnectionTo(int toModule, int toOutput) const;
 
-	ModularSynth& getModularSynth();
-	const ModularSynth& getModularSynth() const;
-
 	bool pickConnector(int x, int y, const SDL_Rect& area, int& module, int& connectorType, int& connector);
 	bool pickModule(int x, int y, const SDL_Rect& area, int& module, bool includeFree = false);
 
@@ -73,11 +74,16 @@ private:
 
 	void copySynth();
 	void pasteSynth();
+	void gotoParentSynth();
 
 public:
 
 	SynthGrid(EditorState& editorState, ISynth& synth, IPlayer& player);
 	virtual ~SynthGrid();
+
+	void setModularSynth(ModularSynth& synth, bool rememberParent = false);
+	ModularSynth& getModularSynth();
+	const ModularSynth& getModularSynth() const;
 
 	virtual bool onEvent(SDL_Event& event);
 	virtual void onFileSelectorEvent(const Editor& moduleSelector, bool accept);

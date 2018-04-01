@@ -13,3 +13,4 @@ Here's a list of reserved module IDs.
 | 30 | linear-module |
 | 29 | oscilloscope-module |
 | 31 | vu-meter |
+| 32-34 | module-container |
