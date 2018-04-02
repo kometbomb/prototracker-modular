@@ -11,6 +11,7 @@ class ISynth;
 class IPlayer;
 struct Color;
 class ModuleSelector;
+struct FileSelector;
 
 class SynthGrid: public Editor, public Listenable
 {
@@ -27,6 +28,7 @@ private:
 	ModuleSelector *mModuleSelector;
 	ModularSynth *mCurrentModularSynth;
 	std::stack<ModularSynth*> mParentSynth;
+	FileSelector *mFileSelector;
 
 	virtual void onDraw(Renderer& renderer, const SDL_Rect& area);
 	void drawAngledWire(Renderer& renderer, int x1, int y1, int x2, int y2, int y3, const Color& color1) const;
@@ -36,6 +38,13 @@ private:
 	// type: 0 = input, 1 = output
 	SDL_Rect getConnectorArea(int moduleIndex, int type, int connectorIndex, const SDL_Rect& parent) const;
 	int getConnectorNode(int moduleIndex, int type, int connectorIndex) const;
+
+	enum
+	{
+		FileSelectionLoad,
+		FileSelectionSave,
+		ModuleSelection,
+	};
 
 	enum SynthGridMode
 	{
@@ -58,6 +67,7 @@ private:
 
 	void initNetwork();
 	void rebuildWires();
+	void refreshView();
 
 	int findConnectionFrom(int fromModule, int fromOutput) const;
 	int findConnectionTo(int toModule, int toOutput) const;
@@ -75,6 +85,11 @@ private:
 	void copySynth();
 	void pasteSynth();
 	void gotoParentSynth();
+
+	void displayLoadDialog();
+	void displaySaveDialog();
+	bool saveSynth(const char *path);
+	bool loadSynth(const char *path);
 
 public:
 
