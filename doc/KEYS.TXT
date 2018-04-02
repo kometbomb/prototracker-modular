@@ -39,3 +39,8 @@ ALT + DELETE	Empty track effect
 CTRL + D		Duplicate row
 CAPS LOCK/SCROLL LOCK	Toggle follow song position
 CTRL + A        Select output device
+
+Modular Synth editor
+
+CTRL+O/S    Load/save current synth layout
+BACKSPACE   Go to parent synth (from a container)
