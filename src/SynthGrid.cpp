@@ -7,12 +7,14 @@
 #include "SynthModule.h"
 #include "EditorState.h"
 #include "ModuleSelector.h"
+#include "FileSelector.h"
+#include "FileSection.h"
 #include "Color.h"
 #include <cstdlib>
 #include <cstdio>
+#include <cstring>
 #include <cmath>
 #include <algorithm>
-
 
 
 SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth, IPlayer& player)
@@ -20,6 +22,7 @@ SynthGrid::SynthGrid(EditorState& editorState, ISynth& synth, IPlayer& player)
 	mHoveredConnection(-1), mCopyBuffer(NULL)
 {
 	mModuleSelector = new ModuleSelector(editorState);
+	mFileSelector = new FileSelector(editorState);
 	editorState.patternEditor.currentTrack.addListener(this);
 	setModularSynth(static_cast<ModularSynth&>(mSynth.getOscillator(0)));
 	initNetwork();
@@ -30,6 +33,9 @@ SynthGrid::~SynthGrid()
 {
 	if (mCopyBuffer != NULL)
 		delete mCopyBuffer;
+
+	delete mModuleSelector;
+	delete mFileSelector;
 }
 
 
@@ -546,33 +552,49 @@ bool SynthGrid::onEvent(SDL_Event& event)
 	}
 	else if (event.type == SDL_KEYDOWN)
 	{
-		switch (event.key.keysym.sym)
+		if (event.key.keysym.mod & (KMOD_CTRL|KMOD_ALT))
 		{
-			case SDLK_BACKSPACE:
-				gotoParentSynth();
-				break;
+			switch (event.key.keysym.sym)
+			{
+				case SDLK_s:
+					displaySaveDialog();
+					return true;
 
-			case SDLK_F3:
-				copySynth();
-				break;
+				case SDLK_o:
+					displayLoadDialog();
+					return true;
+			}
+		}
+		else
+		{
+			switch (event.key.keysym.sym)
+			{
+				case SDLK_BACKSPACE:
+					gotoParentSynth();
+					return true;
 
-			case SDLK_F4:
-				pasteSynth();
-				break;
+				case SDLK_F3:
+					copySynth();
+					return true;
 
-			case SDLK_DELETE:
-				ModularSynth& modularSynth = getModularSynth();
+				case SDLK_F4:
+					pasteSynth();
+					return true;
 
-				if (mSelectedModule != -1 && modularSynth.getModule(mSelectedModule) != NULL)
-				{
-					modularSynth.lock();
-					modularSynth.removeModule(mSelectedModule);
-					modularSynth.unlock();
-					rebuildWires();
-					mMode = IDLE;
-				}
+				case SDLK_DELETE:
+					ModularSynth& modularSynth = getModularSynth();
 
-				break;
+					if (mSelectedModule != -1 && modularSynth.getModule(mSelectedModule) != NULL)
+					{
+						modularSynth.lock();
+						modularSynth.removeModule(mSelectedModule);
+						modularSynth.unlock();
+						rebuildWires();
+						mMode = IDLE;
+					}
+
+					return true;
+			}
 		}
 	}
 	else if (event.type == SDL_MOUSEMOTION)
@@ -615,19 +637,38 @@ bool SynthGrid::onEvent(SDL_Event& event)
 
 void SynthGrid::showNewModuleDialog()
 {
+	mModuleSelector->setId(ModuleSelection);
 	mModuleSelector->populate(getModularSynth());
 	setModal(mModuleSelector);
 }
 
 
-void SynthGrid::onFileSelectorEvent(const Editor& moduleSelector, bool accept)
+void SynthGrid::onFileSelectorEvent(const Editor& selector, bool accept)
 {
 	if (accept)
 	{
-		ModularSynth& synth = getModularSynth();
-		synth.lock();
-		synth.addModule(mSelectedModule, static_cast<const ModuleSelector&>(moduleSelector).getSelectedModuleId());
-		synth.unlock();
+		int id = reinterpret_cast<const GenericSelector&>(selector).getId();
+		switch (id)
+		{
+			case ModuleSelection: {
+				ModularSynth& synth = getModularSynth();
+				synth.lock();
+				synth.addModule(mSelectedModule, static_cast<const ModuleSelector&>(selector).getSelectedModuleId());
+				synth.unlock();
+			} break;
+
+			case FileSelectionLoad:
+				if (loadSynth(reinterpret_cast<const FileSelector&>(selector).getSelectedPath()))
+					showMessage(MessageInfo, "Synth layout loaded");
+				break;
+
+			case FileSelectionSave:
+				if (saveSynth(reinterpret_cast<const FileSelector&>(selector).getSelectedPath()))
+					showMessage(MessageInfo, "Synth saved");
+				else
+					showMessage(MessageError, "Synth layout was not saved");
+				break;
+		}
 	}
 
 	setModal(NULL);
@@ -880,10 +921,7 @@ void SynthGrid::setModularSynth(ModularSynth& synth, bool rememberParent)
 	mSelectedModule = -1;
 	mHoveredConnection = -1;
 	mMode = IDLE;
-	synth.onShow();
-	rebuildWires();
-	invalidateAll();
-	notify();
+	refreshView();
 }
 
 
@@ -953,4 +991,90 @@ void SynthGrid::gotoParentSynth()
 		mParentSynth.pop();
 		setModularSynth(*prev);
 	}
+}
+
+
+void SynthGrid::displayLoadDialog()
+{
+	mFileSelector->setId(FileSelectionLoad);
+	mFileSelector->setTitle("Load synth");
+	mFileSelector->setFilter(".synth");
+	mFileSelector->setOverwriteCheck(false);
+	mFileSelector->populate();
+	setModal(mFileSelector);
+}
+
+
+void SynthGrid::displaySaveDialog()
+{
+	mFileSelector->setId(FileSelectionSave);
+	mFileSelector->setTitle("Save synth");
+	mFileSelector->setFilter(".synth");
+	mFileSelector->setOverwriteCheck(true);
+	mFileSelector->populate();
+	setModal(mFileSelector);
+}
+
+
+bool SynthGrid::saveSynth(const char *path)
+{
+	FileSection *section = FileSection::createSection("SNTH");
+	getModularSynth().writeSynth(*section);
+
+	FILE *f = fopen(path, "wb");
+	fwrite(section->getPackedData(), section->getPackedSize(), 1, f);
+	fclose(f);
+
+	delete section;
+
+	return true;
+}
+
+
+bool SynthGrid::loadSynth(const char *path)
+{
+	FILE *f = fopen(path, "rb");
+
+	if (f)
+	{
+		fseek(f, 0, SEEK_END);
+		int fileSize = ftell(f);
+		fseek(f, 0, SEEK_SET);
+
+		char *data = new char[fileSize];
+
+		fread(data, fileSize, 1, f);
+		fclose(f);
+
+		FileSection *section = FileSection::openSection(data, fileSize);
+		int offset = 0;
+
+		if (!section || strcmp(section->getName(), "SNTH") != 0 ||
+			!getModularSynth().readSynth(*section, offset))
+		{
+			showMessage(MessageError, "Failed to read synth layout");
+
+			delete section;
+			delete[] data;
+			return false;
+		}
+
+		delete section;
+		delete[] data;
+
+		refreshView();
+
+		return true;
+	}
+
+	return false;
+}
+
+
+void SynthGrid::refreshView()
+{
+	mCurrentModularSynth->onShow();
+	rebuildWires();
+	invalidateAll();
+	notify();
 }
