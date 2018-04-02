@@ -34,6 +34,7 @@ SynthGrid::~SynthGrid()
 	if (mCopyBuffer != NULL)
 		delete mCopyBuffer;
 
+	delete mModuleSelector;
 	delete mFileSelector;
 }
 
