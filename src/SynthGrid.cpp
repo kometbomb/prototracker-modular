@@ -790,7 +790,7 @@ int SynthGrid::getConnectorNode(int moduleIndex, int type, int connectorIndex) c
 
 	// moduleArea.x + moduleArea.w * (connectorIndex * 2 + 1) / (c * 2) - connectorSize / 2;
 
-	return (x * gridResolution + gridResolution * (connectorIndex * 2 + 1) / (c * 2)) + (y * gridResolution + yOffset) * networkWidth;
+	return (x * gridResolution + gridResolution * (connectorIndex * 2 + 1) / std::max(1, c * 2)) + (y * gridResolution + yOffset) * networkWidth;
 }
 
 
