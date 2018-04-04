@@ -30,6 +30,16 @@ private:
 	bool mNoteTrigger;
 	int mEffectValues[256];
 
+	// Samples since the synth last output non-silence
+	int mSilenceLength;
+	bool mPaused;
+
+	// Consider output under the threshold as silence
+	static constexpr float silenceThreshold = 0.001f;
+
+	// Synth will pause after this many samples of "silence"
+	static const int silenceDurationUntilPause = 1000;
+
 public:
 	ModularSynth(Synth& synth, IPlayer& player);
 	virtual ~ModularSynth();
@@ -39,6 +49,7 @@ public:
 	void setName(const char *name);
 
 	void cycle();
+	bool isPaused() const;
 
 	ModularSynth* createEmpty() const;
 	ModularSynth* clone() const;

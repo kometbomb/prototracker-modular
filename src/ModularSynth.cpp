@@ -7,6 +7,7 @@
 #include "IPlayer.h"
 #include "SDL.h"
 #include "Synth.h"
+#include "Debug.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -17,7 +18,8 @@
 #endif
 
 ModularSynth::ModularSynth(Synth& synth, IPlayer& player)
-	: mSynth(synth), mPlayer(player), mNumConnections(0), mFrequency(0), mVolume(0), mNoteTrigger(false)
+	: mSynth(synth), mPlayer(player), mNumConnections(0), mFrequency(0), mVolume(0), mNoteTrigger(false),
+	mSilenceLength(0), mPaused(true)
 {
 	strcpy(mName, "");
 
@@ -119,6 +121,10 @@ void ModularSynth::removeConnection(int index)
 
 void ModularSynth::cycle()
 {
+	// Do nothing if the synth has been paused after silence
+	if (mPaused)
+		return;
+
 	for (int i = 0 ; i < mNumConnections ; ++i)
 	{
 		SynthConnection& connection = mConnections[i];
@@ -132,12 +138,36 @@ void ModularSynth::cycle()
 	// After all modules have had their change to see if note was triggered,
 	// reset the status
 	mNoteTrigger = false;
+
+
+	// Increase silence counter and check if we are outputting non-silence
+
+	for (int i = 0 ; i < 2 ; ++i)
+	{
+		if (fabs(mOutput[i]) > silenceThreshold)
+		{
+			mSilenceLength = 0;
+		}
+	}
+
+	if (++mSilenceLength > silenceDurationUntilPause)
+	{
+		mPaused = true;
+		debug("Synth has been paused for inactivity");
+	}
 }
 
 
 void ModularSynth::triggerNote()
 {
 	mNoteTrigger = true;
+
+	if (mPaused)
+		debug("Synth has been resumed");
+
+	// Resume synth and reset silence counter
+	mPaused = false;
+	mSilenceLength = 0;
 }
 
 
@@ -568,4 +598,10 @@ void ModularSynth::onShow()
 		if (module != NULL)
 			module->onShow();
 	}
+}
+
+
+bool ModularSynth::isPaused() const
+{
+	return mPaused;
 }
