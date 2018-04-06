@@ -34,7 +34,7 @@ Synth::Synth(IPlayer& player, const Song& song)
 
 	for (int i = 0 ; i < SequenceRow::maxTracks ; ++i)
 	{
-		mOscillator[i] = new ModularSynth(*this, player);
+		mOscillator[i] = new ModularSynth(*this, player, true);
 	}
 }
 

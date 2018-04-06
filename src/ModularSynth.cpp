@@ -17,9 +17,9 @@
 #define TUNING 440.0
 #endif
 
-ModularSynth::ModularSynth(Synth& synth, IPlayer& player)
+ModularSynth::ModularSynth(Synth& synth, IPlayer& player, bool isPausable)
 	: mSynth(synth), mPlayer(player), mNumConnections(0), mFrequency(0), mVolume(0), mNoteTrigger(false),
-	mSilenceLength(0), mPaused(true)
+	mSilenceLength(0), mPaused(true), mIsPausable(isPausable)
 {
 	strcpy(mName, "");
 
@@ -122,7 +122,7 @@ void ModularSynth::removeConnection(int index)
 void ModularSynth::cycle()
 {
 	// Do nothing if the synth has been paused after silence
-	if (mPaused)
+	if (mPaused && mIsPausable)
 		return;
 
 	for (int i = 0 ; i < mNumConnections ; ++i)
@@ -139,21 +139,23 @@ void ModularSynth::cycle()
 	// reset the status
 	mNoteTrigger = false;
 
-
-	// Increase silence counter and check if we are outputting non-silence
-
-	for (int i = 0 ; i < 2 ; ++i)
+	if (mIsPausable)
 	{
-		if (fabs(mOutput[i]) > silenceThreshold)
+		// Increase silence counter and check if we are outputting non-silence
+
+		for (int i = 0 ; i < 2 ; ++i)
 		{
-			mSilenceLength = 0;
+			if (fabs(mOutput[i]) > silenceThreshold)
+			{
+				mSilenceLength = 0;
+			}
 		}
-	}
 
-	if (++mSilenceLength > silenceDurationUntilPause)
-	{
-		mPaused = true;
-		debug("Synth has been paused for inactivity");
+		if (++mSilenceLength > silenceDurationUntilPause)
+		{
+			mPaused = true;
+			debug("Synth has been paused for inactivity");
+		}
 	}
 }
 

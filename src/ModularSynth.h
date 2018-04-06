@@ -32,7 +32,7 @@ private:
 
 	// Samples since the synth last output non-silence
 	int mSilenceLength;
-	bool mPaused;
+	bool mIsPausable, mPaused;
 
 	// Consider output under the threshold as silence
 	static constexpr float silenceThreshold = 0.001f;
@@ -41,7 +41,7 @@ private:
 	static const int silenceDurationUntilPause = 1000;
 
 public:
-	ModularSynth(Synth& synth, IPlayer& player);
+	ModularSynth(Synth& synth, IPlayer& player, bool isPausable = false);
 	virtual ~ModularSynth();
 
 	const char *getName() const;
