@@ -623,3 +623,9 @@ void ModularSynth::addChangeListener(Listener* listener)
 {
 	mSynthChangeListenable.addListener(listener);
 }
+
+
+float ModularSynth::getOutput(int index) const
+{
+	return mOutput[index];
+}

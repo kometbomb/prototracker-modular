@@ -67,6 +67,7 @@ public:
 	float getExtInput(int index) const;
 	void setExtOutput(int index, float value);
 	float getExtOutput (int index) const;
+	float getOutput(int index) const;
 
 	bool addModule(int index, int moduleId);
 	void removeModule(int index);

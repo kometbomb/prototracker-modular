@@ -11,7 +11,7 @@ VirtualModule::VirtualModule(ModularSynth& synth)
 {
 	for (int i = 0 ; i < maxVirtualTracks ; ++i)
 	{
-		mContainerSynth[i] = synth.createEmpty(false);
+		mContainerSynth[i] = synth.createEmpty(true);
 		mContainerSynth[i]->setName(moduleName);
 	}
 
@@ -62,8 +62,16 @@ void VirtualModule::cycle()
 
 	for (int track = 0 ; track < maxVirtualTracks ; ++track)
 	{
-		for (int index = 0 ; index < ModularSynth::numExtConnections ; ++index)
-			setOutput(index, mOutputs[index] + mContainerSynth[track]->getExtOutput(index));
+		for (int i = 0 ; i < 2 ; ++i)
+		{
+			// Output 0 = mono out
+			setOutput(0, mOutputs[0] + mContainerSynth[track]->getOutput(i));
+			// Output 1-2 = left/right
+			setOutput(i + 1, mOutputs[i + 1] + mContainerSynth[track]->getOutput(i));
+		}
+
+		for (int index = 0 ; index < ModularSynth::numExtConnections - 3 ; ++index)
+			setOutput(index + 3, mOutputs[index + 3] + mContainerSynth[track]->getExtOutput(index));
 	}
 }
 
@@ -81,8 +89,14 @@ const char * VirtualModule::getInputName(int input) const
 
 const char * VirtualModule::getOutputName(int output) const
 {
+	if (output < 3)
+	{
+		static const char *names[] = {"L+R", "Left", "Right"};
+		return names[output];
+	}
+
 	static char name[50];
-	snprintf(name, sizeof(name), "ExtOut%d", output);
+	snprintf(name, sizeof(name), "ExtOut%d", output - 3);
 	return name;
 }
 
@@ -155,6 +169,10 @@ void VirtualModule::updateExtConnectionCounts()
 	// The first input is the trigger input so we need one more
 
 	mNumInputs++;
+
+	// The first three outputs are the center-left-right outputs
+
+	mNumOutputs += 3;
 }
 
 
