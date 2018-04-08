@@ -31,6 +31,7 @@
 #include "modules/OscilloscopeModule.h"
 #include "modules/VUMeterModule.h"
 #include "modules/ContainerModule.h"
+#include "modules/VirtualModule.h"
 #include "modules/ExtInModule.h"
 #include "modules/ExtOutModule.h"
 #include <cstdlib>
@@ -71,6 +72,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(VUMeterModule);
 	REGISTER(AudioOutModule);
 	REGISTER(ContainerModule);
+	REGISTER(VirtualModule);
 	REGISTER(ExtInModule);
 	REGISTER(ExtOutModule);
 }

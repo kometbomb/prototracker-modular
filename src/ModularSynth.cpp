@@ -47,6 +47,8 @@ bool ModularSynth::addModule(int index, int moduleId)
 	mModules[index]->setSampleRate(mSampleRate);
 	mModules[index]->onLoaded();
 
+	mSynthChangeListenable.notify();
+
 	return true;
 }
 
@@ -74,6 +76,8 @@ bool ModularSynth::connectModules(int fromModule, int toModule, int fromOutput, 
 	connection.toInput = toInput;
 
 	mNumConnections++;
+
+	mSynthChangeListenable.notify();
 
 	return true;
 }
@@ -254,6 +258,8 @@ void ModularSynth::swapModules(int fromModule, int toModule)
 		else if (connection.toModule == fromModule)
 			connection.toModule = toModule;
 	}
+
+	mSynthChangeListenable.notify();
 }
 
 
@@ -275,6 +281,8 @@ void ModularSynth::removeModule(int index)
 			else
 				++i;
 		}
+
+		mSynthChangeListenable.notify();
 	}
 }
 
@@ -510,9 +518,9 @@ void ModularSynth::copy(const ModularSynth& source)
 }
 
 
-ModularSynth* ModularSynth::createEmpty() const
+ModularSynth* ModularSynth::createEmpty(bool isPausable) const
 {
-	return new ModularSynth(mSynth, mPlayer);
+	return new ModularSynth(mSynth, mPlayer, isPausable);
 }
 
 
@@ -606,4 +614,10 @@ void ModularSynth::onShow()
 bool ModularSynth::isPaused() const
 {
 	return mPaused;
+}
+
+
+void ModularSynth::addChangeListener(Listener* listener)
+{
+	mSynthChangeListenable.addListener(listener);
 }

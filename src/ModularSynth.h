@@ -3,6 +3,7 @@
 #include "SynthConnection.h"
 #include "IOscillator.h"
 #include "Lockable.h"
+#include "Listenable.h"
 
 struct SynthModule;
 struct FileSection;
@@ -40,6 +41,8 @@ private:
 	// Synth will pause after this many samples of "silence"
 	static const int silenceDurationUntilPause = 1000;
 
+	Listenable mSynthChangeListenable;
+
 public:
 	ModularSynth(Synth& synth, IPlayer& player, bool isPausable = false);
 	virtual ~ModularSynth();
@@ -51,7 +54,7 @@ public:
 	void cycle();
 	bool isPaused() const;
 
-	ModularSynth* createEmpty() const;
+	ModularSynth* createEmpty(bool isPausable = false) const;
 	ModularSynth* clone() const;
 	void copy(const ModularSynth& source);
 
@@ -72,6 +75,8 @@ public:
 	void removeConnection(int index);
 	void swapModules(int fromModule, int toModule);
 	void onShow();
+
+	void addChangeListener(Listener* listener);
 
 	void clear();
 
