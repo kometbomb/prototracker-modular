@@ -1,6 +1,6 @@
 #pragma once
 
-struct Editor;
+struct Listener;
 
 /*
 
@@ -22,6 +22,6 @@ protected:
 public:
 	Listenable();
 
-	bool addListener(Listener *editor);
+	bool addListener(Listener *listener);
 	void notify();
 };

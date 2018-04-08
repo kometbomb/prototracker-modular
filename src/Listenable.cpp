@@ -1,5 +1,5 @@
 #include "Listenable.h"
-#include "Editor.h"
+#include "Listener.h"
 
 Listenable::Listenable()
 	: mNumListeners(0)
