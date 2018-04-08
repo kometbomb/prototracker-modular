@@ -119,6 +119,8 @@ void ModularSynth::removeConnection(int index)
 
 		mNumConnections--;
 		memmove(&mConnections[index], &mConnections[index + 1], sizeof(mConnections[index]) * (mNumConnections - index));
+
+		mSynthChangeListenable.notify();
 	}
 }
 
