@@ -197,6 +197,23 @@ ModularSynth& VirtualModule::getCurrentActiveTrack()
 void VirtualModule::gotoNextTrack()
 {
 	mCurrentActiveTrack = (mCurrentActiveTrack + 1) % maxVirtualTracks;
+}
+
+
+void VirtualModule::gotoNextFreeTrack()
+{
+	int prevTrack = mCurrentActiveTrack;
+	do
+	{
+		gotoNextTrack();
+	}
+	while (mCurrentActiveTrack != prevTrack && !mContainerSynth[mCurrentActiveTrack]->isPaused());
+
+	if (prevTrack == mCurrentActiveTrack)
+	{
+		gotoNextTrack();
+	}
+
 	debug("Active track = %d", mCurrentActiveTrack);
 }
 

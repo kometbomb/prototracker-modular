@@ -16,6 +16,7 @@ public:
 	float mPrevKeyonValue;
 
 	void gotoNextTrack();
+	void gotoNextFreeTrack();
 	ModularSynth& getCurrentActiveTrack();
 	void updateExtConnectionCounts();
 	void cloneTracks();
