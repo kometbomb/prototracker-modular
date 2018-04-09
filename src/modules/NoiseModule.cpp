@@ -31,8 +31,8 @@ unsigned int NoiseModule::nextRandomValue()
 		update();
 		mRandomValue = (mRandomValue << 1) | (mLfsrRegister & 1);
 	}
-	
-	mRandomValue &= 0xffff;
+
+	return mRandomValue &= 0xffff;
 }
 
 
@@ -47,7 +47,7 @@ void NoiseModule::update()
 	);
 	mLfsrRegister = (mLfsrRegister >> 1) ^ ((zero - (mLfsrRegister & lsb)) & feedback);
 }
-	
+
 
 void NoiseModule::cycle()
 {
@@ -56,31 +56,31 @@ void NoiseModule::cycle()
 		mAccumulator = 0;
 		reset();
 	}
-	
-	mPreviousSync = getInput(1);	
-	
+
+	mPreviousSync = getInput(1);
+
 	mAccumulator += std::max(0.0f, getInput(0)) / mSampleRate * 10000.0f;
-	
-	while (mAccumulator >= 1.0f) 
+
+	while (mAccumulator >= 1.0f)
 	{
 		mAccumulator -= 1.0f;
 		mRandomValue = nextRandomValue();
 	}
-	
+
 	setOutput(0, static_cast<float>(mLfsrRegister & 0x0ffff) / 32768.0f - 1.0f);
 	setOutput(1, static_cast<float>(mLfsrRegister & 0x0f000) / 32768.0f - 1.0f);
 	setOutput(2, static_cast<float>(mLfsrRegister & 0x10000) / 32768.0f - 1.0f);
 }
 
 
-const char * NoiseModule::getInputName(int input) const 
+const char * NoiseModule::getInputName(int input) const
 {
 	static const char *names[] = {"Frequency", "Sync"};
 	return names[input];
 }
 
 
-const char * NoiseModule::getOutputName(int output) const 
+const char * NoiseModule::getOutputName(int output) const
 {
 	static const char *names[] = {"Output", "4-Bit", "1-Bit"};
 	return names[output];
