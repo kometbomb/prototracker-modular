@@ -147,7 +147,8 @@ void ISynth::render(Sample16 *buffer, int numSamples)
 		// Run each thread/channel
 		for (int i = 0 ; i < mNumThreads && channel < SequenceRow::maxTracks ; ++i)
 		{
-			mThreads[i].render(mOscillator[channel++], mRenderBuffers[channel], numSamples);
+			mThreads[i].render(mOscillator[channel], mRenderBuffers[channel], numSamples);
+			channel++;
 		}
 
 		// Wait for all threads
