@@ -17,9 +17,9 @@
 #define TUNING 440.0
 #endif
 
-ModularSynth::ModularSynth(Synth& synth, IPlayer& player, bool isPausable)
+ModularSynth::ModularSynth(Synth& synth, IPlayer& player, bool isPausable, const ModularSynth* parent)
 	: mSynth(synth), mPlayer(player), mNumConnections(0), mFrequency(0), mVolume(0), mNoteTrigger(false),
-	mSilenceLength(0), mPaused(true), mIsPausable(isPausable)
+	mSilenceLength(0), mPaused(true), mIsPausable(isPausable), mParentSynth(parent)
 {
 	strcpy(mName, "");
 
@@ -38,14 +38,19 @@ ModularSynth::~ModularSynth()
 
 bool ModularSynth::addModule(int index, int moduleId)
 {
+	lockParent();
 	ModuleFactory moduleFactory;
 
 	if (mModules[index] != NULL)
+	{
+		unlockParent();
 		return false;
+	}
 
 	mModules[index] = moduleFactory.createModule(moduleId, *this);
 	mModules[index]->setSampleRate(mSampleRate);
 	mModules[index]->onLoaded();
+	unlockParent();
 
 	mSynthChangeListenable.notify();
 
@@ -113,13 +118,14 @@ void ModularSynth::removeConnection(int index)
 {
 	if (index < mNumConnections)
 	{
+		lockParent();
 		SynthConnection& connection = mConnections[index];
 		if (mModules[connection.toModule] != NULL)
 			mModules[connection.toModule]->setInput(connection.toInput, 0.0f);
 
 		mNumConnections--;
 		memmove(&mConnections[index], &mConnections[index + 1], sizeof(mConnections[index]) * (mNumConnections - index));
-
+		unlockParent();
 		mSynthChangeListenable.notify();
 	}
 }
@@ -267,6 +273,8 @@ void ModularSynth::swapModules(int fromModule, int toModule)
 
 void ModularSynth::removeModule(int index)
 {
+	lockParent();
+
 	if (mModules[index] != NULL)
 	{
 		delete mModules[index];
@@ -284,7 +292,13 @@ void ModularSynth::removeModule(int index)
 				++i;
 		}
 
+		unlockParent();
+
 		mSynthChangeListenable.notify();
+	}
+	else
+	{
+		unlockParent();
 	}
 }
 
@@ -492,6 +506,7 @@ void ModularSynth::setSampleRate(int rate)
 
 void ModularSynth::copy(const ModularSynth& source)
 {
+	lockParent();
 	strncpy(mName, source.getName(), sizeof(mName));
 
 	for (int i = 0 ; i < maxModules ; ++i)
@@ -502,7 +517,7 @@ void ModularSynth::copy(const ModularSynth& source)
 		const SynthModule *oldModule = source.getModule(i);
 		if (oldModule != NULL)
 		{
-			if (addModule(i, source.getModule(i)->getSynthId()))
+			if (addModule(i, oldModule->getSynthId()))
 			{
 				SynthModule *newModule = getModule(i);
 				newModule->copy(*oldModule);
@@ -517,12 +532,14 @@ void ModularSynth::copy(const ModularSynth& source)
 		const SynthConnection& connection = source.getConnection(i);
 		connectModules(connection.fromModule, connection.toModule, connection.fromOutput, connection.toInput);
 	}
+
+	unlockParent();
 }
 
 
 ModularSynth* ModularSynth::createEmpty(bool isPausable) const
 {
-	return new ModularSynth(mSynth, mPlayer, isPausable);
+	return new ModularSynth(mSynth, mPlayer, isPausable, this);
 }
 
 
@@ -628,4 +645,22 @@ void ModularSynth::addChangeListener(Listener* listener)
 float ModularSynth::getOutput(int index) const
 {
 	return mOutput[index];
+}
+
+
+void ModularSynth::lockParent() const
+{
+	if (mParentSynth == NULL)
+		lock();
+	else
+		mParentSynth->lockParent();
+}
+
+
+void ModularSynth::unlockParent() const
+{
+	if (mParentSynth == NULL)
+		unlock();
+	else
+		mParentSynth->unlockParent();
 }

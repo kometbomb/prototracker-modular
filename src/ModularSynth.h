@@ -20,6 +20,7 @@ public:
 	static const int nameLength = 16;
 
 private:
+	const ModularSynth* const mParentSynth;
 	char mName[nameLength + 1];
 	Synth& mSynth;
 	IPlayer& mPlayer;
@@ -43,8 +44,13 @@ private:
 
 	Listenable mSynthChangeListenable;
 
+protected:
+	// Lock the "root" ModularSynth
+	void lockParent() const;
+	void unlockParent() const;
+
 public:
-	ModularSynth(Synth& synth, IPlayer& player, bool isPausable = false);
+	ModularSynth(Synth& synth, IPlayer& player, bool isPausable = false, const ModularSynth* parent = NULL);
 	virtual ~ModularSynth();
 
 	const char *getName() const;

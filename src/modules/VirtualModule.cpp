@@ -39,7 +39,7 @@ void VirtualModule::cycle()
 	float keyOn = getInput(0);
 	if (keyOn > 0.5f && mPrevKeyonValue <= 0.5f)
 	{
-		gotoNextTrack();
+		gotoNextFreeTrack();
 
 		// Note triggered, notify currently queued track
 		getCurrentActiveTrack().triggerNote();
@@ -136,6 +136,7 @@ void VirtualModule::copy(const SynthModule& source)
 {
 	SynthModule::copy(source);
 	mContainerSynth[0]->copy(static_cast<const VirtualModule&>(source).getModularSynth());
+	cloneTracks();
 }
 
 
@@ -178,6 +179,7 @@ void VirtualModule::updateExtConnectionCounts()
 
 void VirtualModule::onLoaded()
 {
+	cloneTracks();
 	updateExtConnectionCounts();
 }
 
@@ -226,6 +228,8 @@ void VirtualModule::cloneTracks()
 
 	for (int i = 1 ; i < maxVirtualTracks ; ++i)
 		mContainerSynth[i]->copy(*mContainerSynth[0]);
+
+	debug("Clone done");
 }
 
 
