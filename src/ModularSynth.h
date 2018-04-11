@@ -84,6 +84,7 @@ public:
 	void onShow();
 
 	void addChangeListener(Listener* listener);
+	void removeChangeListener(Listener* listener);
 
 	void clear();
 
