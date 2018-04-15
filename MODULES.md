@@ -406,3 +406,29 @@ host synth. Looking from outside the Container, these show up as normal
 module inputs and outputs on the Container.
 
 Use the mouse wheel to select which input or output the modules connect to.
+
+### Virtual
+
+This module can be used to host multiple polyphonic instances of the same layout.
+The difference between a Container and a Virtual module is that Virtual
+only has left/right/mono audio outputs and the hosted layout needs to use the
+AudioOut module for any outputs. ExtIn modules can be used as with Container.
+
+Whenever the AudioOut signal is close to zero for some duration the track
+is stopped and queued as the next available track. This means all layouts
+should e.g. fade out when TriggerNote is not outputting a signal.
+
+The first input is required and it can be routed from e.g. TriggerNote.
+Whenever the first input is triggered a new virtual track is picked from the
+available tracks and the ExtIn signals are routed to the new track.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | KeyOn |
+| 1.. | ExtIn |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Mono out |
+| 1 | Left out |
+| 2 | Right out |
