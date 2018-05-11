@@ -237,3 +237,9 @@ void VirtualModule::onListenableChange(Listenable *listenable)
 {
 	cloneTracks();
 }
+
+
+Color VirtualModule::getModuleColor(bool isSelected) const
+{
+	return isSelected ? Color(48,128,112) : Color(48,128,80);
+}

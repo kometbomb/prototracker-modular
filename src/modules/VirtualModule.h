@@ -46,6 +46,8 @@ public:
 	virtual void onLoaded();
 	virtual void onShow();
 
+	virtual Color getModuleColor(bool isSelected) const;
+
 	virtual void copy(const SynthModule& source);
 
 	virtual void onListenableChange(Listenable *listenable);
