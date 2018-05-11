@@ -131,3 +131,9 @@ void ContainerModule::onShow()
 {
 	updateExtConnectionCounts();
 }
+
+
+Color ContainerModule::getModuleColor(bool isSelected) const
+{
+	return isSelected ? Color(48,48,112) : Color(48,48,80);
+}
