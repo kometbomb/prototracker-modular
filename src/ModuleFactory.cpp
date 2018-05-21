@@ -74,7 +74,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(ContainerModule);
 	REGISTER(ExtInModule);
 	REGISTER(ExtOutModule);
-    REGISTER(ValueModule);
+	REGISTER(ValueModule);
 }
 
 
