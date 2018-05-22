@@ -6,7 +6,7 @@ class EGModule: public SynthModule
 {
 	enum { Idle, Attack, Full, Decay } mState;
 	float mAmp;
-	bool mPrevKeyOn;
+	float mPrevKeyOn, mPrevHardReset;
 
 	EGModule(ModularSynth& synth);
 
