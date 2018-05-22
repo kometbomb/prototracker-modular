@@ -37,3 +37,7 @@ prototracker.js
 # Project stuff
 .vscode/*
 node_modules/*
+
+#mac rubbish
+
+.DS_Store

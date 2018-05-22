@@ -2,9 +2,9 @@
 
 #include "../SynthModule.h"
 
-class ValueModule: public SynthModule
+class DisplayModule: public SynthModule
 {
-	ValueModule(ModularSynth& synth);
+	DisplayModule(ModularSynth& synth);
 
 	char mInputValue[50];
 	int mType;
@@ -13,7 +13,7 @@ public:
 //	static const ModuleClass moduleClass = ModuleClass::{{moduleClass}};
 	static const int moduleId = 35;
 	static const int maxInstances = -1;
-	static constexpr const char *moduleName = "Value";
+	static constexpr const char *moduleName = "Display";
 
 	static SynthModule * createModule(ModularSynth& synth);
 

@@ -11,6 +11,7 @@ class OscilloscopeModule: public SynthModule
 		mSampleStart, mSampleEnd, mLastUpdated;
 
 	void initBuffer();
+	int mType;
 
 public:
 	~OscilloscopeModule();
@@ -23,6 +24,7 @@ public:
 	static SynthModule * createModule(ModularSynth& synth);
 
 	virtual void cycle();
+	virtual void onDial(int delta);
 	virtual void render(Renderer& renderer, const SDL_Rect& moduleArea, bool isSelected) const;
 	virtual void setSampleRate(int newRate);
 
