@@ -30,7 +30,6 @@ void EGModule::cycle()
 	switch (mState)
 	{
 		case Idle:
-			setOutput(2, 0.0f);
 			break;
 
 		case Attack:
