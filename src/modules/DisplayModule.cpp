@@ -9,7 +9,6 @@ DisplayModule::DisplayModule(ModularSynth& synth)
 
 void DisplayModule::cycle()
 {
-//	mInputValue = getInput(0); <- this didn't work. i am stupid
 	sprintf(mInputValue, "%.2f", getInput(0));
 
 	// Passthru

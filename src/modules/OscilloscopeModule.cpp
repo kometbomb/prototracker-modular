@@ -119,38 +119,15 @@ void OscilloscopeModule::render(Renderer& renderer, const SDL_Rect& moduleArea, 
 	int bufPos = mSampleStart;
 	int maxAmp = moduleArea.h / 2;
 	int py = std::max(-maxAmp, std::min(maxAmp - 1, static_cast<int>(mBuffer[bufPos] * maxAmp)));
-	switch (mType)
-	{
-		default:
-		case 0: {
-			// normal
-			for (int x = 1 ; x < moduleArea.w ; ++x)
-			{
-				bufPos = (x * mSampleLength / moduleArea.w + mSampleStart) % mBufferLength;
-				int y = std::max(-maxAmp, std::min(maxAmp - 1, static_cast<int>(mBuffer[bufPos] * maxAmp)));
-				renderer.renderLine(moduleArea.x + x - 1, -py + moduleArea.y + moduleArea.h / 2, moduleArea.x + x, -y + moduleArea.y + moduleArea.h / 2, Color(255, 255, 255));
-				
-				//	y values were drawn inverted onto the rect due to point of origin being 0 (top of rectangle)
-				//	and they were being added to the height offset (so negative values showed above zero
-				//	line & positive below zero) inverting the calculated y variables seems to fix this
-				
-				py = y;
-			}
-		} break;
-			
-		case 1: {
-			// inverted
-			for (int x = 1 ; x < moduleArea.w ; ++x)
-			{
-				bufPos = (x * mSampleLength / moduleArea.w + mSampleStart) % mBufferLength;
-				int y = std::max(-maxAmp, std::min(maxAmp - 1, static_cast<int>(mBuffer[bufPos] * maxAmp)));
-				renderer.renderLine(moduleArea.x + x - 1, py + moduleArea.y + moduleArea.h / 2, moduleArea.x + x, y + moduleArea.y + moduleArea.h / 2, Color(255, 255, 255));
-				
-				py = y;
-			}
 
-		} break;
-			
+	for (int x = 1 ; x < moduleArea.w ; ++x)
+	{
+		bufPos = (x * mSampleLength / moduleArea.w + mSampleStart) % mBufferLength;
+		int y = std::max(-maxAmp, std::min(maxAmp - 1, static_cast<int>(mBuffer[bufPos] * maxAmp)));
+
+		renderer.renderLine(moduleArea.x + x - 1, -py + moduleArea.y + moduleArea.h / 2, moduleArea.x + x, -y + moduleArea.y + moduleArea.h / 2, Color(255, 255, 255));
+
+		py = y;
 	}
 
 }
