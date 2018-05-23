@@ -425,7 +425,7 @@ available tracks and the ExtIn signals are routed to the new track.
 | Input | Description  |
 |-------|--------------|
 | 0 | KeyOn |
-| 1.. | ExtIn |
+| 1.. | ExtIn 0.. |
 
 | Output | Description  |
 |--------|--------------|
