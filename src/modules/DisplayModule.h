@@ -6,7 +6,7 @@ class DisplayModule: public SynthModule
 {
 	DisplayModule(ModularSynth& synth);
 	
-	mutable char strValue[50];
+	mutable char mValueStr[50];
 
 public:
 	static const int moduleId = 35;
@@ -18,7 +18,7 @@ public:
 	virtual void cycle();
 	virtual void render(Renderer& renderer, const SDL_Rect& moduleArea, bool isSelected) const;
 	virtual void onLoaded();
-	virtual void stringMeUp(float value) const;
+	virtual void floatToChar(float value) const;
 
 	virtual const char * getName() const;
 	virtual const char * getInputName(int input) const;

@@ -31,14 +31,14 @@ const char * DisplayModule::getOutputName(int output) const
 
 const char * DisplayModule::getName() const
 {
-	return strValue;
+	return mValueStr;
 }
 
 
 void DisplayModule::onLoaded()
 {
 	setInput(0, 0.0f);
-	stringMeUp(getInput(0));
+	floatToChar(getInput(0));
 }
 
 
@@ -52,14 +52,14 @@ void DisplayModule::render(Renderer& renderer, const SDL_Rect& moduleArea, bool 
 {
 	renderer.renderRect(moduleArea, getModuleColor(isSelected));
 	
-	stringMeUp(getInput(0));
+	floatToChar(getInput(0));
 	
 	SDL_Rect textArea = {moduleArea.x + 2, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
 	renderer.renderText(textArea, Color(255,255,255), getName());
 }
 
 
-void DisplayModule::stringMeUp(float value) const
+void DisplayModule::floatToChar(float value) const
 {
-	sprintf(strValue, "%.2f", value);
+	sprintf(mValueStr, "%.2f", value);
 }
