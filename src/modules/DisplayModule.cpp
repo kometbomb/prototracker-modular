@@ -4,15 +4,13 @@
 #include <functional>
 
 DisplayModule::DisplayModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 1, 1, 0), floatInput(0)
+	:SynthModule(synth, moduleId, 1, 1, 0)
 {
 }
 
 
 void DisplayModule::cycle()
 {
-	floatInput = getInput(0);
-	
 	// Passthru
 	setOutput(0, getInput(0));
 }
@@ -41,7 +39,6 @@ const char * DisplayModule::getName() const
 void DisplayModule::onLoaded()
 {
 	setInput(0, 0.0f);
-	stringMeUp(getInput(0));
 }
 
 
@@ -64,10 +61,8 @@ void DisplayModule::render(Renderer& renderer, const SDL_Rect& moduleArea, bool 
 {
 	renderer.renderRect(moduleArea, getModuleColor(isSelected));
 	
-	
-	
 	SDL_Rect textArea = {moduleArea.x + 2, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
-	renderer.renderText(textArea, Color(255,255,255), stringMeUp(floatInput));
+	renderer.renderText(textArea, Color(255,255,255), stringMeUp(getInput(0)));
 }
 
 
