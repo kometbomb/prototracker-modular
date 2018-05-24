@@ -6,8 +6,6 @@ class DisplayModule: public SynthModule
 {
 	DisplayModule(ModularSynth& synth);
 
-	float floatInput;
-
 public:
 	static const int moduleId = 35;
 	static const int maxInstances = -1;
