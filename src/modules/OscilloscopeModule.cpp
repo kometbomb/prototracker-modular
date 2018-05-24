@@ -132,8 +132,3 @@ void OscilloscopeModule::render(Renderer& renderer, const SDL_Rect& moduleArea, 
 
 }
 
-void OscilloscopeModule::onDial(int delta)
-{
-	mType = (static_cast<int>(static_cast<float>(delta) + mParams[0]) + 2) % 2;
-	setParam(0, mType);
-}
