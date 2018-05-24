@@ -32,7 +32,7 @@ const char * DisplayModule::getOutputName(int output) const
 
 const char * DisplayModule::getName() const
 {
-	return "Display";
+	return strValue;
 }
 
 void DisplayModule::onLoaded()
@@ -41,12 +41,9 @@ void DisplayModule::onLoaded()
 }
 
 
-char * DisplayModule::stringMeUp(float value) const
+void DisplayModule::stringMeUp(float value) const
 {
-	static char funky[20];
-	sprintf(funky, "%.2f", value);
-	
-	return funky;
+	sprintf(strValue, "%.2f", value);
 }
 
 
@@ -60,8 +57,10 @@ void DisplayModule::render(Renderer& renderer, const SDL_Rect& moduleArea, bool 
 {
 	renderer.renderRect(moduleArea, getModuleColor(isSelected));
 	
+	stringMeUp(getInput(0));
+	
 	SDL_Rect textArea = {moduleArea.x + 2, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
-	renderer.renderText(textArea, Color(255,255,255), stringMeUp(getInput(0)));
+	renderer.renderText(textArea, Color(255,255,255), getName());
 }
 
 
