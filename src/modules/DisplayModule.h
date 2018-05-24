@@ -15,9 +15,9 @@ public:
 
 	static SynthModule * createModule(ModularSynth& synth);
 
-	virtual void onLoaded();
-	virtual void render(Renderer& renderer, const SDL_Rect& moduleArea, bool isSelected) const;
 	virtual void cycle();
+	virtual void render(Renderer& renderer, const SDL_Rect& moduleArea, bool isSelected) const;
+	virtual void onLoaded();
 	virtual void stringMeUp(float value) const;
 
 	virtual const char * getName() const;

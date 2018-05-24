@@ -15,7 +15,6 @@ void DisplayModule::cycle()
 }
 
 
-
 const char * DisplayModule::getInputName(int input) const
 {
 	static const char *names[] = {"Input"};
@@ -35,15 +34,11 @@ const char * DisplayModule::getName() const
 	return strValue;
 }
 
+
 void DisplayModule::onLoaded()
 {
 	setInput(0, 0.0f);
-}
-
-
-void DisplayModule::stringMeUp(float value) const
-{
-	sprintf(strValue, "%.2f", value);
+	stringMeUp(getInput(0));
 }
 
 
@@ -64,3 +59,7 @@ void DisplayModule::render(Renderer& renderer, const SDL_Rect& moduleArea, bool 
 }
 
 
+void DisplayModule::stringMeUp(float value) const
+{
+	sprintf(strValue, "%.2f", value);
+}
