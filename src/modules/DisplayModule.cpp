@@ -31,7 +31,7 @@ const char * DisplayModule::getOutputName(int output) const
 
 const char * DisplayModule::getName() const
 {
-	return mValueStr;
+	return "Display";
 }
 
 
@@ -55,11 +55,15 @@ void DisplayModule::render(Renderer& renderer, const SDL_Rect& moduleArea, bool 
 	floatToChar(getInput(0));
 	
 	SDL_Rect textArea = {moduleArea.x + 2, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
-	renderer.renderText(textArea, Color(255,255,255), getName());
+	renderer.renderText(textArea, Color(255,255,255), floatToChar(getInput(0)));
 }
 
 
-void DisplayModule::floatToChar(float value) const
+char * DisplayModule::floatToChar(float value) const
 {
+	static char mValueStr[25];
+	
 	sprintf(mValueStr, "%.2f", value);
+	
+	return mValueStr;
 }
