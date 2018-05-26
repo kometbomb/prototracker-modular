@@ -457,6 +457,11 @@ creating stereo reverb effects.
 This can be used to host another whole synth inside a synth. The inputs
 and outputs depend on the contained input/output modules.
 
+Double click the module to access its insides. You can use CTRL+O and
+CTRL+S to load and save whatever is inside the module. To use partials,
+first create a Container, double-click and load a new synth partial with
+CTRL+O.
+
 ### ExtIn/ExtOut
 
 These modules act as the interface between the Container module and the
