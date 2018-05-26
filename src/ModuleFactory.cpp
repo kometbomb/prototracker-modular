@@ -28,6 +28,7 @@
 #include "modules/TriggerNoteModule.h"
 #include "modules/TickModule.h"
 #include "modules/LinearModule.h"
+#include "modules/LerpModule.h"
 #include "modules/OscilloscopeModule.h"
 #include "modules/VUMeterModule.h"
 #include "modules/ContainerModule.h"
@@ -57,6 +58,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(ClampModule);
 	REGISTER(ShapeModule);
 	REGISTER(LinearModule);
+	REGISTER(LerpModule);
 	REGISTER(DistortionModule);
 	REGISTER(BitsModule);
 	REGISTER(DelayModule);

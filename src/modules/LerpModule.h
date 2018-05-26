@@ -2,18 +2,14 @@
 
 #include "../SynthModule.h"
 
-class EGModule: public SynthModule
+class LerpModule: public SynthModule
 {
-	enum { Idle, Attack, Full, Decay } mState;
-	float mAmp;
-	float mPrevKeyOn, mPrevHardReset;
-
-	EGModule(ModularSynth& synth);
+	LerpModule(ModularSynth& synth);
 
 public:
-	static const int moduleId = 14;
+	static const int moduleId = 37;
 	static const int maxInstances = -1;
-	static constexpr const char *moduleName = "EG";
+	static constexpr const char *moduleName = "Lerp";
 
 	static SynthModule * createModule(ModularSynth& synth);
 
@@ -22,5 +18,4 @@ public:
 	virtual const char * getName() const;
 	virtual const char * getInputName(int input) const;
 	virtual const char * getOutputName(int output) const;
-
 };
