@@ -14,4 +14,6 @@ Here's a list of reserved module IDs.
 | 29 | oscilloscope-module |
 | 31 | vu-meter |
 | 32-34 | module-container |
-| 35 | virtual-tracks |
+| 35 | pull-21 |
+| 36 | virtual-track | 
+| 37 | eg-hard-reset |

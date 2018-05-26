@@ -95,18 +95,22 @@ to visualize values between -1 and 1.
 
 ### EG
 
-Generates a simple attack-decay envelope. Key down input
+Generates a simple attack-decay envelope. The envelope output will rise from 0.0 to 1.0 and stay at 1.0 until key down input is released.
+The hard reset input does the same but also sets the envelope volume to zero when triggered but it will NOT keep the envelope at full
+output (the decay state will automatically start after the envelope reaches 1.0).
 
 | Input | Description  |
 |-------|--------------|
 | 0 | Attack time (in seconds) |
 | 1 | Decay time (in seconds) |
 | 2 | Key down (>0.5 = down) |
+| 3 | Key down with hard reset |
 
 | Output | Description  |
 |--------|--------------|
 | 0 | Envelope amplitude (0..1) |
 | 1 | Envelope finished (pulse 1 when finished, 0 otherwise) |
+| 2 | Envelope state (0 = attack, 1 = decay) |
 
 ### Accumulator
 
@@ -329,6 +333,20 @@ Splits input A two outputs based on input B. In other words, use this to create 
 |--------|--------------|
 | 0 | Output A |
 | 1 | Output B |
+
+### Lerp
+
+This module takes in two inputs and interpolates (linearly) between the two inputs.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Input A |
+| 1 | Mix (0 = output A, 1.0 = output B) |
+| 2 | Input B |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Output |
 
 ### Filter
 
