@@ -25,7 +25,7 @@ protected:
 	const ModularSynth& getModularSynth() const;
 
 public:
-	static const int moduleId = 35;
+	static const int moduleId = 36;
 	static const int maxInstances = -1;
 	static constexpr const char *moduleName = "Virtual";
 
