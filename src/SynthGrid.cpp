@@ -960,7 +960,9 @@ void SynthGrid::pasteSynth()
 	synth.unlock();
 
 	rebuildWires();
-
+	
+	refreshView();
+	
 	showMessageV(MessageInfo, "Synth layout pasted");
 
 	notify();

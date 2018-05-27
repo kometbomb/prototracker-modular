@@ -73,7 +73,7 @@ public:
 	virtual void showMessage(MessageClass messageClass, const char* message);
 	virtual void showTooltip(const SDL_Rect& area, const char* message);
 
-	void cycleFocus();
+	void cycleFocus(int direction);
 	void syncPlayerState();
 
 	virtual void onUpdate(int ms);

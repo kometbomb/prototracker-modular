@@ -304,7 +304,14 @@ bool MainEditor::onEvent(SDL_Event& event)
 					return true;
 
 				case SDLK_ESCAPE:
-					cycleFocus();
+					if (event.key.keysym.mod & KMOD_SHIFT)
+					{
+						cycleFocus(-1);
+					}
+					else
+					{
+						cycleFocus(1);
+					}
 					return true;
 
 				case SDLK_PERIOD:
@@ -382,7 +389,7 @@ bool MainEditor::onEvent(SDL_Event& event)
 					break;
 
 				case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
-					cycleFocus();
+					cycleFocus(1);
 					return true;
 					break;
 			}
@@ -408,7 +415,7 @@ void MainEditor::setMacro(int index)
 }
 
 
-void MainEditor::cycleFocus()
+void MainEditor::cycleFocus(int direction)
 {
 	int index = 0;
 	Editor *currentFocus = getFocus();
@@ -421,13 +428,26 @@ void MainEditor::cycleFocus()
 
 	if (index >= mNumChildren)
 		index = 0;
-
-	do
+	
+	switch (direction)
 	{
-		index = (index + 1) % mNumChildren;
+		case 1:
+			do
+			{
+				index = (index + 1) % mNumChildren;
+			}
+			while (!mChildren[index]->isFocusable());
+			break;
+	
+		case -1:
+			do
+			{
+				index = (index + (mNumChildren - 1)) % mNumChildren;
+			}
+			while (!mChildren[index]->isFocusable());
+			break;
 	}
-	while (!mChildren[index]->isFocusable());
-
+	
 	setFocus(mChildren[index]);
 
 	setDirty(true);

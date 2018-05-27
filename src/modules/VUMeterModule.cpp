@@ -78,7 +78,7 @@ void VUMeterModule::render(Renderer& renderer, const SDL_Rect& moduleArea, bool 
 
 void VUMeterModule::onDial(int delta)
 {
-	if (delta == 1)
+	if (delta == 1 || delta == 0)
 	{
 		mType = 0;
 	}
