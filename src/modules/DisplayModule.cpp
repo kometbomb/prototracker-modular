@@ -57,7 +57,6 @@ void DisplayModule::render(Renderer& renderer, const SDL_Rect& moduleArea, bool 
 	{
 		SDL_Rect textArea = {moduleArea.x - 10, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
 		renderer.renderText(textArea, Color(255,255,255), floatToChar(getInput(0)));
-//		debug(floatToChar(getInput(0)));
 	}
 	else if (getInput(0) < 0)
 	{
@@ -65,7 +64,6 @@ void DisplayModule::render(Renderer& renderer, const SDL_Rect& moduleArea, bool 
 		
 		SDL_Rect textArea = {moduleArea.x - 10, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
 		renderer.renderText(textArea, Color(170,170,170), floatToChar(input));
-//		debug(floatToChar(input));
 	}
 	
 }

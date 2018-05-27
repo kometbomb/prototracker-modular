@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		30045DEC20BAF6CE00DEC5CE /* IntModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30045DEA20BAF6CE00DEC5CE /* IntModule.cpp */; };
 		303BC95420B4E9500098413A /* proto.icns in Resources */ = {isa = PBXBuildFile; fileRef = 303BC95320B4E9500098413A /* proto.icns */; };
 		304927F320B4B4410038E787 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 304927F220B4B4410038E787 /* Cocoa.framework */; };
 		3049280720B4B5E50038E787 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 3049280620B4B5E50038E787 /* assets */; };
@@ -133,6 +134,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		30045DEA20BAF6CE00DEC5CE /* IntModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IntModule.cpp; sourceTree = "<group>"; };
+		30045DEB20BAF6CE00DEC5CE /* IntModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntModule.h; sourceTree = "<group>"; };
 		303BC95320B4E9500098413A /* proto.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = proto.icns; path = "Prototracker Modular/proto.icns"; sourceTree = "<group>"; };
 		304927C820B4B1D90038E787 /* Prototracker Modular.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prototracker Modular.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		304927CC20B4B1D90038E787 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Prototracker Modular/Info.plist"; sourceTree = "<group>"; };
@@ -597,6 +600,8 @@
 				307A81BB20B5EC2900C1FA54 /* FrequencyInModule.h */,
 				307A81BC20B5EC2900C1FA54 /* GlideModule.cpp */,
 				307A81BD20B5EC2900C1FA54 /* GlideModule.h */,
+				30045DEA20BAF6CE00DEC5CE /* IntModule.cpp */,
+				30045DEB20BAF6CE00DEC5CE /* IntModule.h */,
 				307A81BE20B5EC2900C1FA54 /* LinearModule.cpp */,
 				307A81BF20B5EC2900C1FA54 /* LinearModule.h */,
 				307A81C020B5EC2900C1FA54 /* MixerModule.cpp */,
@@ -711,6 +716,7 @@
 				307A827620B5EC2900C1FA54 /* TrackEditor.cpp in Sources */,
 				307A822A20B5EC2900C1FA54 /* Color.cpp in Sources */,
 				307A822720B5EC2900C1FA54 /* TouchRegion.cpp in Sources */,
+				30045DEC20BAF6CE00DEC5CE /* IntModule.cpp in Sources */,
 				307A822020B5EC2900C1FA54 /* ModuleFactory.cpp in Sources */,
 				307A825920B5EC2900C1FA54 /* RMSModule.cpp in Sources */,
 				307A824B20B5EC2900C1FA54 /* ExtInModule.cpp in Sources */,
