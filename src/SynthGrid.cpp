@@ -537,7 +537,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 			int dialSpeed = 1;
 			SDL_Keymod modState = SDL_GetModState();
 
-			if (modState & KMOD_CTRL)
+			if (modState & KMOD_ALT)
 				dialSpeed = 5;
 
 			if (modState & KMOD_SHIFT)
@@ -574,7 +574,23 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					return true;
 
 				case SDLK_F3:
-					copySynth();
+					if (event.key.keysym.mod & (KMOD_SHIFT))
+					{
+						copySynth();
+						for (int index = 0 ; index < ModularSynth::maxModules ; ++index)
+						{
+							ModularSynth& modularSynth = getModularSynth();
+							modularSynth.lock();
+							modularSynth.removeModule(index);
+							modularSynth.unlock();
+//							rebuildWires();
+//							mMode = IDLE;
+						}
+					}
+					else
+					{
+						copySynth();
+					}
 					return true;
 
 				case SDLK_F4:

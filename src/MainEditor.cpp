@@ -257,7 +257,7 @@ bool MainEditor::onEvent(SDL_Event& event)
 
 				/* F5 and F6 also used for laptops etc. keyboards with (very) limited key layout */
 				case SDLK_F5:
-				case SDLK_RCTRL:
+//				case SDLK_RCTRL:
 					mPlayer.play(mEditorState.sequenceEditor.currentRow);
 					mEditorState.editMode = false;
 					refreshAll();
@@ -265,7 +265,7 @@ bool MainEditor::onEvent(SDL_Event& event)
 
 				/* F5 and F6 also used for laptops etc. keyboards with (very) limited key layout */
 				case SDLK_F6:
-				case SDLK_RSHIFT:
+//				case SDLK_RSHIFT:
 					mPlayer.play(mEditorState.sequenceEditor.currentRow, PlayerState::PlaySequenceRow);
 					mEditorState.editMode = false;
 					refreshAll();
@@ -311,6 +311,7 @@ bool MainEditor::onEvent(SDL_Event& event)
 					if (!(event.key.keysym.mod & KMOD_SHIFT))
 						break;
 				case SDLK_KP_PLUS:
+				case SDLK_EQUALS:
 					if (mEditorState.macro < Song::maxMacros - 1)
 						++mEditorState.macro;
 					setMacro(mEditorState.macro);
@@ -320,6 +321,7 @@ bool MainEditor::onEvent(SDL_Event& event)
 					if (!(event.key.keysym.mod & KMOD_SHIFT))
 						break;
 				case SDLK_KP_MINUS:
+				case SDLK_MINUS:
 					if (mEditorState.macro > 0)
 						--mEditorState.macro;
 					setMacro(mEditorState.macro);

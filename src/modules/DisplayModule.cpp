@@ -1,6 +1,7 @@
 #include "DisplayModule.h"
 #include "../Renderer.h"
 #include <cstdio>
+#include "Debug.h"
 
 DisplayModule::DisplayModule(ModularSynth& synth)
 	:SynthModule(synth, moduleId, 1, 1, 0)
@@ -52,18 +53,29 @@ void DisplayModule::render(Renderer& renderer, const SDL_Rect& moduleArea, bool 
 {
 	renderer.renderRect(moduleArea, getModuleColor(isSelected));
 	
-	floatToChar(getInput(0));
+	if (getInput(0) >= 0)
+	{
+		SDL_Rect textArea = {moduleArea.x - 10, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
+		renderer.renderText(textArea, Color(255,255,255), floatToChar(getInput(0)));
+//		debug(floatToChar(getInput(0)));
+	}
+	else if (getInput(0) < 0)
+	{
+		float input = getInput(0) * -1;
+		
+		SDL_Rect textArea = {moduleArea.x - 10, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
+		renderer.renderText(textArea, Color(170,170,170), floatToChar(input));
+//		debug(floatToChar(input));
+	}
 	
-	SDL_Rect textArea = {moduleArea.x + 2, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
-	renderer.renderText(textArea, Color(255,255,255), floatToChar(getInput(0)));
 }
 
 
 char * DisplayModule::floatToChar(float value) const
 {
-	static char mValueStr[25];
+	static char valueStr[25];
 	
-	sprintf(mValueStr, "%.2f", value);
+	snprintf(valueStr, 25, "%+06.2f", value);
 	
-	return mValueStr;
+	return valueStr;
 }
