@@ -135,5 +135,5 @@ void ContainerModule::onShow()
 
 Color ContainerModule::getModuleColor(bool isSelected) const
 {
-	return isSelected ? Color(48,48,112) : Color(48,48,80);
+	return isSelected ? Color(64,64,112) : Color(48,48,80);
 }

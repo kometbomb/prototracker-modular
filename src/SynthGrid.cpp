@@ -623,54 +623,88 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				}
 					
 				case SDLK_UP:
-				{
-					ModularSynth& modularSynth = getModularSynth();
-					
-					if(!(mSelectedModule - 4 < 0) && modularSynth.getModule(mSelectedModule - 4) != NULL)
+					if (event.key.keysym.mod & (KMOD_SHIFT))
 					{
-						mSelectedModule -= 4;
+						ModularSynth& modularSynth = getModularSynth();
+						int dialSpeed = 1;
+//						SDL_Keymod modState = SDL_GetModState();
+//						
+//						if (modState & KMOD_ALT)
+//						{
+//							dialSpeed = 5;
+//						}
+						
+						modularSynth.lock();
+						modularSynth.getModule(mSelectedModule)->onDial(dialSpeed);
+						modularSynth.unlock();
+						setDirty(true);
 					}
-					else if (!(mSelectedModule - 4 < 0) && modularSynth.getModule(mSelectedModule - 4) == NULL)
+					else
 					{
-						int index = mSelectedModule;
-							
-						while (index - 4 >= 0)
+						ModularSynth& modularSynth = getModularSynth();
+						
+						if(!(mSelectedModule - 4 < 0) && modularSynth.getModule(mSelectedModule - 4) != NULL)
 						{
-							index -= 4;
-							if (modularSynth.getModule(index) != NULL)
+							mSelectedModule -= 4;
+						}
+						else if (!(mSelectedModule - 4 < 0) && modularSynth.getModule(mSelectedModule - 4) == NULL)
+						{
+							int index = mSelectedModule;
+								
+							while (index - 4 >= 0)
 							{
-								mSelectedModule = index;
-								break;
+								index -= 4;
+								if (modularSynth.getModule(index) != NULL)
+								{
+									mSelectedModule = index;
+									break;
+								}
 							}
 						}
 					}
 					return true;
-				}
 					
 				case SDLK_DOWN:
-				{
-					ModularSynth& modularSynth = getModularSynth();
-					
-					if (!(mSelectedModule + 4 >= ModularSynth::maxModules) && modularSynth.getModule(mSelectedModule + 4) != NULL)
+					if (event.key.keysym.mod & (KMOD_SHIFT))
 					{
-						mSelectedModule += 4;
+						ModularSynth& modularSynth = getModularSynth();
+						int dialSpeed = 1;
+//						SDL_Keymod modState = SDL_GetModState();
+//						
+//						if (modState & KMOD_ALT)
+//						{
+//							dialSpeed = 5;
+//						}
+							
+						modularSynth.lock();
+						modularSynth.getModule(mSelectedModule)->onDial(-dialSpeed);
+						modularSynth.unlock();
+						setDirty(true);
 					}
-					else if(!(mSelectedModule + 4 >= ModularSynth::maxModules) && modularSynth.getModule(mSelectedModule + 4) == NULL)
+					else
 					{
-						int index = mSelectedModule;
+						ModularSynth& modularSynth = getModularSynth();
 						
-						while (index + 4 <= ModularSynth::maxModules - 1)
+						if (!(mSelectedModule + 4 >= ModularSynth::maxModules) && modularSynth.getModule(mSelectedModule + 4) != NULL)
 						{
-							index += 4;
-							if (modularSynth.getModule(index) != NULL)
+							mSelectedModule += 4;
+						}
+						else if(!(mSelectedModule + 4 >= ModularSynth::maxModules) && modularSynth.getModule(mSelectedModule + 4) == NULL)
+						{
+							int index = mSelectedModule;
+							
+							while (index + 4 <= ModularSynth::maxModules - 1)
 							{
-								mSelectedModule = index;
-								break;
+								index += 4;
+								if (modularSynth.getModule(index) != NULL)
+								{
+									mSelectedModule = index;
+									break;
+								}
 							}
 						}
 					}
 					return true;
-				}
 					
 				case SDLK_BACKSPACE:
 					gotoParentSynth();
