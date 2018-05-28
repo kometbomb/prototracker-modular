@@ -574,39 +574,108 @@ bool SynthGrid::onEvent(SDL_Event& event)
 			{
 				case SDLK_RIGHT:
 				{
-					int index = mSelectedModule;
-					mSelectedModule += 1;
-					if (mSelectedModule % 4 == 0)
-						mSelectedModule = index;
-					if (mSelectedModule >= ModularSynth::maxModules)
-						mSelectedModule = ModularSynth::maxModules - 1;
+					ModularSynth& modularSynth = getModularSynth();
+					
+					if((mSelectedModule + 1) % 4 != 0 && modularSynth.getModule(mSelectedModule + 1) != NULL)
+					{
+						if (mSelectedModule + 1 <= ModularSynth::maxModules - 1)
+						{
+							mSelectedModule += 1;
+						}
+					}
+					else if (modularSynth.getModule(mSelectedModule + 1) == NULL)
+					{
+						int index = mSelectedModule;
+						
+						while (index + 1 <= ModularSynth::maxModules - 1)
+						{
+							index += 1;
+							if (modularSynth.getModule(index) != NULL)
+							{
+								mSelectedModule = index;
+								break;
+							}
+						}
+					}
 					return true;
 				}
+					
 				case SDLK_LEFT:
 				{
-					int index = mSelectedModule;
-					mSelectedModule -= 1;
-					if (mSelectedModule % 4 == 3)
-						mSelectedModule = index;
-					if (mSelectedModule < 0)
-						mSelectedModule = 0;
+					ModularSynth& modularSynth = getModularSynth();
+					
+					if((mSelectedModule - 1) % 4 != 3 && modularSynth.getModule(mSelectedModule - 1) != NULL)
+					{
+						if (mSelectedModule - 1 >= 0)
+						{
+							mSelectedModule -= 1;
+						}
+
+					}
+					else if (modularSynth.getModule(mSelectedModule - 1) == NULL)
+					{
+						int index = mSelectedModule;
+						
+						while (index - 1 >= 0)
+						{
+							index -= 1;
+							if (modularSynth.getModule(index) != NULL)
+							{
+								mSelectedModule = index;
+								break;
+							}
+						}
+					}
 					return true;
 				}
+					
 				case SDLK_UP:
 				{
-					int index = mSelectedModule;
-					mSelectedModule -= 4;
-					if (mSelectedModule < 0)
-						mSelectedModule = index;
+					ModularSynth& modularSynth = getModularSynth();
+					
+					if(!(mSelectedModule - 4 < 0) && modularSynth.getModule(mSelectedModule - 4) != NULL)
+					{
+						mSelectedModule -= 4;
+					}
+					else if (!(mSelectedModule - 4 < 0) && modularSynth.getModule(mSelectedModule - 4) == NULL)
+					{
+						int index = mSelectedModule;
+							
+						while (index - 4 >= 0)
+						{
+							index -= 4;
+							if (modularSynth.getModule(index) != NULL)
+							{
+								mSelectedModule = index;
+								break;
+							}
+						}
+					}
 					return true;
 				}
 					
 				case SDLK_DOWN:
 				{
-					int index = mSelectedModule;
-					mSelectedModule += 4;
-					if (mSelectedModule >= ModularSynth::maxModules)
-						mSelectedModule = index;
+					ModularSynth& modularSynth = getModularSynth();
+					
+					if (!(mSelectedModule + 4 >= ModularSynth::maxModules) && modularSynth.getModule(mSelectedModule + 4) != NULL)
+					{
+						mSelectedModule += 4;
+					}
+					else if(!(mSelectedModule + 4 >= ModularSynth::maxModules) && modularSynth.getModule(mSelectedModule + 4) == NULL)
+					{
+						int index = mSelectedModule;
+						
+						while (index + 4 <= ModularSynth::maxModules - 1)
+						{
+							index += 4;
+							if (modularSynth.getModule(index) != NULL)
+							{
+								mSelectedModule = index;
+								break;
+							}
+						}
+					}
 					return true;
 				}
 					
