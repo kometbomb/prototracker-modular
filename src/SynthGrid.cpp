@@ -576,12 +576,9 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				{
 					ModularSynth& modularSynth = getModularSynth();
 					
-					if((mSelectedModule + 1) % 4 != 0 && modularSynth.getModule(mSelectedModule + 1) != NULL)
+					if (mSelectedModule + 1 <= ModularSynth::maxModules - 1 && modularSynth.getModule(mSelectedModule + 1) != NULL)
 					{
-						if (mSelectedModule + 1 <= ModularSynth::maxModules - 1)
-						{
-							mSelectedModule += 1;
-						}
+						mSelectedModule += 1;
 					}
 					else if (modularSynth.getModule(mSelectedModule + 1) == NULL)
 					{
@@ -604,13 +601,9 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				{
 					ModularSynth& modularSynth = getModularSynth();
 					
-					if((mSelectedModule - 1) % 4 != 3 && modularSynth.getModule(mSelectedModule - 1) != NULL)
+					if (mSelectedModule - 1 >= 0 && modularSynth.getModule(mSelectedModule - 1) != NULL)
 					{
-						if (mSelectedModule - 1 >= 0)
-						{
-							mSelectedModule -= 1;
-						}
-
+						mSelectedModule -= 1;
 					}
 					else if (modularSynth.getModule(mSelectedModule - 1) == NULL)
 					{
