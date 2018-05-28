@@ -269,6 +269,9 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 	}
 
 	renderer.renderBackground(area);
+	
+//	SDL_Rect focused = {area.x, area.y + 1, area.w, area.h - 2};
+//	renderer.drawRect(focused, Color(255,64,64));
 
 	/*for (const auto& node : mNetwork)
 	{
@@ -569,6 +572,36 @@ bool SynthGrid::onEvent(SDL_Event& event)
 		{
 			switch (event.key.keysym.sym)
 			{
+				case SDLK_RIGHT:
+					mSelectedModule += 1;
+					if (mSelectedModule >= ModularSynth::maxModules)
+						mSelectedModule = ModularSynth::maxModules - 1;
+					return true;
+					
+				case SDLK_LEFT:
+					mSelectedModule -= 1;
+					if (mSelectedModule < 0)
+						mSelectedModule = 0;
+					return true;
+					
+				case SDLK_UP:
+				{
+					int index = mSelectedModule;
+					mSelectedModule -= 4;
+					if (mSelectedModule < 0)
+						mSelectedModule = index;
+					return true;
+				}
+					
+				case SDLK_DOWN:
+				{
+					int index = mSelectedModule;
+					mSelectedModule += 4;
+					if (mSelectedModule >= ModularSynth::maxModules)
+						mSelectedModule = index;
+					return true;
+				}
+					
 				case SDLK_BACKSPACE:
 					gotoParentSynth();
 					return true;

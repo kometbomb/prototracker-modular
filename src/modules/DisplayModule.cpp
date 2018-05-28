@@ -52,9 +52,13 @@ SynthModule * DisplayModule::createModule(ModularSynth& synth)
 void DisplayModule::render(Renderer& renderer, const SDL_Rect& moduleArea, bool isSelected) const
 {
 	renderer.renderRect(moduleArea, getModuleColor(isSelected));
+	SDL_Rect sign = {moduleArea.x + 3, moduleArea.y + 3, 5, 1};
+	SDL_Rect cross = {moduleArea.x + 5, moduleArea.y + 1, 1, 5};
 	
 	if (getInput(0) >= 0)
 	{
+		renderer.renderRect(sign, Color(255,255,255));
+		renderer.renderRect(cross, Color(255,255,255));
 		SDL_Rect textArea = {moduleArea.x - 10, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
 		renderer.renderText(textArea, Color(255,255,255), floatToChar(getInput(0)));
 	}
@@ -62,6 +66,7 @@ void DisplayModule::render(Renderer& renderer, const SDL_Rect& moduleArea, bool 
 	{
 		float input = getInput(0) * -1;
 		
+		renderer.renderRect(sign, Color(255,255,255));
 		SDL_Rect textArea = {moduleArea.x - 10, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
 		renderer.renderText(textArea, Color(170,170,170), floatToChar(input));
 	}
