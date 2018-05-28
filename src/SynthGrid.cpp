@@ -573,17 +573,25 @@ bool SynthGrid::onEvent(SDL_Event& event)
 			switch (event.key.keysym.sym)
 			{
 				case SDLK_RIGHT:
+				{
+					int index = mSelectedModule;
 					mSelectedModule += 1;
+					if (mSelectedModule % 4 == 0)
+						mSelectedModule = index;
 					if (mSelectedModule >= ModularSynth::maxModules)
 						mSelectedModule = ModularSynth::maxModules - 1;
 					return true;
-					
+				}
 				case SDLK_LEFT:
+				{
+					int index = mSelectedModule;
 					mSelectedModule -= 1;
+					if (mSelectedModule % 4 == 3)
+						mSelectedModule = index;
 					if (mSelectedModule < 0)
 						mSelectedModule = 0;
 					return true;
-					
+				}
 				case SDLK_UP:
 				{
 					int index = mSelectedModule;
