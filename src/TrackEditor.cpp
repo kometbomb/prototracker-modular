@@ -194,6 +194,7 @@ bool TrackEditor::onEvent(SDL_Event& event)
 						if (hex >= 0 && hex <= 9)
 						{
 							mTrackEditorState.editSkip = hex;
+							showMessageV(MessageInfo, "Edit skip: %d", hex);
 						}
 						else if (event.key.keysym.sym == SDLK_c)
 						{

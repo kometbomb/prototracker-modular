@@ -361,6 +361,7 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 		}
 		drawConnection(renderer, area, i, palette[i % 9]);
 	}
+	
 
 	if (mHoveredConnection != -1)
 	{
@@ -397,6 +398,12 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 	{
 			SDL_Rect moduleArea = getModuleArea(mSelectedModule, area, true);
 			renderer.drawRect(moduleArea, Color(128,128,128));
+	}
+	
+	if (hasFocus())
+	{
+		SDL_Rect blob = {area.x, area.y, 5, 5};
+		renderer.renderRect(blob, Color(255, 64, 64));
 	}
 }
 
