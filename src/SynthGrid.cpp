@@ -627,13 +627,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					{
 						ModularSynth& modularSynth = getModularSynth();
 						int dialSpeed = 1;
-//						SDL_Keymod modState = SDL_GetModState();
-//						
-//						if (modState & KMOD_ALT)
-//						{
-//							dialSpeed = 5;
-//						}
-						
+					
 						modularSynth.lock();
 						modularSynth.getModule(mSelectedModule)->onDial(dialSpeed);
 						modularSynth.unlock();
@@ -669,13 +663,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					{
 						ModularSynth& modularSynth = getModularSynth();
 						int dialSpeed = 1;
-//						SDL_Keymod modState = SDL_GetModState();
-//						
-//						if (modState & KMOD_ALT)
-//						{
-//							dialSpeed = 5;
-//						}
-							
+						
 						modularSynth.lock();
 						modularSynth.getModule(mSelectedModule)->onDial(-dialSpeed);
 						modularSynth.unlock();

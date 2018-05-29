@@ -114,13 +114,22 @@ bool SequenceRowEditor::onEvent(SDL_Event& event)
 					break;
 
 				case SDLK_RETURN:
-					/*if (mTrackEditorState.currentRow == mSong.getSequenceLength() - 1)
-						break;*/
-					insertRow(false, 0);
+					if (event.key.keysym.mod & KMOD_SHIFT)
+					{
+						insertRow(false, 0);
+						return true;
+						break;
+					}
+					else
+					{
+						/*if (mTrackEditorState.currentRow == mSong.getSequenceLength() - 1)
+							break;*/
+						insertRow(false, 0);
 
-					scrollView(1, false);
-					return true;
-					break;
+						scrollView(1, false);
+						return true;
+						break;
+					}
 
 				default:
 				{
