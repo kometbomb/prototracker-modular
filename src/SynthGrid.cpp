@@ -573,58 +573,21 @@ bool SynthGrid::onEvent(SDL_Event& event)
 			switch (event.key.keysym.sym)
 			{
 				case SDLK_RIGHT:
-				{
-					ModularSynth& modularSynth = getModularSynth();
-					
-					if (mSelectedModule + 1 <= ModularSynth::maxModules - 1 && modularSynth.getModule(mSelectedModule + 1) != NULL)
-					{
+					if (mSelectedModule + 1 <= ModularSynth::maxModules - 1)
 						mSelectedModule += 1;
-					}
-					else if (modularSynth.getModule(mSelectedModule + 1) == NULL)
-					{
-						int index = mSelectedModule;
-						
-						while (index + 1 <= ModularSynth::maxModules - 1)
-						{
-							index += 1;
-							if (modularSynth.getModule(index) != NULL)
-							{
-								mSelectedModule = index;
-								break;
-							}
-						}
-					}
+					else
+						mSelectedModule = 0;
 					return true;
-				}
 					
 				case SDLK_LEFT:
-				{
-					ModularSynth& modularSynth = getModularSynth();
-					
-					if (mSelectedModule - 1 >= 0 && modularSynth.getModule(mSelectedModule - 1) != NULL)
-					{
+					if (mSelectedModule - 1 >= 0)
 						mSelectedModule -= 1;
-					}
-					else if (modularSynth.getModule(mSelectedModule - 1) == NULL)
-					{
-						int index = mSelectedModule;
-						
-						while (index - 1 >= 0)
-						{
-							index -= 1;
-							if (modularSynth.getModule(index) != NULL)
-							{
-								mSelectedModule = index;
-								break;
-							}
-						}
-					}
+					else
+						mSelectedModule = ModularSynth::maxModules - 1;
 					return true;
-				}
 					
 				case SDLK_UP:
-					if (event.key.keysym.mod & (KMOD_SHIFT))
-					{
+					if (event.key.keysym.mod & (KMOD_SHIFT)) {
 						ModularSynth& modularSynth = getModularSynth();
 						int dialSpeed = 1;
 					
@@ -633,34 +596,19 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						modularSynth.unlock();
 						setDirty(true);
 					}
-					else
-					{
-						ModularSynth& modularSynth = getModularSynth();
-						
-						if(!(mSelectedModule - 4 < 0) && modularSynth.getModule(mSelectedModule - 4) != NULL)
-						{
+					else {
+						if(!(mSelectedModule - 4 < 0))
 							mSelectedModule -= 4;
-						}
-						else if (!(mSelectedModule - 4 < 0) && modularSynth.getModule(mSelectedModule - 4) == NULL)
-						{
-							int index = mSelectedModule;
-								
-							while (index - 4 >= 0)
-							{
-								index -= 4;
-								if (modularSynth.getModule(index) != NULL)
-								{
-									mSelectedModule = index;
-									break;
-								}
-							}
-						}
+						else
+							if (mSelectedModule == 0)
+								mSelectedModule = mSelectedModule + ModularSynth::maxModules - 1;
+							else
+								mSelectedModule = mSelectedModule + ModularSynth::maxModules - 5;
 					}
 					return true;
 					
 				case SDLK_DOWN:
-					if (event.key.keysym.mod & (KMOD_SHIFT))
-					{
+					if (event.key.keysym.mod & (KMOD_SHIFT)) {
 						ModularSynth& modularSynth = getModularSynth();
 						int dialSpeed = 1;
 						
@@ -669,29 +617,25 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						modularSynth.unlock();
 						setDirty(true);
 					}
-					else
-					{
-						ModularSynth& modularSynth = getModularSynth();
-						
-						if (!(mSelectedModule + 4 >= ModularSynth::maxModules) && modularSynth.getModule(mSelectedModule + 4) != NULL)
-						{
+					else {
+						if (!(mSelectedModule + 4 >= ModularSynth::maxModules))
 							mSelectedModule += 4;
-						}
-						else if(!(mSelectedModule + 4 >= ModularSynth::maxModules) && modularSynth.getModule(mSelectedModule + 4) == NULL)
-						{
-							int index = mSelectedModule;
-							
-							while (index + 4 <= ModularSynth::maxModules - 1)
-							{
-								index += 4;
-								if (modularSynth.getModule(index) != NULL)
-								{
-									mSelectedModule = index;
-									break;
-								}
-							}
-						}
+						else
+							if(mSelectedModule == ModularSynth::maxModules - 1)
+								mSelectedModule = 0;
+							else
+								mSelectedModule = mSelectedModule - ModularSynth::maxModules + 5;
 					}
+					return true;
+				
+				case SDLK_RETURN:
+				{
+					ModularSynth& modularSynth = getModularSynth();
+
+					if (modularSynth.getModule(mSelectedModule) == NULL)
+						showNewModuleDialog();
+					
+				}
 					return true;
 					
 				case SDLK_BACKSPACE:
