@@ -54,3 +54,9 @@ void ExtOutModule::onLoaded()
 	// Trigger mLabel update
 	onDial(0);
 }
+
+void ExtOutModule::onShow()
+{
+	// Trigger mLabel update
+	onDial(0);
+}

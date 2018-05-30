@@ -50,3 +50,9 @@ void IntModule::onLoaded()
 	// Trigger mLabel update
 	onDial(0);
 }
+
+void IntModule::onShow()
+{
+	// Trigger mLabel update
+	onDial(0);
+}

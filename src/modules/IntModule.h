@@ -18,6 +18,7 @@ public:
 	
 	virtual void cycle();
 	
+	virtual void onShow();
 	virtual void onLoaded();
 	virtual void onDial(int delta);
 	

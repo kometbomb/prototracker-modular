@@ -55,3 +55,9 @@ void ConstModule::onLoaded()
 	// Trigger mLabel update
 	onDial(0);
 }
+
+void ConstModule::onShow()
+{
+	// Trigger mLabel update
+	onDial(0);
+}

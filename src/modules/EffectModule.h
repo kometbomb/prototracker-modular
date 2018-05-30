@@ -18,6 +18,7 @@ public:
 	virtual void cycle();
 
 	virtual void onLoaded();
+	virtual void onShow();
 	virtual void onDial(int delta);
 
 	virtual const char * getName() const;

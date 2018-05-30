@@ -65,3 +65,9 @@ void EffectModule::onLoaded()
 	// Trigger mLabel update
 	onDial(0);
 }
+
+void EffectModule::onShow()
+{
+	// Trigger mLabel update
+	onDial(0);
+}

@@ -53,6 +53,12 @@ void AutomationModule::onLoaded()
 	onDial(0);
 }
 
+void AutomationModule::onShow()
+{
+	// Trigger mLabel update
+	onDial(0);
+}
+
 
 void AutomationModule::onDial(int delta)
 {
