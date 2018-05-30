@@ -59,5 +59,5 @@ void AutomationModule::onDial(int delta)
 	int track = (static_cast<int>(static_cast<float>(delta) + mParams[0]) + Synth::maxAutomationTracks) % Synth::maxAutomationTracks;
 
 	setParam(0, track);
-	sprintf(mLabel, "Auto%d", track);
+	sprintf(mLabel, "Atm%d", track);
 }

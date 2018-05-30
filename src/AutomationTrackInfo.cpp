@@ -5,7 +5,7 @@
 
 
 AutomationTrackInfo::AutomationTrackInfo(EditorState& editorState)
-	: Editor(editorState)
+	: Editor(editorState, false)
 {
 	mEditorState.automationTrack.addListener(this);
 }

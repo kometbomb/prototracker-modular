@@ -131,6 +131,12 @@ void AutomationEditor::onDraw(Renderer& renderer, const SDL_Rect& area)
 			renderer.clearRect(nodeArea, mSelectedNode == i ? Color(255, 255, 255) : Color(255, 0, 0));
 		}
 	}
+	
+	if (hasFocus())
+	{
+		SDL_Rect blob = {area.w - 23, area.y + 2, 5, 5};
+		renderer.renderRect(blob, Color(255, 64, 64));
+	}
 }
 
 
