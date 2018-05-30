@@ -86,6 +86,7 @@ private:
 	void copySynth();
 	void pasteSynth();
 	void gotoParentSynth();
+	void changeTrack(int d);
 
 	void displayLoadDialog();
 	void displaySaveDialog();

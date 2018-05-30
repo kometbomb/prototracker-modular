@@ -83,6 +83,37 @@ bool TrackEditor::onEvent(SDL_Event& event)
 {
 	switch (event.type)
 	{
+		case SDL_MOUSEBUTTONDOWN:
+			{
+				// Editor base class should probably do this when clicked
+				setFocus(this);
+				
+				mMouseX = event.button.x / SCALE;
+				mMouseY = event.button.y / SCALE;
+				
+				switch (event.button.button)
+				{
+					case SDL_BUTTON_LEFT:
+						if (mMouseX < 80)
+							mTrackEditorState.currentTrack = 0;
+						if (mMouseX >= 80 && mMouseX < 132)
+							mTrackEditorState.currentTrack = 1;
+						if (mMouseX >= 132 && mMouseX < 184)
+							mTrackEditorState.currentTrack = 2;
+						if (mMouseX > 184 && mMouseX < 234)
+							mTrackEditorState.currentTrack = 3;
+						
+						break;
+				}
+				
+				return true;
+			}
+		case SDL_MOUSEWHEEL:
+			{
+				int direction = 1;
+				scrollView(event.wheel.y < 0 ? direction : -direction, false);
+				return true;
+			}
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.sym)
 			{

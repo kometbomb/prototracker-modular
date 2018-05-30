@@ -11,6 +11,9 @@ struct TrackEditorState;
 
 class TrackEditor: public ColumnEditor
 {
+private:
+	int mMouseX, mMouseY;
+	
 protected:
 	IPlayer& mPlayer;
 	Song& mSong;

@@ -9,6 +9,7 @@
 #include "ModuleSelector.h"
 #include "FileSelector.h"
 #include "FileSection.h"
+#include "SequenceRow.h"
 #include "Color.h"
 #include <cstdlib>
 #include <cstdio>
@@ -807,6 +808,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					return true;
 
 				case SDLK_DELETE:
+				{
 					ModularSynth& modularSynth = getModularSynth();
 
 					if (mSelectedModule != -1 && modularSynth.getModule(mSelectedModule) != NULL)
@@ -818,6 +820,14 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						mMode = IDLE;
 					}
 
+					return true;
+				}
+				
+				case SDLK_TAB:
+					if (event.key.keysym.mod & KMOD_SHIFT)
+						changeTrack(-1);
+					else
+						changeTrack(1);
 					return true;
 			}
 		}
@@ -897,6 +907,26 @@ void SynthGrid::onFileSelectorEvent(const Editor& selector, bool accept)
 	}
 
 	setModal(NULL);
+}
+
+
+void SynthGrid::changeTrack(int d)
+{
+	int currentTrack = mEditorState.patternEditor.currentTrack.getValue();
+	currentTrack += d;
+	
+	if (currentTrack < 0)
+	{
+		currentTrack = 0;
+	}
+	
+	if (currentTrack > SequenceRow::maxTracks - 1)
+	{
+		currentTrack = SequenceRow::maxTracks - 1;
+	}
+	
+	mEditorState.patternEditor.currentTrack = currentTrack;
+	showMessageV(MessageInfo, "Track %d", currentTrack + 1);
 }
 
 
