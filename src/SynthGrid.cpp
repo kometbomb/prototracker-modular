@@ -402,8 +402,29 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 	
 	if (hasFocus())
 	{
-		SDL_Rect blob = {area.x, area.y, 5, 5};
-		renderer.renderRect(blob, Color(255, 64, 64));
+		SDL_Rect blob1 = {area.x, area.y, 2, 10};
+		renderer.renderRect(blob1, Color(255, 64, 64));
+		
+		SDL_Rect blob2 = {area.x, area.y, 10, 2};
+		renderer.renderRect(blob2, Color(255, 64, 64));
+		
+		SDL_Rect blob3 = {area.x + 148, area.y, 10, 2};
+		renderer.renderRect(blob3, Color(255, 64, 64));
+		
+		SDL_Rect blob4 = {area.x + 158, area.y, 2, 10};
+		renderer.renderRect(blob4, Color(255, 64, 64));
+		
+		SDL_Rect blob5 = {area.x, area.y + 214, 2, 10};
+		renderer.renderRect(blob5, Color(255, 64, 64));
+		
+		SDL_Rect blob6 = {area.x, area.y + 222, 10, 2};
+		renderer.renderRect(blob6, Color(255, 64, 64));
+		
+		SDL_Rect blob7 = {area.x + 148, area.y + 222, 10, 2};
+		renderer.renderRect(blob7, Color(255, 64, 64));
+		
+		SDL_Rect blob8 = {area.x + 158, area.y + 214, 2, 10};
+		renderer.renderRect(blob8, Color(255, 64, 64));
 	}
 }
 
@@ -676,12 +697,14 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					}
 					else
 					{
-						if (mSelectedModule - 12 >= 0)
-							mSelectedModule -= 12;
-						else if (mSelectedModule - 8 >= 0)
-							mSelectedModule -= 8;
-						else if (mSelectedModule - 4 >= 0)
-							mSelectedModule -= 4;
+						int count = 0;
+						
+						while (mSelectedModule + count > 3)
+						{
+							count -= 4;
+						}
+						
+						mSelectedModule = mSelectedModule + count;
 					}
 					if (modularSynth.getModule(mSelectedModule) == NULL)
 						mMode = SELECTING_MODULE;
@@ -701,12 +724,14 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					}
 					else
 					{
-						if (mSelectedModule + 12 <  ModularSynth::maxModules)
-							mSelectedModule += 12;
-						else if (mSelectedModule + 8 < ModularSynth::maxModules)
-							mSelectedModule += 8;
-						else if (mSelectedModule + 4 < ModularSynth::maxModules)
-							mSelectedModule += 4;
+						int count = 0;
+						
+						while (mSelectedModule + count < ModularSynth::maxModules - 4)
+						{
+							count += 4;
+						}
+						
+						mSelectedModule = mSelectedModule + count;
 					}
 					if (modularSynth.getModule(mSelectedModule) == NULL)
 						mMode = SELECTING_MODULE;

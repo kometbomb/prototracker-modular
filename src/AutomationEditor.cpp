@@ -134,7 +134,7 @@ void AutomationEditor::onDraw(Renderer& renderer, const SDL_Rect& area)
 	
 	if (hasFocus())
 	{
-		SDL_Rect blob = {area.w - 23, area.y + 2, 5, 5};
+		SDL_Rect blob = {area.w - 16, area.y + 10, 16, 3};
 		renderer.renderRect(blob, Color(255, 64, 64));
 	}
 }
