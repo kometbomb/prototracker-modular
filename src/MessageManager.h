@@ -7,7 +7,7 @@
 class MessageManager 
 {
 public:
-	static const int MessageVisibleMs = 2000;
+	static const int MessageVisibleMs = 750;
 	static const int MessageAnimationMs = 100;
 
 	struct Message 

@@ -969,7 +969,7 @@ void SynthGrid::changeTrack(int d)
 	}
 	
 	mEditorState.patternEditor.currentTrack = currentTrack;
-	showMessageV(MessageInfo, "Track %d", currentTrack + 1);
+//	showMessageV(MessageInfo, "Track %d", currentTrack + 1);
 }
 
 
