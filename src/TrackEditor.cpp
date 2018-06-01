@@ -129,7 +129,15 @@ bool TrackEditor::onEvent(SDL_Event& event)
 			switch (event.key.keysym.sym)
 			{
 				case SDLK_F3:
-					copyTrack(mTrackEditorState.currentTrack);
+					if (event.key.keysym.mod & KMOD_SHIFT)
+					{
+						copyTrack(mTrackEditorState.currentTrack);
+						killTrack(mTrackEditorState.currentTrack);
+					}
+					else
+					{
+						copyTrack(mTrackEditorState.currentTrack);
+					}
 					return true;
 
 				case SDLK_F4:
@@ -710,7 +718,7 @@ void TrackEditor::emptyRow(bool allTracks, int flags)
 
 void TrackEditor::copyTrack(int track)
 {
-	showMessageV(MessageInfo, "Copied track %d on clipboard", track);
+	showMessageV(MessageInfo, "Copied track %d on clipboard", track + 1);
 
 	mEditorState.copyBuffer.copy(getCurrentPattern(track), 0, 255);
 }
@@ -718,7 +726,7 @@ void TrackEditor::copyTrack(int track)
 
 void TrackEditor::pasteTrack(int track)
 {
-	showMessageV(MessageInfo, "Pasted clipboard on track %d", track);
+	showMessageV(MessageInfo, "Pasted clipboard on track %d", track + 1);
 
 	mEditorState.copyBuffer.paste(getCurrentPattern(track), 0);
 	mTrackEditorState.currentRow.notify();

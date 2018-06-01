@@ -114,6 +114,7 @@ bool SequenceRowEditor::onEvent(SDL_Event& event)
 					break;
 
 				case SDLK_RETURN:
+#ifdef __MAC_KEYS__
 					if (event.key.keysym.mod & KMOD_SHIFT)
 					{
 						insertRow(false, 0);
@@ -130,6 +131,15 @@ bool SequenceRowEditor::onEvent(SDL_Event& event)
 						return true;
 						break;
 					}
+#else
+					/*if (mTrackEditorState.currentRow == mSong.getSequenceLength() - 1)
+					 break;*/
+					insertRow(false, 0);
+					
+					scrollView(1, false);
+					return true;
+					break;
+#endif
 
 				default:
 				{

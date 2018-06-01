@@ -247,7 +247,7 @@ bool MainEditor::onEvent(SDL_Event& event)
 						{
 							mPlayer.getTrackState(track).enabled ^= true;
 
-							showMessageV(MessageInfo, "%s track %d", mPlayer.getTrackState(track).enabled ? "Unmuted" : "Muted", track);
+							showMessageV(MessageInfo, "%s track %d", mPlayer.getTrackState(track).enabled ? "Unmuted" : "Muted", track + 1);
 
 							return true;
 						}
@@ -257,7 +257,9 @@ bool MainEditor::onEvent(SDL_Event& event)
 
 				/* F5 and F6 also used for laptops etc. keyboards with (very) limited key layout */
 				case SDLK_F5:
-//				case SDLK_RCTRL:
+#ifndef __MAC_KEYS__
+				case SDLK_RCTRL:
+#endif
 					mPlayer.play(mEditorState.sequenceEditor.currentRow);
 					mEditorState.editMode = false;
 					refreshAll();
@@ -265,7 +267,9 @@ bool MainEditor::onEvent(SDL_Event& event)
 
 				/* F5 and F6 also used for laptops etc. keyboards with (very) limited key layout */
 				case SDLK_F6:
-//				case SDLK_RSHIFT:
+#ifndef __MAC_KEYS__
+				case SDLK_RSHIFT:
+#endif
 					mPlayer.play(mEditorState.sequenceEditor.currentRow, PlayerState::PlaySequenceRow);
 					mEditorState.editMode = false;
 					refreshAll();
@@ -318,7 +322,9 @@ bool MainEditor::onEvent(SDL_Event& event)
 					if (!(event.key.keysym.mod & KMOD_SHIFT))
 						break;
 				case SDLK_KP_PLUS:
+#ifdef __MAC_KEYS__
 				case SDLK_EQUALS:
+#endif
 					if (mEditorState.macro < Song::maxMacros - 1)
 						++mEditorState.macro;
 					setMacro(mEditorState.macro);
@@ -328,7 +334,9 @@ bool MainEditor::onEvent(SDL_Event& event)
 					if (!(event.key.keysym.mod & KMOD_SHIFT))
 						break;
 				case SDLK_KP_MINUS:
+#ifdef __MAC_KEYS__
 				case SDLK_MINUS:
+#endif
 					if (mEditorState.macro > 0)
 						--mEditorState.macro;
 					setMacro(mEditorState.macro);
