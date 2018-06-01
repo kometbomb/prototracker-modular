@@ -252,7 +252,10 @@ bool AutomationEditor::onEvent(SDL_Event& event)
 	}
 	else if (event.type == SDL_MOUSEWHEEL)
 	{
-		mEditorState.automationTrack = (mEditorState.automationTrack + (event.wheel.y < 0 ? -1 : 1) + Synth::maxAutomationTracks) % Synth::maxAutomationTracks;
+		if (event.wheel.y != 0)
+		{
+			mEditorState.automationTrack = (mEditorState.automationTrack + (event.wheel.y < 0 ? -1 : 1) + Synth::maxAutomationTracks) % Synth::maxAutomationTracks;
+		}
 		mSelectedNode = -1;
 		setDirty(true);
 	}

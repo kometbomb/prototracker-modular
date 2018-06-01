@@ -94,15 +94,22 @@ bool TrackEditor::onEvent(SDL_Event& event)
 				switch (event.button.button)
 				{
 					case SDL_BUTTON_LEFT:
-						if (mMouseX < 80)
-							mTrackEditorState.currentTrack = 0;
-						if (mMouseX >= 80 && mMouseX < 132)
+						if (mMouseX >= ((mThisArea.w - 26) / 4) + 29 && mMouseX < (((mThisArea.w - 26) / 4) * 2) + 30)
+						{
 							mTrackEditorState.currentTrack = 1;
-						if (mMouseX >= 132 && mMouseX < 184)
+						}
+						else if (mMouseX >= (((mThisArea.w - 26) / 4) * 2) + 30 && mMouseX < (((mThisArea.w - 26) / 4) * 3) + 31)
+						{
 							mTrackEditorState.currentTrack = 2;
-						if (mMouseX > 184 && mMouseX < 234)
+						}
+						else if (mMouseX >= (((mThisArea.w - 26) / 4) * 3) + 31 && mMouseX < mThisArea.w + 3)
+						{
 							mTrackEditorState.currentTrack = 3;
-						
+						}
+						else
+						{
+							mTrackEditorState.currentTrack = 0;
+						}
 						break;
 				}
 				
@@ -111,7 +118,11 @@ bool TrackEditor::onEvent(SDL_Event& event)
 		case SDL_MOUSEWHEEL:
 			{
 				int direction = 1;
-				scrollView(event.wheel.y < 0 ? direction : -direction, false);
+				
+				if (event.wheel.y != 0) //filter out '0' wheel events
+				{
+					scrollView(event.wheel.y < 0 ? direction : -direction, false);
+				}
 				return true;
 			}
 		case SDL_KEYDOWN:
