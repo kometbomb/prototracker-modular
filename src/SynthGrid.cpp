@@ -633,6 +633,13 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				{
 					ModularSynth& modularSynth = getModularSynth();
 					
+					if (mSelectedModule == -1)
+					{
+						mSelectedModule = 0;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+						return true;
+					}
+					
 					if (event.key.keysym.mod & (KMOD_SHIFT) && modularSynth.getModule(mSelectedModule) != NULL && modularSynth.getModule(mSelectedModule)->getNumParams() != 0)
 					{
 						int dialSpeed = 10;
@@ -646,10 +653,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					{
 						if (mSelectedModule + 1 <= ModularSynth::maxModules - 1 && (mSelectedModule + 1) % 4 != 0)
 							mSelectedModule += 1;
-						if (modularSynth.getModule(mSelectedModule) == NULL)
-							mMode = SELECTING_MODULE;
-						else
-							mMode = IDLE;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
 					}
 					return true;
 				}
@@ -657,6 +661,13 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				case SDLK_LEFT:
 				{
 					ModularSynth& modularSynth = getModularSynth();
+					
+					if (mSelectedModule == -1)
+					{
+						mSelectedModule = 0;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+						return true;
+					}
 					
 					if (event.key.keysym.mod & (KMOD_SHIFT) && modularSynth.getModule(mSelectedModule) != NULL && modularSynth.getModule(mSelectedModule)->getNumParams() != 0)
 					{
@@ -671,10 +682,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					{
 						if (mSelectedModule - 1 >= 0 && (mSelectedModule - 1) % 4 != 3)
 							mSelectedModule -= 1;
-						if (modularSynth.getModule(mSelectedModule) == NULL)
-							mMode = SELECTING_MODULE;
-						else
-							mMode = IDLE;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
 					}
 					return true;
 				}
@@ -682,6 +690,13 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				case SDLK_UP:
 				{
 					ModularSynth& modularSynth = getModularSynth();
+					
+					if (mSelectedModule == -1)
+					{
+						mSelectedModule = 0;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+						return true;
+					}
 
 					if (event.key.keysym.mod & (KMOD_SHIFT) && modularSynth.getModule(mSelectedModule) != NULL && modularSynth.getModule(mSelectedModule)->getNumParams() != 0)
 					{
@@ -696,10 +711,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					{
 						if(!(mSelectedModule - 4 < 0))
 							mSelectedModule -= 4;
-						if (modularSynth.getModule(mSelectedModule) == NULL)
-							mMode = SELECTING_MODULE;
-						else
-							mMode = IDLE;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
 					}
 					return true;
 				}
@@ -707,6 +719,13 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				case SDLK_DOWN:
 				{
 					ModularSynth& modularSynth = getModularSynth();
+					
+					if (mSelectedModule == -1)
+					{
+						mSelectedModule = 0;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+						return true;
+					}
 
 					if (event.key.keysym.mod & (KMOD_SHIFT) && modularSynth.getModule(mSelectedModule) != NULL && modularSynth.getModule(mSelectedModule)->getNumParams() != 0)
 					{
@@ -721,10 +740,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					{
 						if (!(mSelectedModule + 4 >= ModularSynth::maxModules))
 							mSelectedModule += 4;
-						if (modularSynth.getModule(mSelectedModule) == NULL)
-							mMode = SELECTING_MODULE;
-						else
-							mMode = IDLE;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
 					}
 					return true;
 				}
@@ -732,6 +748,13 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				case SDLK_PAGEUP:
 				{
 					ModularSynth& modularSynth = getModularSynth();
+					
+					if (mSelectedModule == -1)
+					{
+						mSelectedModule = 0;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+						return true;
+					}
 
 					if (mSelectedModule - 16 >= 0)
 					{
@@ -748,17 +771,21 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						
 						mSelectedModule = mSelectedModule + count;
 					}
-					if (modularSynth.getModule(mSelectedModule) == NULL)
-						mMode = SELECTING_MODULE;
-					else
-						mMode = IDLE;
 					
+					mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
 					return true;
 				}
 					
 				case SDLK_PAGEDOWN:
 				{
 					ModularSynth& modularSynth = getModularSynth();
+					
+					if (mSelectedModule == -1)
+					{
+						mSelectedModule = 0;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+						return true;
+					}
 					
 					if (mSelectedModule + 16 < ModularSynth::maxModules - 1)
 					{
@@ -775,11 +802,8 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						
 						mSelectedModule = mSelectedModule + count;
 					}
-					if (modularSynth.getModule(mSelectedModule) == NULL)
-						mMode = SELECTING_MODULE;
-					else
-						mMode = IDLE;
 					
+					mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
 					return true;
 				}
 					
@@ -789,11 +813,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 
 					mSelectedModule = 0;
 					
-					if (modularSynth.getModule(mSelectedModule) == NULL)
-						mMode = SELECTING_MODULE;
-					else
-						mMode = IDLE;
-					
+					mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
 					return true;
 				}
 					
@@ -803,11 +823,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 
 					mSelectedModule = ModularSynth::maxModules - 1;
 					
-					if (modularSynth.getModule(mSelectedModule) == NULL)
-						mMode = SELECTING_MODULE;
-					else
-						mMode = IDLE;
-					
+					mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
 					return true;
 				}
 				
