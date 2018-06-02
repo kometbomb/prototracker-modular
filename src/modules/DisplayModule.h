@@ -17,7 +17,6 @@ public:
 	virtual void render(Renderer& renderer, const SDL_Rect& moduleArea, bool isSelected) const;
 	virtual void onLoaded();
 
-	virtual char * floatToChar(float value) const;
 	virtual const char * getName() const;
 	virtual const char * getInputName(int input) const;
 	virtual const char * getOutputName(int output) const;

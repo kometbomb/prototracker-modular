@@ -39,7 +39,6 @@ const char * DisplayModule::getName() const
 void DisplayModule::onLoaded()
 {
 	setInput(0, 0.0f);
-	floatToChar(getInput(0));
 }
 
 
@@ -53,29 +52,16 @@ void DisplayModule::render(Renderer& renderer, const SDL_Rect& moduleArea, bool 
 {
 	renderer.renderRect(moduleArea, getModuleColor(isSelected));
 	SDL_Rect sign = {moduleArea.x + 3, moduleArea.y + 4, 5, 1};
+	SDL_Rect textArea = {moduleArea.x - 10, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
+
 	
 	if (getInput(0) >= 0)
 	{
-		SDL_Rect textArea = {moduleArea.x - 10, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
-		renderer.renderText(textArea, Color(255,255,255), floatToChar(getInput(0)));
+		renderer.renderTextV(textArea, Color(255,255,255), "%+06.2f", getInput(0));
 	}
 	else if (getInput(0) < 0)
 	{
-		float input = getInput(0) * -1;
-		
 		renderer.renderRect(sign, Color(255,255,255));
-		SDL_Rect textArea = {moduleArea.x - 10, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
-		renderer.renderText(textArea, Color(170,170,170), floatToChar(input));
+		renderer.renderTextV(textArea, Color(170,170,170), "%+06.2f", getInput(0) * -1);
 	}
-	
-}
-
-
-char * DisplayModule::floatToChar(float value) const
-{
-	static char valueStr[25];
-	
-	snprintf(valueStr, 25, "%+06.2f", value);
-	
-	return valueStr;
 }
