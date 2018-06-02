@@ -852,9 +852,9 @@ bool SynthGrid::onEvent(SDL_Event& event)
 							modularSynth.lock();
 							modularSynth.removeModule(index);
 							modularSynth.unlock();
-//							rebuildWires();
-//							mMode = IDLE;
 						}
+						
+						mMode = SELECTING_MODULE;
 					}
 					else
 					{
@@ -876,7 +876,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						modularSynth.removeModule(mSelectedModule);
 						modularSynth.unlock();
 						rebuildWires();
-						mMode = IDLE;
+						mMode = SELECTING_MODULE;
 					}
 
 					return true;
@@ -1252,11 +1252,13 @@ void SynthGrid::copySynth()
 
 void SynthGrid::pasteSynth()
 {
-	ModularSynth& synth = getModularSynth();
-	synth.lock();
-	synth.copy(*mCopyBuffer);
-	synth.unlock();
-
+	if (mCopyBuffer != NULL)
+	{
+		ModularSynth& synth = getModularSynth();
+		synth.lock();
+		synth.copy(*mCopyBuffer);
+		synth.unlock();
+	
 	rebuildWires();
 	
 	refreshView();
@@ -1264,6 +1266,7 @@ void SynthGrid::pasteSynth()
 	showMessageV(MessageInfo, "Synth layout pasted");
 
 	notify();
+	}
 }
 
 
