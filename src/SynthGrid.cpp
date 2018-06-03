@@ -845,7 +845,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				case SDLK_F3:
 					if (event.key.keysym.mod & (KMOD_SHIFT))
 					{
-						copySynth();
+						copySynth(1);
 						for (int index = 0 ; index < ModularSynth::maxModules ; ++index)
 						{
 							ModularSynth& modularSynth = getModularSynth();
@@ -858,7 +858,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					}
 					else
 					{
-						copySynth();
+						copySynth(0);
 					}
 					return true;
 
@@ -1239,14 +1239,14 @@ void SynthGrid::setModularSynth(ModularSynth& synth, bool rememberParent)
 }
 
 
-void SynthGrid::copySynth()
+void SynthGrid::copySynth(int mode)
 {
 	if (mCopyBuffer != NULL)
 		delete mCopyBuffer;
 
 	mCopyBuffer = getModularSynth().clone();
-
-	showMessageV(MessageInfo, "Synth layout copied");
+	
+	showMessageV(MessageInfo, mode == 0 ? "Synth layout copied" : "Synth layout cut");
 }
 
 

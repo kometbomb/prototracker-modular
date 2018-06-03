@@ -83,7 +83,7 @@ private:
 	void startConnect(int fromModule, int toModule, int fromOutput, int toInput);
 	void endConnect(int module, int connector);
 
-	void copySynth();
+	void copySynth(int mode);
 	void pasteSynth();
 	void gotoParentSynth();
 	void changeTrack(int d);
