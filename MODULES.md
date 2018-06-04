@@ -2,6 +2,46 @@
 
 Modules are loosely divided in three categories: Control, Generators and Modifiers. This doesn't mean they are limited to that role, though. An oscillator is useful for modifying audio volume as much as an envelope.
 
+- [Prototracker-modular modules](#prototracker-modular-modules)
+    - [Good to know](#good-to-know)
+    - [Control](#control)
+        - [FrequencyIn](#frequencyin)
+        - [TriggerNote](#triggernote)
+        - [Const](#const)
+        - [Effect](#effect)
+        - [Automation](#automation)
+        - [AudioOut](#audioout)
+        - [Oscilloscope](#oscilloscope)
+        - [VUMeter](#vumeter)
+        - [EG](#eg)
+        - [Accumulator](#accumulator)
+        - [Semitone](#semitone)
+    - [Generators](#generators)
+        - [Oscillator](#oscillator)
+        - [Pulse](#pulse)
+        - [Noise](#noise)
+    - [Modifiers](#modifiers)
+        - [Add](#add)
+        - [Mul](#mul)
+        - [Abs](#abs)
+        - [Bits](#bits)
+        - [Shape](#shape)
+        - [Linear](#linear)
+        - [Clamp](#clamp)
+        - [Distorion](#distorion)
+        - [Split](#split)
+        - [RMS](#rms)
+        - [Mixer](#mixer)
+        - [Lerp](#lerp)
+        - [Filter](#filter)
+        - [Glide](#glide)
+        - [Delay](#delay)
+        - [Reverb](#reverb)
+        - [Container](#container)
+        - [ExtIn/ExtOut](#extin-extout)
+
+## Good to know
+
 Most modules output either in the -1..1 range (or similar), this means you can basically connect anything to anything. Experiment.
 
 Note that there is a delay in signal propagation: every connection between two modules results in a delay of one cycle. This might make things harder with e.g. the accumulator if the reset value is changed at the same time when the reset signal is sent and the signals won't arrive at the exact same cycle.
@@ -95,18 +135,22 @@ to visualize values between -1 and 1.
 
 ### EG
 
-Generates a simple attack-decay envelope. Key down input
+Generates a simple attack-decay envelope. The envelope output will rise from 0.0 to 1.0 and stay at 1.0 until key down input is released.
+The hard reset input does the same but also sets the envelope volume to zero when triggered but it will NOT keep the envelope at full
+output (the decay state will automatically start after the envelope reaches 1.0).
 
 | Input | Description  |
 |-------|--------------|
 | 0 | Attack time (in seconds) |
 | 1 | Decay time (in seconds) |
 | 2 | Key down (>0.5 = down) |
+| 3 | Key down with hard reset |
 
 | Output | Description  |
 |--------|--------------|
 | 0 | Envelope amplitude (0..1) |
 | 1 | Envelope finished (pulse 1 when finished, 0 otherwise) |
+| 2 | Envelope state (0 = attack, 1 = decay) |
 
 ### Accumulator
 
@@ -330,6 +374,20 @@ Splits input A two outputs based on input B. In other words, use this to create 
 | 0 | Output A |
 | 1 | Output B |
 
+### Lerp
+
+This module takes in two inputs and interpolates (linearly) between the two inputs.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Input A |
+| 1 | Mix (0 = output A, 1.0 = output B) |
+| 2 | Input B |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Output |
+
 ### Filter
 
 | Input | Description  |
@@ -398,6 +456,11 @@ creating stereo reverb effects.
 
 This can be used to host another whole synth inside a synth. The inputs
 and outputs depend on the contained input/output modules.
+
+Double click the module to access its insides. You can use CTRL+O and
+CTRL+S to load and save whatever is inside the module. To use partials,
+first create a Container, double-click and load a new synth partial with
+CTRL+O.
 
 ### ExtIn/ExtOut
 

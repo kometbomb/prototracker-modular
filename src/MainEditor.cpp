@@ -1,4 +1,3 @@
-#include "Debug.h"
 #include "MainEditor.h"
 #include "IPlayer.h"
 #include "PatternEditor.h"
@@ -887,7 +886,7 @@ bool MainEditor::exportSong()
 #ifndef __EMSCRIPTEN__
 	if (SDL_SetClipboardText(section->getBase64()))
 	{
-		debug("SDL_GetError: %s", SDL_GetError());
+		showMessageV(MessageClass::MessageError, "SDL_GetError: %s", SDL_GetError());
 	}
 
 #else
@@ -949,9 +948,9 @@ void MainEditor::newSong()
 }
 
 
-void MainEditor::showMessage(MessageClass messageClass, const char* message)
+int MainEditor::showMessageInner(MessageClass messageClass, int messageId, const char* message)
 {
-	mMessageManager->pushMessage(messageClass, message);
+	return mMessageManager->pushMessage(messageClass, message, messageId);
 }
 
 
