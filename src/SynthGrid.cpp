@@ -938,13 +938,20 @@ void SynthGrid::copySynth()
 
 void SynthGrid::pasteSynth()
 {
+	if (mCopyBuffer == NULL)
+	{
+		return;
+	}
+	
 	ModularSynth& synth = getModularSynth();
 	synth.lock();
 	synth.copy(*mCopyBuffer);
 	synth.unlock();
-
+	
 	rebuildWires();
-
+	
+	refreshView();
+	
 	showMessageV(MessageInfo, "Synth layout pasted");
 
 	notify();
