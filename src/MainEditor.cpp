@@ -1,3 +1,4 @@
+#include "Debug.h"
 #include "MainEditor.h"
 #include "IPlayer.h"
 #include "PatternEditor.h"

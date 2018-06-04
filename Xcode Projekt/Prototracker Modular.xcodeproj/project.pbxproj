@@ -115,6 +115,7 @@
 		3092517720B60868002D6F35 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3092517520B60868002D6F35 /* SDL2.framework */; };
 		3092517920B60BA9002D6F35 /* SDL2.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 3092517520B60868002D6F35 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3092517A20B60BA9002D6F35 /* SDL2_image.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 3092517420B60868002D6F35 /* SDL2_image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		309D6A4120C5B65B002F2352 /* LerpModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 309D6A3F20C5B65B002F2352 /* LerpModule.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -177,7 +178,6 @@
 		307A816820B5EC2900C1FA54 /* AudioDeviceSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioDeviceSelector.h; path = ../src/AudioDeviceSelector.h; sourceTree = "<group>"; };
 		307A816920B5EC2900C1FA54 /* AutomationTrackInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AutomationTrackInfo.cpp; path = ../src/AutomationTrackInfo.cpp; sourceTree = "<group>"; };
 		307A816A20B5EC2900C1FA54 /* AutomationTrackInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AutomationTrackInfo.h; path = ../src/AutomationTrackInfo.h; sourceTree = "<group>"; };
-		307A816B20B5EC2900C1FA54 /* Channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Channel.h; path = ../src/Channel.h; sourceTree = "<group>"; };
 		307A816C20B5EC2900C1FA54 /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Color.cpp; path = ../src/Color.cpp; sourceTree = "<group>"; };
 		307A816D20B5EC2900C1FA54 /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Color.h; path = ../src/Color.h; sourceTree = "<group>"; };
 		307A816E20B5EC2900C1FA54 /* ColumnEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColumnEditor.cpp; path = ../src/ColumnEditor.cpp; sourceTree = "<group>"; };
@@ -347,6 +347,8 @@
 		307A821320B5EC2900C1FA54 /* Value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Value.h; path = ../src/Value.h; sourceTree = "<group>"; };
 		3092517420B60868002D6F35 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		3092517520B60868002D6F35 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		309D6A3F20C5B65B002F2352 /* LerpModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LerpModule.cpp; sourceTree = "<group>"; };
+		309D6A4020C5B65B002F2352 /* LerpModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LerpModule.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -392,7 +394,6 @@
 				307A814820B5EC2900C1FA54 /* AutomationEditor.h */,
 				307A816920B5EC2900C1FA54 /* AutomationTrackInfo.cpp */,
 				307A816A20B5EC2900C1FA54 /* AutomationTrackInfo.h */,
-				307A816B20B5EC2900C1FA54 /* Channel.h */,
 				307A816C20B5EC2900C1FA54 /* Color.cpp */,
 				307A816D20B5EC2900C1FA54 /* Color.h */,
 				307A816E20B5EC2900C1FA54 /* ColumnEditor.cpp */,
@@ -595,6 +596,8 @@
 				307A81BB20B5EC2900C1FA54 /* FrequencyInModule.h */,
 				307A81BC20B5EC2900C1FA54 /* GlideModule.cpp */,
 				307A81BD20B5EC2900C1FA54 /* GlideModule.h */,
+				309D6A3F20C5B65B002F2352 /* LerpModule.cpp */,
+				309D6A4020C5B65B002F2352 /* LerpModule.h */,
 				307A81BE20B5EC2900C1FA54 /* LinearModule.cpp */,
 				307A81BF20B5EC2900C1FA54 /* LinearModule.h */,
 				307A81C020B5EC2900C1FA54 /* MixerModule.cpp */,
@@ -714,6 +717,7 @@
 				307A824B20B5EC2900C1FA54 /* ExtInModule.cpp in Sources */,
 				307A824520B5EC2900C1FA54 /* ContainerModule.cpp in Sources */,
 				307A822F20B5EC2900C1FA54 /* EditorState.cpp in Sources */,
+				309D6A4120C5B65B002F2352 /* LerpModule.cpp in Sources */,
 				307A823520B5EC2900C1FA54 /* Label.cpp in Sources */,
 				307A826B20B5EC2900C1FA54 /* Sequence.cpp in Sources */,
 				307A824E20B5EC2900C1FA54 /* FrequencyInModule.cpp in Sources */,
