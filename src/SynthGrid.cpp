@@ -389,6 +389,12 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 			renderer.drawRect(moduleArea, Color(128,128,128));
 		}
 	}
+
+	if (mMode == SELECTING_MODULE)
+	{
+			SDL_Rect moduleArea = getModuleArea(mSelectedModule, area, true);
+			renderer.drawRect(moduleArea, Color(128,128,128));
+	}
 }
 
 
@@ -440,7 +446,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 							}
 						}
 					}
-					else if (mMode == IDLE || mMode == MOVING_MODULE)
+					else if (mMode == IDLE || mMode == MOVING_MODULE || mMode == SELECTING_MODULE)
 					{
 						// Abort moving if clicking on connectors
 
@@ -468,7 +474,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				}
 				else if (pickModule(event.button.x / SCALE, event.button.y / SCALE, mThisArea, moduleOut, true))
 				{
-					if (mMode == IDLE)
+					if (mMode == IDLE || mMode == SELECTING_MODULE)
 					{
 						mSelectedModule = moduleOut;
 						mHoveredConnection = -1;
@@ -489,7 +495,11 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						}
 						else
 						{
-							if (event.button.clicks == 2)
+							if (event.button.clicks == 1)
+							{
+								mMode = SELECTING_MODULE;
+							}
+							else if (event.button.clicks == 2)
 							{
 								showNewModuleDialog();
 							}
@@ -500,7 +510,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				break;
 
 			case SDL_BUTTON_RIGHT:
-				if (mMode == CONNECTING_MODULE || mMode == MOVING_MODULE)
+				if (mMode == CONNECTING_MODULE || mMode == MOVING_MODULE || mMode == SELECTING_MODULE)
 				{
 					// Abort connecting/moving
 					mMode = IDLE;
@@ -569,6 +579,214 @@ bool SynthGrid::onEvent(SDL_Event& event)
 		{
 			switch (event.key.keysym.sym)
 			{
+
+				case SDLK_RIGHT:
+				{
+					ModularSynth& modularSynth = getModularSynth();
+
+					if (mSelectedModule == -1)
+					{
+						mSelectedModule = 0;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+						return true;
+					}
+					if (event.key.keysym.mod & (KMOD_SHIFT) && modularSynth.getModule(mSelectedModule) != NULL && modularSynth.getModule(mSelectedModule)->getNumParams() != 0)
+					{
+						int dialSpeed = 1;
+
+						modularSynth.lock();
+						modularSynth.getModule(mSelectedModule)->onDial(dialSpeed);
+						modularSynth.unlock();
+						setDirty(true);
+					}
+					else
+					{
+						if (mSelectedModule + 1 <= ModularSynth::maxModules - 1 && (mSelectedModule + 1) % 4 != 0)
+							mSelectedModule += 1;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+					}
+					
+					return true;
+				}
+
+				case SDLK_LEFT:
+				{
+					ModularSynth& modularSynth = getModularSynth();
+
+					if (mSelectedModule == -1)
+					{
+						mSelectedModule = 0;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+						return true;
+					}
+					if (event.key.keysym.mod & (KMOD_SHIFT) && modularSynth.getModule(mSelectedModule) != NULL && modularSynth.getModule(mSelectedModule)->getNumParams() != 0)
+					{
+						int dialSpeed = 1;
+
+						modularSynth.lock();
+						modularSynth.getModule(mSelectedModule)->onDial(-dialSpeed);
+						modularSynth.unlock();
+						setDirty(true);
+					}
+					else
+					{
+						if (mSelectedModule - 1 >= 0 && (mSelectedModule - 1) % 4 != 3)
+							mSelectedModule -= 1;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+					}
+					
+					return true;
+				}
+
+				case SDLK_UP:
+				{
+					ModularSynth& modularSynth = getModularSynth();
+
+					if (mSelectedModule == -1)
+					{
+						mSelectedModule = 0;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+						return true;
+					}
+					if (event.key.keysym.mod & (KMOD_SHIFT) && modularSynth.getModule(mSelectedModule) != NULL && modularSynth.getModule(mSelectedModule)->getNumParams() != 0)
+					{
+						int dialSpeed = 10;
+
+						modularSynth.lock();
+						modularSynth.getModule(mSelectedModule)->onDial(dialSpeed);
+						modularSynth.unlock();
+						setDirty(true);
+					}
+					else
+					{
+						if(!(mSelectedModule - 4 < 0))
+							mSelectedModule -= 4;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+					}
+					
+					return true;
+				}
+
+				case SDLK_DOWN:
+				{
+					ModularSynth& modularSynth = getModularSynth();
+
+					if (mSelectedModule == -1)
+					{
+						mSelectedModule = 0;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+						return true;
+					}
+					if (event.key.keysym.mod & (KMOD_SHIFT) && modularSynth.getModule(mSelectedModule) != NULL && modularSynth.getModule(mSelectedModule)->getNumParams() != 0)
+					{
+						int dialSpeed = 10;
+
+						modularSynth.lock();
+						modularSynth.getModule(mSelectedModule)->onDial(-dialSpeed);
+						modularSynth.unlock();
+						setDirty(true);
+					}
+					else
+					{
+						if (!(mSelectedModule + 4 >= ModularSynth::maxModules))
+							mSelectedModule += 4;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+					}
+					
+					return true;
+				}
+
+				case SDLK_PAGEUP:
+				{
+					ModularSynth& modularSynth = getModularSynth();
+
+					if (mSelectedModule == -1)
+					{
+						mSelectedModule = 0;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+						return true;
+					}
+					if (mSelectedModule - 16 >= 0)
+					{
+						mSelectedModule -= 16;
+					}
+					else
+					{
+						int count = 0;
+
+						while (mSelectedModule + count > 3)
+						{
+							count -= 4;
+						}
+
+						mSelectedModule = mSelectedModule + count;
+					}
+
+					mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+					return true;
+				}
+
+				case SDLK_PAGEDOWN:
+				{
+					ModularSynth& modularSynth = getModularSynth();
+
+					if (mSelectedModule == -1)
+					{
+						mSelectedModule = 0;
+						mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+						return true;
+					}
+					if (mSelectedModule + 16 < ModularSynth::maxModules - 1)
+					{
+						mSelectedModule += 16;
+					}
+					else
+					{
+						int count = 0;
+
+						while (mSelectedModule + count < ModularSynth::maxModules - 4)
+						{
+							count += 4;
+						}
+
+						mSelectedModule = mSelectedModule + count;
+					}
+
+					mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+					return true;
+				}
+
+				case SDLK_HOME:
+				{
+					ModularSynth& modularSynth = getModularSynth();
+
+					mSelectedModule = 0;
+
+					mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+					return true;
+				}
+
+				case SDLK_END:
+				{
+					ModularSynth& modularSynth = getModularSynth();
+
+					mSelectedModule = ModularSynth::maxModules - 1;
+
+					mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+					return true;
+				}
+
+				case SDLK_RETURN:
+				{
+					ModularSynth& modularSynth = getModularSynth();
+
+					if (modularSynth.getModule(mSelectedModule) == NULL)
+						showNewModuleDialog();
+					else
+						modularSynth.getModule(mSelectedModule)->onAction(*this);
+					return true;
+				}
+
 				case SDLK_BACKSPACE:
 					gotoParentSynth();
 					return true;
@@ -582,6 +800,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					return true;
 
 				case SDLK_DELETE:
+				{
 					ModularSynth& modularSynth = getModularSynth();
 
 					if (mSelectedModule != -1 && modularSynth.getModule(mSelectedModule) != NULL)
@@ -590,10 +809,11 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						modularSynth.removeModule(mSelectedModule);
 						modularSynth.unlock();
 						rebuildWires();
-						mMode = IDLE;
+						mMode = SELECTING_MODULE;
 					}
 
 					return true;
+				}
 			}
 		}
 	}

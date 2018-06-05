@@ -50,7 +50,8 @@ private:
 	{
 		IDLE,
 		CONNECTING_MODULE,
-		MOVING_MODULE
+		MOVING_MODULE,
+		SELECTING_MODULE
 	};
 
 	SynthGridMode mMode;
