@@ -400,6 +400,11 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 
 void SynthGrid::turnDial(int delta, int moduleIndex)
 {
+	if (moduleIndex < 0 || moduleIndex >= ModularSynth::maxModules)
+	{
+		return;
+	}
+
 	ModularSynth& modularSynth = getModularSynth();
 	SynthModule* module = modularSynth.getModule(moduleIndex);
 
@@ -657,7 +662,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				case SDLK_PAGEDOWN:
 					moveCursor(SynthGrid::gridWidth * 4, false);
 					break;
-				
+
 				case SDLK_HOME:
 				case SDLK_END:
 				{
@@ -1060,16 +1065,16 @@ void SynthGrid::pasteSynth()
 	{
 		return;
 	}
-	
+
 	ModularSynth& synth = getModularSynth();
 	synth.lock();
 	synth.copy(*mCopyBuffer);
 	synth.unlock();
-	
+
 	rebuildWires();
-	
+
 	refreshView();
-	
+
 	showMessageV(MessageInfo, "Synth layout pasted");
 
 	notify();
