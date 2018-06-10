@@ -91,6 +91,9 @@ private:
 	void displaySaveDialog();
 	bool saveSynth(const char *path);
 	bool loadSynth(const char *path);
+	
+	void moveCursor(int delta, bool isHoriz);
+	void turnDial(int delta, int moduleIndex);
 
 public:
 
