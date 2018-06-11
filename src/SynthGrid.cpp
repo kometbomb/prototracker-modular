@@ -656,12 +656,32 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					break;
 
 				case SDLK_PAGEUP:
-					moveCursor(-SynthGrid::gridWidth * 4, false);
+				{
+					if (mSelectedModule < ModularSynth::maxModules / 2)
+					{
+						int x = mSelectedModule / 4;
+						moveCursor(-SynthGrid::gridWidth * x, false);
+					}
+					else
+					{
+						moveCursor(-SynthGrid::gridWidth * 4, false);
+					}
 					break;
+				}
 
 				case SDLK_PAGEDOWN:
-					moveCursor(SynthGrid::gridWidth * 4, false);
+				{
+					if (mSelectedModule > (ModularSynth::maxModules / 2) - 1)
+					{
+						int x = (ModularSynth::maxModules - 1 - mSelectedModule) / 4;
+						moveCursor(SynthGrid::gridWidth * x, false);
+					}
+					else
+					{
+						moveCursor(SynthGrid::gridWidth * 4, false);
+					}
 					break;
+				}
 
 				case SDLK_HOME:
 				case SDLK_END:
