@@ -430,17 +430,41 @@ void SynthGrid::moveCursor(int delta, bool isHoriz)
 		return;
 	}
 
-	if (delta < 0)
+	// Check if doing a page-up/down move
+	if (abs(delta) == SynthGrid::gridWidth * 4)
 	{
-		// Move horizontally only if already not on the first column
-		if (mSelectedModule + delta >= 0 && (!isHoriz || ((mSelectedModule + delta) % SynthGrid::gridWidth != (SynthGrid::gridWidth - 1))))
+		int jump;
+
+		// Check direction of move and see if it will go out of bounds
+		if (delta < 0 && mSelectedModule < ModularSynth::maxModules / 2)
+		{
+			jump = mSelectedModule / 4;
+			mSelectedModule += (-SynthGrid::gridWidth * jump);
+		}
+		else if (delta > 0 && mSelectedModule > (ModularSynth::maxModules / 2) - 1)
+		{
+			jump = (ModularSynth::maxModules - 1 - mSelectedModule) / 4;
+			mSelectedModule += (SynthGrid::gridWidth * jump);
+		}
+		else
+		{
 			mSelectedModule += delta;
+		}
 	}
 	else
 	{
-		// Move horizontally only if already not on the last column
-		if (mSelectedModule + delta <= ModularSynth::maxModules - 1 && (!isHoriz || ((mSelectedModule + delta) % SynthGrid::gridWidth != 0)))
-			mSelectedModule += delta;
+		if (delta < 0)
+		{
+			// Move horizontally only if already not on the first column
+			if (mSelectedModule + delta >= 0 && (!isHoriz || ((mSelectedModule + delta) % SynthGrid::gridWidth != (SynthGrid::gridWidth - 1))))
+				mSelectedModule += delta;
+		}
+		else
+		{
+			// Move horizontally only if already not on the last column
+			if (mSelectedModule + delta <= ModularSynth::maxModules - 1 && (!isHoriz || ((mSelectedModule + delta) % SynthGrid::gridWidth != 0)))
+				mSelectedModule += delta;
+		}
 	}
 
 	mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
@@ -656,32 +680,12 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					break;
 
 				case SDLK_PAGEUP:
-				{
-					if (mSelectedModule < ModularSynth::maxModules / 2)
-					{
-						int x = mSelectedModule / 4;
-						moveCursor(-SynthGrid::gridWidth * x, false);
-					}
-					else
-					{
-						moveCursor(-SynthGrid::gridWidth * 4, false);
-					}
+					moveCursor(-SynthGrid::gridWidth * 4, false);
 					break;
-				}
 
 				case SDLK_PAGEDOWN:
-				{
-					if (mSelectedModule > (ModularSynth::maxModules / 2) - 1)
-					{
-						int x = (ModularSynth::maxModules - 1 - mSelectedModule) / 4;
-						moveCursor(SynthGrid::gridWidth * x, false);
-					}
-					else
-					{
-						moveCursor(SynthGrid::gridWidth * 4, false);
-					}
+					moveCursor(SynthGrid::gridWidth * 4, false);
 					break;
-				}
 
 				case SDLK_HOME:
 				case SDLK_END:
