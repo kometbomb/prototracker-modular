@@ -430,41 +430,25 @@ void SynthGrid::moveCursor(int delta, bool isHoriz)
 		return;
 	}
 
-	// Check if doing a page-up/down move
-	if (abs(delta) == SynthGrid::gridWidth * 4)
-	{
-		int jump;
 
-		// Check direction of move and see if it will go out of bounds
-		if (delta < 0 && mSelectedModule < ModularSynth::maxModules / 2)
-		{
-			jump = mSelectedModule / 4;
-			mSelectedModule += (-SynthGrid::gridWidth * jump);
-		}
-		else if (delta > 0 && mSelectedModule > (ModularSynth::maxModules / 2) - 1)
-		{
-			jump = (ModularSynth::maxModules - 1 - mSelectedModule) / 4;
-			mSelectedModule += (SynthGrid::gridWidth * jump);
-		}
-		else
-		{
+	if (delta < 0)
+	{
+		// Move horizontally only if already not on the first column
+		if (mSelectedModule + delta >= 0 && (!isHoriz || ((mSelectedModule + delta) % SynthGrid::gridWidth != (SynthGrid::gridWidth - 1))))
 			mSelectedModule += delta;
-		}
 	}
 	else
 	{
-		if (delta < 0)
-		{
-			// Move horizontally only if already not on the first column
-			if (mSelectedModule + delta >= 0 && (!isHoriz || ((mSelectedModule + delta) % SynthGrid::gridWidth != (SynthGrid::gridWidth - 1))))
-				mSelectedModule += delta;
-		}
-		else
-		{
-			// Move horizontally only if already not on the last column
-			if (mSelectedModule + delta <= ModularSynth::maxModules - 1 && (!isHoriz || ((mSelectedModule + delta) % SynthGrid::gridWidth != 0)))
-				mSelectedModule += delta;
-		}
+		// Move horizontally only if already not on the last column
+		if (mSelectedModule + delta <= ModularSynth::maxModules - 1 && (!isHoriz || ((mSelectedModule + delta) % SynthGrid::gridWidth != 0)))
+			mSelectedModule += delta;
+	}
+
+	if (!isHoriz)
+	{
+		// Ensure the up/down movement doesn't ever change the column if upper/lower limit is reached
+		int column = mSelectedModule % gridWidth;
+		mSelectedModule = std::min(std::max(mSelectedModule, column), ModularSynth::maxModules - column);
 	}
 
 	mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
