@@ -35,13 +35,6 @@ const char * DisplayModule::getName() const
 }
 
 
-void DisplayModule::onLoaded()
-{
-	setInput(0, 0.0f);
-	floatToChar(getInput(0));
-}
-
-
 SynthModule * DisplayModule::createModule(ModularSynth& synth)
 {
 	return new DisplayModule(synth);
@@ -51,19 +44,7 @@ SynthModule * DisplayModule::createModule(ModularSynth& synth)
 void DisplayModule::render(Renderer& renderer, const SDL_Rect& moduleArea, bool isSelected) const
 {
 	renderer.renderRect(moduleArea, getModuleColor(isSelected));
-	
-	floatToChar(getInput(0));
-	
+
 	SDL_Rect textArea = {moduleArea.x + 2, moduleArea.y + moduleArea.h / 2 - 4, 100, 100};
-	renderer.renderText(textArea, Color(255,255,255), floatToChar(getInput(0)));
-}
-
-
-char * DisplayModule::floatToChar(float value) const
-{
-	static char mValueStr[25];
-	
-	sprintf(mValueStr, "%.2f", value);
-	
-	return mValueStr;
+	renderer.renderTextV(textArea, Color(255,255,255), "%.2f", getInput(0));
 }

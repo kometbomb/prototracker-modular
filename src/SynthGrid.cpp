@@ -389,6 +389,61 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 			renderer.drawRect(moduleArea, Color(128,128,128));
 		}
 	}
+
+	if (mMode == SELECTING_MODULE)
+	{
+			SDL_Rect moduleArea = getModuleArea(mSelectedModule, area, true);
+			renderer.drawRect(moduleArea, Color(128,128,128));
+	}
+}
+
+
+void SynthGrid::turnDial(int delta, int moduleIndex)
+{
+	if (moduleIndex < 0 || moduleIndex >= ModularSynth::maxModules)
+	{
+		return;
+	}
+
+	ModularSynth& modularSynth = getModularSynth();
+	SynthModule* module = modularSynth.getModule(moduleIndex);
+
+	if (module != NULL && module->getNumParams() != 0)
+	{
+		modularSynth.lock();
+		module->onDial(delta);
+		modularSynth.unlock();
+		setDirty(true);
+	}
+}
+
+
+void SynthGrid::moveCursor(int delta, bool isHoriz)
+{
+	ModularSynth& modularSynth = getModularSynth();
+
+	if (mSelectedModule == -1)
+	{
+		mSelectedModule = 0;
+		mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+		setDirty(true);
+		return;
+	}
+
+
+	// Move horizontally only if already not on the first column
+	if (!isHoriz || ((mSelectedModule + delta) / SynthGrid::gridWidth == mSelectedModule / SynthGrid::gridWidth))
+		mSelectedModule += delta;
+
+	if (!isHoriz)
+	{
+		// Ensure the up/down movement doesn't ever change the column if upper/lower limit is reached
+		int column = (mSelectedModule + ModularSynth::maxModules) % SynthGrid::gridWidth;
+		mSelectedModule = std::min(std::max(mSelectedModule, column), ModularSynth::maxModules - SynthGrid::gridWidth + column);
+	}
+
+	mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+	setDirty(true);
 }
 
 
@@ -440,7 +495,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 							}
 						}
 					}
-					else if (mMode == IDLE || mMode == MOVING_MODULE)
+					else if (mMode == IDLE || mMode == MOVING_MODULE || mMode == SELECTING_MODULE)
 					{
 						// Abort moving if clicking on connectors
 
@@ -468,7 +523,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				}
 				else if (pickModule(event.button.x / SCALE, event.button.y / SCALE, mThisArea, moduleOut, true))
 				{
-					if (mMode == IDLE)
+					if (mMode == IDLE || mMode == SELECTING_MODULE)
 					{
 						mSelectedModule = moduleOut;
 						mHoveredConnection = -1;
@@ -489,7 +544,11 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						}
 						else
 						{
-							if (event.button.clicks == 2)
+							if (event.button.clicks == 1)
+							{
+								mMode = SELECTING_MODULE;
+							}
+							else if (event.button.clicks == 2)
 							{
 								showNewModuleDialog();
 							}
@@ -500,7 +559,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 				break;
 
 			case SDL_BUTTON_RIGHT:
-				if (mMode == CONNECTING_MODULE || mMode == MOVING_MODULE)
+				if (mMode == CONNECTING_MODULE || mMode == MOVING_MODULE || mMode == SELECTING_MODULE)
 				{
 					// Abort connecting/moving
 					mMode = IDLE;
@@ -543,11 +602,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 			if (modState & KMOD_SHIFT)
 				dialSpeed *= 10;
 
-			ModularSynth& synth = getModularSynth();
-			synth.lock();
-			synth.getModule(moduleOut)->onDial(event.wheel.y < 0 ? -dialSpeed : dialSpeed);
-			synth.unlock();
-			setDirty(true);
+			turnDial(event.wheel.y < 0 ? -dialSpeed : dialSpeed, moduleOut);
 		}
 	}
 	else if (event.type == SDL_KEYDOWN)
@@ -567,8 +622,75 @@ bool SynthGrid::onEvent(SDL_Event& event)
 		}
 		else
 		{
+			ModularSynth& modularSynth = getModularSynth();
+
 			switch (event.key.keysym.sym)
 			{
+				case SDLK_RIGHT:
+					if (event.key.keysym.mod & KMOD_SHIFT)
+						turnDial(1, mSelectedModule);
+					else
+						moveCursor(1, true);
+					return true;
+
+				case SDLK_LEFT:
+					if (event.key.keysym.mod & KMOD_SHIFT)
+						turnDial(-1, mSelectedModule);
+					else
+						moveCursor(-1, true);
+					return true;
+
+				case SDLK_UP:
+					if (event.key.keysym.mod & KMOD_SHIFT)
+						turnDial(10, mSelectedModule);
+					else
+						moveCursor(-SynthGrid::gridWidth, false);
+					break;
+
+				case SDLK_DOWN:
+					if (event.key.keysym.mod & KMOD_SHIFT)
+						turnDial(-10, mSelectedModule);
+					else
+						moveCursor(SynthGrid::gridWidth, false);
+					break;
+
+				case SDLK_PAGEUP:
+					moveCursor(-SynthGrid::gridWidth * 4, false);
+					break;
+
+				case SDLK_PAGEDOWN:
+					moveCursor(SynthGrid::gridWidth * 4, false);
+					break;
+
+				case SDLK_HOME:
+				case SDLK_END:
+				{
+					int direction = event.key.keysym.sym == SDLK_HOME ? 1 : 0;
+
+					switch (direction)
+					{
+					case 1:
+						mSelectedModule = 0;
+						break;
+
+					case 0:
+						mSelectedModule = ModularSynth::maxModules - 1;
+						break;
+					}
+
+					mMode = modularSynth.getModule(mSelectedModule) == NULL ? SELECTING_MODULE : IDLE;
+					return true;
+				}
+
+				case SDLK_RETURN:
+				{
+					if (modularSynth.getModule(mSelectedModule) == NULL)
+						showNewModuleDialog();
+					else
+						modularSynth.getModule(mSelectedModule)->onAction(*this);
+					return true;
+				}
+
 				case SDLK_BACKSPACE:
 					gotoParentSynth();
 					return true;
@@ -582,18 +704,18 @@ bool SynthGrid::onEvent(SDL_Event& event)
 					return true;
 
 				case SDLK_DELETE:
-					ModularSynth& modularSynth = getModularSynth();
-
+				{
 					if (mSelectedModule != -1 && modularSynth.getModule(mSelectedModule) != NULL)
 					{
 						modularSynth.lock();
 						modularSynth.removeModule(mSelectedModule);
 						modularSynth.unlock();
 						rebuildWires();
-						mMode = IDLE;
+						mMode = SELECTING_MODULE;
 					}
 
 					return true;
+				}
 			}
 		}
 	}
@@ -942,16 +1064,16 @@ void SynthGrid::pasteSynth()
 	{
 		return;
 	}
-	
+
 	ModularSynth& synth = getModularSynth();
 	synth.lock();
 	synth.copy(*mCopyBuffer);
 	synth.unlock();
-	
+
 	rebuildWires();
-	
+
 	refreshView();
-	
+
 	showMessageV(MessageInfo, "Synth layout pasted");
 
 	notify();
