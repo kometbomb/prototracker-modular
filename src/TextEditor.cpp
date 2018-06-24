@@ -103,7 +103,7 @@ void TextEditor::onDraw(Renderer& renderer, const SDL_Rect& area)
 	if (mBuffer == NULL)
 		return;
 
-	renderer.renderText(area, Color(), mBuffer);
+	renderer.renderText(area, renderer.getTheme().getColor(Theme::ColorType::NormalText), mBuffer);
 
 	if ((hasFocus() && mIsEditing) || mAlwaysShowCursor)
 	{
