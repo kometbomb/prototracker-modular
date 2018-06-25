@@ -132,8 +132,8 @@ void AutomationEditor::onDraw(Renderer& renderer, const SDL_Rect& area)
 		{
 			SDL_Rect nodeArea = getNodeArea(area, i);
 			renderer.clearRect(nodeArea, mSelectedNode == i ?
-				renderer.getTheme().getColor(Theme::ColorType::AutomationNode) :
-				renderer.getTheme().getColor(Theme::ColorType::AutomationNodeSelected));
+				renderer.getTheme().getColor(Theme::ColorType::AutomationNodeSelected) :
+				renderer.getTheme().getColor(Theme::ColorType::AutomationNode));
 		}
 	}
 }

@@ -69,9 +69,9 @@ void ModuleSelector::renderItem(Renderer& renderer, const SDL_Rect& area, const 
 	Color color;
 
 	if (isSelected)
-		color = Color(255, 0, 0);
+		color = renderer.getTheme().getColor(Theme::ColorType::SelectedRow);
 
-	renderer.clearRect(area, Color(0, 0, 0));
+	renderer.clearRect(area, renderer.getTheme().getColor(Theme::ColorType::ModalBackground));
 
 	renderer.renderTextV(area, color, "%s", moduleInfo.name);
 }
