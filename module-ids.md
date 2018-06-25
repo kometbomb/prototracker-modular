@@ -15,5 +15,6 @@ Here's a list of reserved module IDs.
 | 31 | vu-meter |
 | 32-34 | module-container |
 | 35 | pull-21 |
-| 36 | virtual-track | 
+| 36 | virtual-track |
 | 37 | eg-hard-reset |
+| 39 | divisor-module |
