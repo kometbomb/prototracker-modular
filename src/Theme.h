@@ -54,6 +54,13 @@ public:
 		TextBackground,
 		TextFocus,
 		OscilloscopeColor,
+		AutomationVerticalLine,
+		AutomationSpline,
+		AutomationSplineCurrent,
+		AutomationPlayHead,
+		AutomationEditPos,
+		AutomationNode,
+		AutomationNodeSelected,
 		NumColors
 	};
 

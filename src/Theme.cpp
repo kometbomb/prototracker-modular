@@ -146,6 +146,13 @@ bool Theme::loadDefinition(const std::string& path)
 		"TextBackground",
 		"TextFocus",
 		"Oscilloscope",
+		"AutomationVerticalLine",
+		"AutomationSpline",
+		"AutomationSplineCurrent",
+		"AutomationPlayHead",
+		"AutomationEditPos",
+		"AutomationNode",
+		"AutomationNodeSelected",
 		NULL,
 	};
 

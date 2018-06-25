@@ -91,7 +91,7 @@ void TextEditor::onDraw(Renderer& renderer, const SDL_Rect& area)
 	setDirty(false);
 
 	if (hasFocus())
-		renderer.clearRect(area, gi);
+		renderer.clearRect(area, renderer.getTheme().getColor(Theme::ColorType::TextFocus));
 	else
 	{
 		if (mSolidBackground)

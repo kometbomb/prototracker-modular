@@ -270,17 +270,6 @@ void SynthGrid::onDraw(Renderer& renderer, const SDL_Rect& area)
 
 	renderer.renderBackground(area);
 
-	/*for (const auto& node : mNetwork)
-	{
-		SDL_Rect nodeArea = { node.x * area.w / (networkWidth - 1) + area.x, node.y * area.h / (networkHeight - 1) + area.y, 16, 16 };
-		for (const auto& neighbor : node.connections)
-		{
-			const PathFinder::Node neighborNode = mNetwork[neighbor.node];
-			SDL_Rect neighborNodeArea = { neighborNode.x * area.w / (networkWidth - 1) + area.x, neighborNode.y * area.h / (networkHeight - 1) + area.y, 16, 16 };
-			renderer.renderLine(nodeArea.x, nodeArea.y, neighborNodeArea.x, neighborNodeArea.y, Color(64,64,64));
-		}
-	}*/
-
 	const ModularSynth& modularSynth = getModularSynth();
 
 	for (int index = 0 ; index < ModularSynth::maxModules ; ++index)
