@@ -9,7 +9,7 @@ DivModule::DivModule(ModularSynth& synth)
 
 void DivModule::cycle()
 {
-	float divisor = std::max(1.0f, getInput(1));
+	float divisor = std::max(0.01f, getInput(1));
 	setOutput(0, getInput(0) / divisor);
 }
 
