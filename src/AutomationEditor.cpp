@@ -70,14 +70,14 @@ void AutomationEditor::onDraw(Renderer& renderer, const SDL_Rect& area)
 
 	for (int x = area.x - getScrollPosition() ; x < area.w + area.x ; x += patternLength)
 	{
-		renderer.renderLine(x, area.y, x, area.y + area.h, renderer.getTheme().getColor(Theme::ColorType::AutomationVerticalLine));
+		renderer.renderLine(x, area.y, x, area.y + area.h, Theme::ColorType::AutomationVerticalLine);
 	}
 
 	float time = synth.getSongPosition();
 	int editPos = mEditorState.patternEditor.currentRow + mEditorState.sequenceEditor.currentRow * patternLength;
 
-	renderer.renderLine(time - getScrollPosition() + area.x, area.y, time - getScrollPosition() + area.x, area.y + area.h, renderer.getTheme().getColor(Theme::ColorType::AutomationPlayHead));
-	renderer.renderLine(editPos - getScrollPosition() + area.x, area.y, editPos - getScrollPosition() + area.x, area.y + area.h, renderer.getTheme().getColor(Theme::ColorType::AutomationEditPos));
+	renderer.renderLine(time - getScrollPosition() + area.x, area.y, time - getScrollPosition() + area.x, area.y + area.h, Theme::ColorType::AutomationPlayHead);
+	renderer.renderLine(editPos - getScrollPosition() + area.x, area.y, editPos - getScrollPosition() + area.x, area.y + area.h, Theme::ColorType::AutomationEditPos);
 
 	for (int track = 0 ; track < Synth::maxAutomationTracks ; ++track)
 	{
@@ -100,8 +100,8 @@ void AutomationEditor::onDraw(Renderer& renderer, const SDL_Rect& area)
 
 				renderer.renderLine(px, py, x, y,
 					track == mEditorState.automationTrack ?
-					renderer.getTheme().getColor(Theme::ColorType::AutomationSplineCurrent) :
-					renderer.getTheme().getColor(Theme::ColorType::AutomationSpline));
+					Theme::ColorType::AutomationSplineCurrent :
+					Theme::ColorType::AutomationSpline);
 
 				px = x;
 				py = y;
@@ -122,7 +122,7 @@ void AutomationEditor::onDraw(Renderer& renderer, const SDL_Rect& area)
 			int x = nodeArea.x + nodeArea.w / 2;
 			int y = nodeArea.y + nodeArea.h / 2;
 
-			renderer.renderLine(px, py, x, y, renderer.getTheme().getColor(Theme::ColorType::AutomationSplineCurrent));
+			renderer.renderLine(px, py, x, y, Theme::ColorType::AutomationSplineCurrent);
 
 			px = x;
 			py = y;
@@ -132,8 +132,8 @@ void AutomationEditor::onDraw(Renderer& renderer, const SDL_Rect& area)
 		{
 			SDL_Rect nodeArea = getNodeArea(area, i);
 			renderer.clearRect(nodeArea, mSelectedNode == i ?
-				renderer.getTheme().getColor(Theme::ColorType::AutomationNodeSelected) :
-				renderer.getTheme().getColor(Theme::ColorType::AutomationNode));
+				Theme::ColorType::AutomationNodeSelected :
+				Theme::ColorType::AutomationNode);
 		}
 	}
 }
