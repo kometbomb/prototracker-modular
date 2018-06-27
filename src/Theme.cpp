@@ -128,52 +128,50 @@ bool Theme::loadDefinition(const std::string& path)
 
 	int lineCounter = 0;
 
-	static const char *colorNames[] = {
-		"CurrentRow",
-		"BlockMarker",
-		"EditCursor",
-		"NonEditCursor",
-		"RowCounter",
-		"SelectedRow",
-		"ModalBackground",
-		"ModalBorder",
-		"ModalTitleBackground",
-		"ModalTitleText",
-		"NormalText",
-		"ScrollBar",
-		"PlayHead",
-		"TextCursor",
-		"TextBackground",
-		"TextFocus",
-		"Oscilloscope",
-		"AutomationVerticalLine",
-		"AutomationSpline",
-		"AutomationSplineCurrent",
-		"AutomationPlayHead",
-		"AutomationEditPos",
-		"AutomationNode",
-		"AutomationNodeSelected",
-		NULL,
+	static struct { ColorType type; const char *name; } colors[] = {
+		{ ColorType::CurrentRow, "CurrentRow" },
+		{ ColorType::BlockMarker, "BlockMarker" },
+		{ ColorType::EditCursor, "EditCursor" },
+		{ ColorType::NonEditCursor, "NonEditCursor" },
+		{ ColorType::RowCounter, "RowCounter" },
+		{ ColorType::SelectedRow, "SelectedRow" },
+		{ ColorType::ModalBackground, "ModalBackground" },
+		{ ColorType::ModalBorder, "ModalBorder" },
+		{ ColorType::ModalTitleBackground, "ModalTitleBackground" },
+		{ ColorType::ModalTitleText, "ModalTitleText" },
+		{ ColorType::NormalText, "NormalText" },
+		{ ColorType::ScrollBar, "ScrollBar" },
+		{ ColorType::PlayHead, "PlayHead" },
+		{ ColorType::TextCursor, "TextCursor" },
+		{ ColorType::TextBackground, "TextBackground" },
+		{ ColorType::TextFocus, "TextFocus" },
+		{ ColorType::OscilloscopeColor, "Oscilloscope" },
+		{ ColorType::AutomationVerticalLine, "AutomationVerticalLine" },
+		{ ColorType::AutomationSpline, "AutomationSpline" },
+		{ ColorType::AutomationSplineCurrent, "AutomationSplineCurrent" },
+		{ ColorType::AutomationPlayHead, "AutomationPlayHead" },
+		{ ColorType::AutomationEditPos, "AutomationEditPos" },
+		{ ColorType::AutomationNode, "AutomationNode" },
+		{ ColorType::AutomationNodeSelected, "AutomationNodeSelected" },
 	};
 
-	static const char *elementNames[] = {
-		"PatternEditor",
-		"SequenceEditor",
-		"MacroEditor",
-		"Oscilloscope",
-		"SongName",
-		"MacroName",
-		"MacroNumber",
-		"SequencePosition",
-		"SequenceLength",
-		"PatternLength",
-		"OctaveNumber",
-		"TouchRegion",
-		"SynthGrid",
-		"AutomationEditor",
-		"AutomationTrack",
-		"SynthGridName",
-		NULL
+	static struct { ElementType type; const char *name; } elements[] = {
+		{ ElementType::PatternEditor, "PatternEditor" },
+		{ ElementType::SequenceEditor, "SequenceEditor" },
+		{ ElementType::MacroEditor, "MacroEditor" },
+		{ ElementType::Oscilloscope, "Oscilloscope"},
+		{ ElementType::SongName, "SongName"},
+		{ ElementType::MacroName, "MacroName"},
+		{ ElementType::MacroNumber, "MacroNumber"},
+		{ ElementType::SequencePosition, "SequencePosition"},
+		{ ElementType::SequenceLength, "SequenceLength"},
+		{ ElementType::PatternLength, "PatternLength"},
+		{ ElementType::OctaveNumber, "OctaveNumber"},
+		{ ElementType::TouchRegion, "TouchRegion"},
+		{ ElementType::SynthGrid, "SynthGrid" },
+		{ ElementType::AutomationEditor, "AutomationEditor" },
+		{ ElementType::AutomationTrack, "AutomationTrack" },
+		{ ElementType::SynthGridName, "SynthGridName" },
 	};
 
 	while (true)
@@ -204,11 +202,11 @@ bool Theme::loadDefinition(const std::string& path)
 			if (strcmp(elementName, "Color") == 0)
 			{
 				ColorType colorType = NumColors;
-				for (int index = 0 ; colorNames[index] ; ++index)
+				for (auto color : colors)
 				{
-					if (strcmp(colorNames[index], path) == 0)
+					if (strcmp(color.name, path) == 0)
 					{
-						colorType = static_cast<Theme::ColorType>(index);
+						colorType = color.type;
 						break;
 					}
 				}
@@ -236,11 +234,11 @@ bool Theme::loadDefinition(const std::string& path)
 			Element element;
 			element.type = Theme::Unknown;
 
-			for (int index = 0 ; elementNames[index] ; ++index)
+			for (auto elementDef : elements)
 			{
-				if (strcmp(elementNames[index], elementName) == 0)
+				if (strcmp(elementDef.name, elementName) == 0)
 				{
-					element.type = static_cast<Theme::ElementType>(index);
+					element.type = elementDef.type;
 					break;
 				}
 			}
