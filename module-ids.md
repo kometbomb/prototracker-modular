@@ -18,3 +18,4 @@ Here's a list of reserved module IDs.
 | 36 | virtual-track |
 | 37 | eg-hard-reset |
 | 39 | divisor-module |
+| 40 | midi-controlelr-module |
