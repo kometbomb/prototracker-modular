@@ -66,12 +66,12 @@ void ModuleSelector::reject(bool isFinal)
 void ModuleSelector::renderItem(Renderer& renderer, const SDL_Rect& area, const GenericSelector::Item& item, bool isSelected)
 {
 	const ModuleInfo& moduleInfo = static_cast<const ModuleInfo&>(item);
-	Color color;
+	Theme::ColorType color = Theme::ColorType::NormalText;
 
 	if (isSelected)
-		color = Color(255, 0, 0);
+		color = Theme::ColorType::SelectedRow;
 
-	renderer.clearRect(area, Color(0, 0, 0));
+	renderer.clearRect(area, Theme::ColorType::ModalBackground);
 
 	renderer.renderTextV(area, color, "%s", moduleInfo.name);
 }

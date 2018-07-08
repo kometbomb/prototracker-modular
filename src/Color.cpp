@@ -7,25 +7,6 @@ Color::Color(int _r, int _g, int _b, int _a)
 }
 
 
-Color Color::getColor(ColorType type)
-{
-	switch (type)
-	{
-		case ColorType::EditCursor:
-			return Color(255, 0, 0);
-
-		case ColorType::NonEditCursor:
-			return Color(0, 0, 255);
-
-		case ColorType::RowCounter:
-			return Color(128, 128, 255);
-
-		default:
-			return Color();
-	}
-}
-
-
 Color Color::getEffectColor(const EffectParam& effect)
 {
 	if (effect.isEmpty())
