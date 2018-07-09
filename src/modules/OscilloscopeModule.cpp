@@ -125,8 +125,10 @@ void OscilloscopeModule::render(Renderer& renderer, const SDL_Rect& moduleArea, 
 		bufPos = (x * mSampleLength / moduleArea.w + mSampleStart) % mBufferLength;
 		int y = std::max(-maxAmp, std::min(maxAmp - 1, static_cast<int>(mBuffer[bufPos] * maxAmp)));
 
-		renderer.renderLine(moduleArea.x + x - 1, py + moduleArea.y + moduleArea.h / 2, moduleArea.x + x, y + moduleArea.y + moduleArea.h / 2, Color(255, 255, 255));
+		renderer.renderLine(moduleArea.x + x - 1, -py + moduleArea.y + moduleArea.h / 2, moduleArea.x + x, -y + moduleArea.y + moduleArea.h / 2, Color(255, 255, 255));
 
 		py = y;
 	}
+
 }
+

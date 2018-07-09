@@ -146,6 +146,13 @@ bool Theme::loadDefinition(const std::string& path)
 		{ ColorType::TextBackground, "TextBackground" },
 		{ ColorType::TextFocus, "TextFocus" },
 		{ ColorType::OscilloscopeColor, "Oscilloscope" },
+		{ ColorType::AutomationVerticalLine, "AutomationVerticalLine" },
+		{ ColorType::AutomationSpline, "AutomationSpline" },
+		{ ColorType::AutomationSplineCurrent, "AutomationSplineCurrent" },
+		{ ColorType::AutomationPlayHead, "AutomationPlayHead" },
+		{ ColorType::AutomationEditPos, "AutomationEditPos" },
+		{ ColorType::AutomationNode, "AutomationNode" },
+		{ ColorType::AutomationNodeSelected, "AutomationNodeSelected" },
 	};
 
 	static struct { ElementType type; const char *name; } elements[] = {
@@ -161,6 +168,10 @@ bool Theme::loadDefinition(const std::string& path)
 		{ ElementType::PatternLength, "PatternLength"},
 		{ ElementType::OctaveNumber, "OctaveNumber"},
 		{ ElementType::TouchRegion, "TouchRegion"},
+		{ ElementType::SynthGrid, "SynthGrid" },
+		{ ElementType::AutomationEditor, "AutomationEditor" },
+		{ ElementType::AutomationTrack, "AutomationTrack" },
+		{ ElementType::SynthGridName, "SynthGridName" },
 	};
 
 	while (true)

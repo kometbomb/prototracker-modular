@@ -17,4 +17,6 @@ Here's a list of reserved module IDs.
 | 35 | pull-21 |
 | 36 | virtual-track |
 | 37 | eg-hard-reset |
+| 39 | divisor-module |
+| 40 | midi-controlelr-module |
 | 41 | virtual-tracks |

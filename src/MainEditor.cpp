@@ -1,3 +1,4 @@
+#include "Debug.h"
 #include "MainEditor.h"
 #include "IPlayer.h"
 #include "Debug.h"
@@ -21,6 +22,7 @@
 #include "ISynth.h"
 #include "Mixer.h"
 #include "Value.h"
+#include "Debug.h"
 #include "SequenceRow.h"
 #include "ITrackState.h"
 #include "FileSection.h"

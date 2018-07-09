@@ -30,8 +30,8 @@ public:
 	void populate(const Mixer& mixer);
 
 
-	/* After the dialog finishes this will return the path
-	 * and filename to selected (or new) file
+	/* After the dialog finishes this will return the name
+	 * of the selected device
 	 */
 	const char * getSelectedDevice() const;
 };
