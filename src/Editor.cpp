@@ -7,7 +7,8 @@
 #define MODAL_BORDER 2
 
 Editor::Editor(EditorState& editorState, bool wantsFocus)
-	: mEditorState(editorState), mFocus(NULL), mModal(NULL), mIsDirty(true), mRedraw(true), mParent(NULL), mNumChildren(0), mWantsFocus(wantsFocus)
+	: mEditorState(editorState), mFocus(NULL), mModal(NULL), mIsDirty(true), mRedraw(true),
+	mParent(NULL), mWantsFocus(wantsFocus), mPopupMessageId(-1), mMounted(false)
 {
 	mThisArea.x = 0;
 	mThisArea.y = 0;
@@ -15,6 +16,12 @@ Editor::Editor(EditorState& editorState, bool wantsFocus)
 
 
 Editor::~Editor() {}
+
+
+void Editor::onRendererMount(const Renderer& renderer)
+{
+
+}
 
 
 Editor * Editor::getFocus()
@@ -75,12 +82,8 @@ bool Editor::isDirty() const
 void Editor::addChild(Editor *child, int x, int y, int w, int h)
 {
 	child->mParent = this;
-	SDL_Rect& area = mChildrenArea[mNumChildren];
-	area.x = x;
-	area.y = y;
-	area.w = w;
-	area.h = h;
-	mChildren[mNumChildren++] = child;
+	SDL_Rect area = { x, y, w, h };
+	mChildren.push_back(EditorChild(child, area));
 
 	SDL_Rect absArea = {area.x + mThisArea.x, area.y + mThisArea.y, area.w, area.h};
 
@@ -114,8 +117,8 @@ void Editor::onAreaChanged(const SDL_Rect& area)
 
 bool Editor::hasDirty() const
 {
-	for (int i = 0 ; i < mNumChildren ; ++i)
-		if (mChildren[i]->isDirty())
+	for (auto child : mChildren)
+		if (child.editor->isDirty())
 			return true;
 
 	return false;
@@ -145,9 +148,14 @@ void Editor::drawCoveredChildren(Renderer& renderer, const SDL_Rect& area, const
 {
 	renderer.renderBackground(childArea);
 
-	for (int index = 0 ; index <= maxIndex && index < mNumChildren ; ++index)
+	int index = 0;
+
+	for (auto child : mChildren)
 	{
-		SDL_Rect thisChildArea = mChildrenArea[index];
+		if (index > maxIndex)
+			break;
+
+		SDL_Rect thisChildArea = child.area;
 		thisChildArea.x += area.x;
 		thisChildArea.y += area.y;
 
@@ -156,19 +164,22 @@ void Editor::drawCoveredChildren(Renderer& renderer, const SDL_Rect& area, const
 		if (intersectRect(childArea, thisChildArea, intersection))
 		{
 			renderer.setClip(intersection);
-			mChildren[index]->draw(renderer, thisChildArea);
+			child.editor->draw(renderer, thisChildArea);
 		}
+
+		++index;
 	}
 }
 
 
 void Editor::drawChildren(Renderer& renderer, const SDL_Rect& area)
 {
-	for (int index = 0 ; index < mNumChildren ; ++index)
+	int index = 0;
+	for (auto child : mChildren)
 	{
-		if (mChildren[index]->isDirty())
+		if (child.editor->isDirty())
 		{
-			SDL_Rect childArea = mChildrenArea[index];
+			SDL_Rect childArea = child.area;
 			childArea.x += area.x;
 			childArea.y += area.y;
 
@@ -176,8 +187,10 @@ void Editor::drawChildren(Renderer& renderer, const SDL_Rect& area)
 
 			renderer.setClip(childArea);
 
-			mChildren[index]->draw(renderer, childArea);
+			child.editor->draw(renderer, childArea);
 		}
+
+		index++;
 	}
 }
 
@@ -196,8 +209,8 @@ void Editor::drawModal(Renderer& renderer)
 			modalBorder.y -= MODAL_BORDER;
 			modalBorder.w += MODAL_BORDER * 2;
 			modalBorder.h += MODAL_BORDER * 2;
-			renderer.clearRect(modalBorder, Color(0, 0, 0));
-			renderer.drawRect(modalBorder, Color(255, 255, 255));
+			renderer.clearRect(modalBorder, Theme::ColorType::ModalBackground);
+			renderer.drawRect(modalBorder, Theme::ColorType::ModalBorder);
 		}
 
 		mModal->draw(renderer, mModal->getArea());
@@ -218,8 +231,8 @@ void Editor::setModal(Editor *modal)
 	if (mModal != NULL)
 	{
 		mModal->mParent = this;
-		SDL_Rect modalArea = { mThisArea.x + 16, mThisArea.y + 16,
-			mThisArea.w - 32, mThisArea.h - 32 };
+		SDL_Rect modalArea = { mThisArea.x + modalMargin, mThisArea.y + modalMargin,
+			mThisArea.w - modalMargin * 2, mThisArea.h - modalMargin * 2 };
 		mModal->setArea(modalArea);
 		mModal->onModalStatusChange(true);
 	}
@@ -238,9 +251,9 @@ void Editor::invalidateAll()
 	setDirty(true);
 	mRedraw = true;
 
-	for (int index = 0 ; index < mNumChildren ; ++index)
+	for (auto child : mChildren)
 	{
-		mChildren[index]->invalidateAll();
+		child.editor->invalidateAll();
 	}
 
 	if (mModal)
@@ -259,6 +272,13 @@ void Editor::draw(Renderer& renderer, const SDL_Rect& area)
 	// and perhaps also other child Editors.
 
 	invalidateAll();
+
+	// First time rendered
+	if (!mMounted)
+	{
+		this->onRendererMount(renderer);
+		mMounted = true;
+	}
 
 	this->onDraw(renderer, area);
 	drawChildren(renderer, area);
@@ -340,7 +360,7 @@ void Editor::showTooltip(const SDL_Rect& area, const char* message)
 }
 
 
-void Editor::showMessageV(MessageClass messageClass, const char* message, ...)
+int Editor::showMessageV(MessageClass messageClass, int messageId, const char* message, ...)
 {
 	char dest[1024];
     va_list argptr;
@@ -348,16 +368,49 @@ void Editor::showMessageV(MessageClass messageClass, const char* message, ...)
     vsnprintf(dest, sizeof(dest), message, argptr);
     va_end(argptr);
 
-	showMessage(messageClass, dest);
+	return showMessage(messageClass, messageId, dest);
 }
 
 
-void Editor::showMessage(MessageClass messageClass, const char* message)
+int Editor::showMessageV(MessageClass messageClass, const char* message, ...)
+{
+	char dest[1024];
+    va_list argptr;
+    va_start(argptr, message);
+    vsnprintf(dest, sizeof(dest), message, argptr);
+    va_end(argptr);
+
+	return showMessage(messageClass, dest);
+}
+
+
+int Editor::showMessageInner(MessageClass messageClass, int messageId, const char* message)
+{
+	debug("[%s] %s", messageClass == MessageInfo ? "INFO" : "ERROR", message);
+	return 0;
+}
+
+
+int Editor::showMessage(MessageClass messageClass, int messageId, const char* message)
 {
 	if (mParent != NULL)
-		mParent->showMessage(messageClass, message);
+		return mParent->showMessage(messageClass, messageId, message);
 	else
-		debug("[%s] %s", messageClass == MessageInfo ? "INFO" : "ERROR", message);
+	{
+		int finalId = messageId;
+
+		// If useSingleMessage was given as ID use the stored per Editor ID
+		if (messageId == replacePreviousMessage)
+			finalId = mPopupMessageId;
+
+		return mPopupMessageId = showMessageInner(messageClass, finalId, message);
+	}
+}
+
+
+int Editor::showMessage(MessageClass messageClass, const char* message)
+{
+	return showMessage(messageClass, -2, message);
 }
 
 
@@ -371,33 +424,39 @@ void Editor::update(int ms)
 {
 	onUpdate(ms);
 
-	for (int index = 0 ; index < mNumChildren ; ++index)
+	for (auto child : mChildren)
 	{
-		mChildren[index]->update(ms);
+		child.editor->update(ms);
 	}
 }
 
 
 void Editor::onLoaded()
 {
-	for (int index = 0 ; index < mNumChildren ; ++index)
+	for (auto child : mChildren)
 	{
-		mChildren[index]->onLoaded();
+		child.editor->onLoaded();
 	}
 }
 
 
-void Editor::childAreaChanged(Editor *child)
+void Editor::childAreaChanged(Editor* changedChild)
 {
-	for (int index = 0 ; index < mNumChildren ; ++index)
-	{
-		if (mChildren[index] == child)
-			mChildrenArea[index] = child->getArea();
+	for (auto& child : mChildren) {
+		if (child.editor == changedChild)
+			child.area = changedChild->getArea();
 	}
 }
 
 
 void Editor::onModalStatusChange(bool isNowModal)
+{
+
+}
+
+
+Editor::EditorChild::EditorChild(Editor *_editor, const SDL_Rect& _area)
+	: editor(_editor), area(_area)
 {
 
 }

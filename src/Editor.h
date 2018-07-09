@@ -2,6 +2,7 @@
 
 #include "SDL.h"
 #include "Listener.h"
+#include <vector>
 
 struct PlayerState;
 struct Renderer;
@@ -16,12 +17,19 @@ The Editor class is the base class for all GUI elements.
 class Editor: public Listener
 {
 public:
-	static const int maxChildren = 128;
+	static const int replacePreviousMessage = -1;
+	static const int modalMargin = 16;
 
 	enum MessageClass
 	{
 		MessageInfo,
 		MessageError
+	};
+
+	struct EditorChild {
+		Editor *editor;
+		SDL_Rect area;
+		EditorChild(Editor *editor, const SDL_Rect& area);
 	};
 
 private:
@@ -30,18 +38,18 @@ private:
 	void drawModal(Renderer& renderer);
 	virtual void onDraw(Renderer& renderer, const SDL_Rect& area) = 0;
 	void drawChildren(Renderer& renderer, const SDL_Rect& area);
-	void childAreaChanged(Editor *child);
+	void childAreaChanged(Editor *changedChild);
 
 protected:
 	Editor *mModal;
 	EditorState& mEditorState;
 	bool mIsDirty, mRedraw;
 	Editor *mParent;
-	Editor *mChildren[maxChildren];
-	SDL_Rect mChildrenArea[maxChildren];
+	std::vector<EditorChild> mChildren;
 	SDL_Rect mThisArea;
-	int mNumChildren;
 	bool mWantsFocus;
+	int mPopupMessageId;
+	bool mMounted;
 
 	void removeFocus();
 	void setModal(Editor *modal);
@@ -54,6 +62,9 @@ protected:
 	bool shouldRedrawBackground() const;
 	virtual void onAreaChanged(const SDL_Rect& area);
 
+	/* Actual rendering of the message */
+	virtual int showMessageInner(MessageClass messageClass, int messageId, const char* message);
+
 public:
 	Editor(EditorState& editorState, bool wantFocus = true);
 	virtual ~Editor();
@@ -65,7 +76,12 @@ public:
 	virtual void onMessageBoxEvent(const Editor& messageBox, int code);
 	virtual void onListenableChange(Listenable *listenable);
 	virtual void onLoaded();
+
+	// When setting/unsetting as a modal
 	virtual void onModalStatusChange(bool isNowModal);
+
+	// When the Editor is rendered the first time
+	virtual void onRendererMount(const Renderer& renderer);
 	virtual bool isDirty() const;
 	bool isFocusable() const;
 	bool hasDirty() const;
@@ -91,9 +107,10 @@ public:
 	/**
 	 * Status popup
 	 */
-	virtual void showMessage(MessageClass messageClass, const char* message);
-	void showMessageV(MessageClass messageClass, const char* message, ...) __attribute__((format(printf, 3, 4)));
-
+	int showMessage(MessageClass messageClass, int messageId, const char* message);
+	int showMessage(MessageClass messageClass, const char* message);
+	int showMessageV(MessageClass messageClass, const char* message, ...) __attribute__((format(printf, 3, 4)));
+	int showMessageV(MessageClass messageClass, int messageId, const char* message, ...) __attribute__((format(printf, 4, 5)));
 
 	void draw(Renderer& renderer, const SDL_Rect& area);
 	virtual void onUpdate(int ms);
