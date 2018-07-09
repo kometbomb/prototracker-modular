@@ -16,6 +16,12 @@ These modules are used to control other modules.
 |--------|-------------|
 | 0 | Keydown frequency in kHz |
 
+### Volume
+
+| Output | Description |
+|--------|-------------|
+| 0 | Current track volume (0..1.0) |
+
 ### TriggerNote
 
 Note that this is just the initial keypress. You need to implement key-off functionality yourself (e.g. with the Effect module).

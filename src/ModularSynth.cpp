@@ -206,8 +206,9 @@ void ModularSynth::render(Sample16 *buffer, int numSamples, int offset)
 {
 	lock();
 
-	// No update or output if volume is zero, meaning the channel is muted
-	if (mVolume > 0.0f)
+	// No update or output if paused
+
+	if (!mPaused)
 	{
 		for (int i = offset ; i < numSamples ; ++i)
 		{
@@ -669,4 +670,10 @@ void ModularSynth::unlockParent() const
 		unlock();
 	else
 		mParentSynth->unlockParent();
+}
+
+
+float ModularSynth::getVolume() const
+{
+	return mVolume;
 }

@@ -104,6 +104,7 @@ public:
 	virtual void triggerNote();
 	virtual void setFrequency(float frequency);
 	virtual void setVolume(int volume);
+	virtual float getVolume() const;
 	virtual void update(int numSamples);
 	virtual void render(Sample16 *buffer, int numSamples, int offset = 0);
 	virtual void setSampleRate(int rate);

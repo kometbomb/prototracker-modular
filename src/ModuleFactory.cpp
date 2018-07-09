@@ -11,6 +11,7 @@
 #include "modules/EffectModule.h"
 #include "modules/EGModule.h"
 #include "modules/RMSModule.h"
+#include "modules/VolumeModule.h"
 #include "modules/FilterModule.h"
 #include "modules/GlideModule.h"
 #include "modules/SplitModule.h"
@@ -68,6 +69,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(GlideModule);
 	REGISTER(AccumulatorModule);
 	REGISTER(FrequencyInModule);
+	REGISTER(VolumeModule);
 	REGISTER(TransposeModule);
 	REGISTER(TriggerNoteModule);
 	REGISTER(OscilloscopeModule);
