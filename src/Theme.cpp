@@ -146,6 +146,7 @@ bool Theme::loadDefinition(const std::string& path)
 		{ ColorType::TextBackground, "TextBackground" },
 		{ ColorType::TextFocus, "TextFocus" },
 		{ ColorType::OscilloscopeColor, "Oscilloscope" },
+		{ ColorType::MutedOscilloscopeColor, "MutedOscilloscope" },
 		{ ColorType::AutomationVerticalLine, "AutomationVerticalLine" },
 		{ ColorType::AutomationSpline, "AutomationSpline" },
 		{ ColorType::AutomationSplineCurrent, "AutomationSplineCurrent" },

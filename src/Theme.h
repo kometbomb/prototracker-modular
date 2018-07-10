@@ -54,6 +54,7 @@ public:
 		TextBackground,
 		TextFocus,
 		OscilloscopeColor,
+		MutedOscilloscopeColor,
 		AutomationVerticalLine,
 		AutomationSpline,
 		AutomationSplineCurrent,
