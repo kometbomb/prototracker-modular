@@ -6,6 +6,7 @@ Modules are loosely divided in three categories: Control, Generators and Modifie
     - [Good to know](#good-to-know)
     - [Control](#control)
         - [FrequencyIn](#frequencyin)
+        - [Volume](#volume)
         - [TriggerNote](#triggernote)
         - [Const](#const)
         - [Effect](#effect)
@@ -38,7 +39,8 @@ Modules are loosely divided in three categories: Control, Generators and Modifie
         - [Delay](#delay)
         - [Reverb](#reverb)
         - [Container](#container)
-        - [ExtIn/ExtOut](#extin-extout)
+        - [ExtIn/ExtOut](#extinextout)
+        - [Virtual](#virtual)
 
 ## Good to know
 
