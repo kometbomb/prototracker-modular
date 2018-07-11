@@ -7,7 +7,6 @@
 #include "IPlayer.h"
 #include "SDL.h"
 #include "Synth.h"
-#include "Debug.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -166,7 +165,6 @@ void ModularSynth::cycle()
 		if (++mSilenceLength > silenceDurationUntilPause)
 		{
 			mPaused = true;
-			debug("Synth has been paused for inactivity");
 		}
 	}
 }
@@ -175,9 +173,6 @@ void ModularSynth::cycle()
 void ModularSynth::triggerNote()
 {
 	mNoteTrigger = true;
-
-	if (mPaused)
-		debug("Synth has been resumed");
 
 	// Resume synth and reset silence counter
 	mPaused = false;
@@ -204,6 +199,9 @@ void ModularSynth::update(int numSamples)
 
 void ModularSynth::render(Sample16 *buffer, int numSamples, int offset)
 {
+	if (!mIsEnabled)
+		return;
+
 	lock();
 
 	// No update or output if paused
