@@ -2,14 +2,14 @@
 #include <algorithm>
 
 DivModule::DivModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 1, 1, 0)
+	:SynthModule(synth, moduleId, 2, 1, 0)
 {
 }
 
 
 void DivModule::cycle()
 {
-	float divisor = std::max(0.01f, getInput(1));
+	float divisor = std::max(0.0001f, getInput(1));
 	setOutput(0, getInput(0) / divisor);
 }
 
