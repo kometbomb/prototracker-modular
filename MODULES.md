@@ -23,6 +23,7 @@ Modules are loosely divided in three categories: Control, Generators and Modifie
     - [Modifiers](#modifiers)
         - [Add](#add)
         - [Mul](#mul)
+        - [Div](#div)
         - [Abs](#abs)
         - [Bits](#bits)
         - [Shape](#shape)
@@ -38,7 +39,7 @@ Modules are loosely divided in three categories: Control, Generators and Modifie
         - [Delay](#delay)
         - [Reverb](#reverb)
         - [Container](#container)
-        - [ExtIn/ExtOut](#extin-extout)
+        - [ExtIn/ExtOut](#extinextout)
 
 ## Good to know
 
@@ -253,6 +254,19 @@ and use it to multiple the two separate inputs to synchronize.
 |--------|--------------|
 | 0 | A multiplied by the multiplier |
 | 1 | B multiplied by the multiplier |
+
+### Div
+
+Divide the first input by the second output the result.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Input |
+| 1 | Divisor |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Input divided by the divisor |
 
 ### Abs
 
