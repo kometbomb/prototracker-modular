@@ -598,16 +598,7 @@ bool SynthGrid::onEvent(SDL_Event& event)
 	{
 		if (event.key.keysym.mod & (KMOD_CTRL|KMOD_ALT))
 		{
-			switch (event.key.keysym.sym)
-			{
-				case SDLK_s:
-					displaySaveDialog();
-					return true;
 
-				case SDLK_o:
-					displayLoadDialog();
-					return true;
-			}
 		}
 		else
 		{
@@ -679,18 +670,6 @@ bool SynthGrid::onEvent(SDL_Event& event)
 						modularSynth.getModule(mSelectedModule)->onAction(*this);
 					return true;
 				}
-
-				case SDLK_BACKSPACE:
-					gotoParentSynth();
-					return true;
-
-				case SDLK_F3:
-					copySynth();
-					return true;
-
-				case SDLK_F4:
-					pasteSynth();
-					return true;
 
 				case SDLK_DELETE:
 				{
@@ -1195,4 +1174,28 @@ void SynthGrid::refreshView()
 	rebuildWires();
 	invalidateAll();
 	notify();
+}
+
+
+void SynthGrid::onRequestCommandRegistration()
+{
+	registerCommand("Synth", "Copy synth layout", [this]() {
+		this->copySynth();
+	}, SDLK_F3);
+
+	registerCommand("Synth", "Paste synth layout", [this]() {
+		this->copySynth();
+	}, SDLK_F4);
+
+	registerCommand("Synth", "Load synth layout", [this]() {
+		this->displayLoadDialog();
+	}, SDLK_o, KMOD_CTRL);
+
+	registerCommand("Synth", "Save synth layout", [this]() {
+		this->displaySaveDialog();
+	}, SDLK_s, KMOD_CTRL);
+
+	registerCommand("Synth", "Go to parent synth", [this]() {
+		this->gotoParentSynth();
+	}, SDLK_BACKSPACE);
 }

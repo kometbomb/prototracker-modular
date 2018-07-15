@@ -146,6 +146,7 @@ bool Theme::loadDefinition(const std::string& path)
 		{ ColorType::TextBackground, "TextBackground" },
 		{ ColorType::TextFocus, "TextFocus" },
 		{ ColorType::OscilloscopeColor, "Oscilloscope" },
+		{ ColorType::MutedOscilloscopeColor, "MutedOscilloscope" },
 		{ ColorType::AutomationVerticalLine, "AutomationVerticalLine" },
 		{ ColorType::AutomationSpline, "AutomationSpline" },
 		{ ColorType::AutomationSplineCurrent, "AutomationSplineCurrent" },
@@ -153,6 +154,8 @@ bool Theme::loadDefinition(const std::string& path)
 		{ ColorType::AutomationEditPos, "AutomationEditPos" },
 		{ ColorType::AutomationNode, "AutomationNode" },
 		{ ColorType::AutomationNodeSelected, "AutomationNodeSelected" },
+		{ ColorType::CommandShortcut, "CommandShortcut" },
+		{ ColorType::CommandShortcutBackground, "CommandShortcutBackground" },
 	};
 
 	static struct { ElementType type; const char *name; } elements[] = {
