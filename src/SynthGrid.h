@@ -91,7 +91,7 @@ private:
 	void displaySaveDialog();
 	bool saveSynth(const char *path);
 	bool loadSynth(const char *path);
-	
+
 	void moveCursor(int delta, bool isHoriz);
 	void turnDial(int delta, int moduleIndex);
 
@@ -108,4 +108,5 @@ public:
 	virtual void onFileSelectorEvent(const Editor& moduleSelector, bool accept);
 	virtual void onListenableChange(Listenable *listenable);
 	virtual void onLoaded();
+	virtual void onRequestCommandRegistration();
 };
