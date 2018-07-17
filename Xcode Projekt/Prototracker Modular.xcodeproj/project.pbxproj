@@ -116,6 +116,8 @@
 		3092517920B60BA9002D6F35 /* SDL2.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 3092517520B60868002D6F35 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3092517A20B60BA9002D6F35 /* SDL2_image.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 3092517420B60868002D6F35 /* SDL2_image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		309D6A4120C5B65B002F2352 /* LerpModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 309D6A3F20C5B65B002F2352 /* LerpModule.cpp */; };
+		30C1C3F620FD8295001F8EC7 /* CommandOptionSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30C1C3F220FD8295001F8EC7 /* CommandOptionSelector.cpp */; };
+		30C1C3F720FD8295001F8EC7 /* CommandSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30C1C3F420FD8295001F8EC7 /* CommandSelector.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -349,6 +351,10 @@
 		3092517520B60868002D6F35 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		309D6A3F20C5B65B002F2352 /* LerpModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LerpModule.cpp; sourceTree = "<group>"; };
 		309D6A4020C5B65B002F2352 /* LerpModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LerpModule.h; sourceTree = "<group>"; };
+		30C1C3F220FD8295001F8EC7 /* CommandOptionSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CommandOptionSelector.cpp; path = ../src/CommandOptionSelector.cpp; sourceTree = "<group>"; };
+		30C1C3F320FD8295001F8EC7 /* CommandOptionSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandOptionSelector.h; path = ../src/CommandOptionSelector.h; sourceTree = "<group>"; };
+		30C1C3F420FD8295001F8EC7 /* CommandSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CommandSelector.cpp; path = ../src/CommandSelector.cpp; sourceTree = "<group>"; };
+		30C1C3F520FD8295001F8EC7 /* CommandSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandSelector.h; path = ../src/CommandSelector.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -398,6 +404,10 @@
 				307A816D20B5EC2900C1FA54 /* Color.h */,
 				307A816E20B5EC2900C1FA54 /* ColumnEditor.cpp */,
 				307A814920B5EC2900C1FA54 /* ColumnEditor.h */,
+				30C1C3F220FD8295001F8EC7 /* CommandOptionSelector.cpp */,
+				30C1C3F320FD8295001F8EC7 /* CommandOptionSelector.h */,
+				30C1C3F420FD8295001F8EC7 /* CommandSelector.cpp */,
+				30C1C3F520FD8295001F8EC7 /* CommandSelector.h */,
 				307A816F20B5EC2900C1FA54 /* Context.h */,
 				307A817020B5EC2900C1FA54 /* CopyBuffer.cpp */,
 				307A817120B5EC2900C1FA54 /* CopyBuffer.h */,
@@ -717,6 +727,7 @@
 				307A824B20B5EC2900C1FA54 /* ExtInModule.cpp in Sources */,
 				307A824520B5EC2900C1FA54 /* ContainerModule.cpp in Sources */,
 				307A822F20B5EC2900C1FA54 /* EditorState.cpp in Sources */,
+				30C1C3F720FD8295001F8EC7 /* CommandSelector.cpp in Sources */,
 				309D6A4120C5B65B002F2352 /* LerpModule.cpp in Sources */,
 				307A823520B5EC2900C1FA54 /* Label.cpp in Sources */,
 				307A826B20B5EC2900C1FA54 /* Sequence.cpp in Sources */,
@@ -805,6 +816,7 @@
 				307A824820B5EC2900C1FA54 /* DistortionModule.cpp in Sources */,
 				307A823620B5EC2900C1FA54 /* Listenable.cpp in Sources */,
 				307A821F20B5EC2900C1FA54 /* ModularSynth.cpp in Sources */,
+				30C1C3F620FD8295001F8EC7 /* CommandOptionSelector.cpp in Sources */,
 				307A823720B5EC2900C1FA54 /* Lockable.cpp in Sources */,
 				307A824F20B5EC2900C1FA54 /* GlideModule.cpp in Sources */,
 			);
