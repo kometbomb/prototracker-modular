@@ -5,6 +5,7 @@
 #include "modules/PassthruModule.h"
 #include "modules/AddModule.h"
 #include "modules/MulModule.h"
+#include "modules/DivModule.h"
 #include "modules/AbsModule.h"
 #include "modules/AutomationModule.h"
 #include "modules/ConstModule.h"
@@ -50,6 +51,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(PassthruModule);
 	REGISTER(AddModule);
 	REGISTER(MulModule);
+	REGISTER(DivModule);
 	REGISTER(AbsModule);
 	REGISTER(RMSModule);
 	REGISTER(TickModule);

@@ -48,6 +48,8 @@ public:
 		ModalTitleBackground,
 		ModalTitleText,
 		NormalText,
+		CommandShortcut,
+		CommandShortcutBackground,
 		ScrollBar,
 		PlayHead,
 		TextCursor,

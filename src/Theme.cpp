@@ -154,6 +154,8 @@ bool Theme::loadDefinition(const std::string& path)
 		{ ColorType::AutomationEditPos, "AutomationEditPos" },
 		{ ColorType::AutomationNode, "AutomationNode" },
 		{ ColorType::AutomationNodeSelected, "AutomationNodeSelected" },
+		{ ColorType::CommandShortcut, "CommandShortcut" },
+		{ ColorType::CommandShortcutBackground, "CommandShortcutBackground" },
 	};
 
 	static struct { ElementType type; const char *name; } elements[] = {
