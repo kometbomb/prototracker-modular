@@ -12,6 +12,7 @@
 #include "modules/EffectModule.h"
 #include "modules/EGModule.h"
 #include "modules/RMSModule.h"
+#include "modules/VolumeModule.h"
 #include "modules/FilterModule.h"
 #include "modules/GlideModule.h"
 #include "modules/SplitModule.h"
@@ -33,6 +34,7 @@
 #include "modules/OscilloscopeModule.h"
 #include "modules/VUMeterModule.h"
 #include "modules/ContainerModule.h"
+#include "modules/VirtualModule.h"
 #include "modules/ExtInModule.h"
 #include "modules/ExtOutModule.h"
 #include "modules/DisplayModule.h"
@@ -70,6 +72,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(GlideModule);
 	REGISTER(AccumulatorModule);
 	REGISTER(FrequencyInModule);
+	REGISTER(VolumeModule);
 	REGISTER(TransposeModule);
 	REGISTER(TriggerNoteModule);
 	REGISTER(DisplayModule);
@@ -77,6 +80,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(VUMeterModule);
 	REGISTER(AudioOutModule);
 	REGISTER(ContainerModule);
+	REGISTER(VirtualModule);
 	REGISTER(ExtInModule);
 	REGISTER(ExtOutModule);
 }
