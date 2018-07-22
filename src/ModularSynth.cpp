@@ -16,8 +16,9 @@
 #define TUNING 440.0
 #endif
 
-ModularSynth::ModularSynth(Synth& synth, IPlayer& player)
-	: mSynth(synth), mPlayer(player), mNumConnections(0), mFrequency(0), mVolume(0), mNoteTrigger(false)
+ModularSynth::ModularSynth(Synth& synth, IPlayer& player, bool isPausable, const ModularSynth* parent)
+	: mSynth(synth), mPlayer(player), mNumConnections(0), mFrequency(0), mVolume(0), mNoteTrigger(false),
+	mSilenceLength(0), mPaused(true), mIsPausable(isPausable), mParentSynth(parent)
 {
 	strcpy(mName, "");
 
@@ -36,14 +37,21 @@ ModularSynth::~ModularSynth()
 
 bool ModularSynth::addModule(int index, int moduleId)
 {
+	lockParent();
 	ModuleFactory moduleFactory;
 
 	if (mModules[index] != NULL)
+	{
+		unlockParent();
 		return false;
+	}
 
 	mModules[index] = moduleFactory.createModule(moduleId, *this);
 	mModules[index]->setSampleRate(mSampleRate);
 	mModules[index]->onLoaded();
+	unlockParent();
+
+	mSynthChangeListenable.notify();
 
 	return true;
 }
@@ -72,6 +80,8 @@ bool ModularSynth::connectModules(int fromModule, int toModule, int fromOutput, 
 	connection.toInput = toInput;
 
 	mNumConnections++;
+
+	mSynthChangeListenable.notify();
 
 	return true;
 }
@@ -107,18 +117,25 @@ void ModularSynth::removeConnection(int index)
 {
 	if (index < mNumConnections)
 	{
+		lockParent();
 		SynthConnection& connection = mConnections[index];
 		if (mModules[connection.toModule] != NULL)
 			mModules[connection.toModule]->setInput(connection.toInput, 0.0f);
 
 		mNumConnections--;
 		memmove(&mConnections[index], &mConnections[index + 1], sizeof(mConnections[index]) * (mNumConnections - index));
+		unlockParent();
+		mSynthChangeListenable.notify();
 	}
 }
 
 
 void ModularSynth::cycle()
 {
+	// Do nothing if the synth has been paused after silence
+	if (mPaused && mIsPausable)
+		return;
+
 	for (int i = 0 ; i < mNumConnections ; ++i)
 	{
 		SynthConnection& connection = mConnections[i];
@@ -132,12 +149,34 @@ void ModularSynth::cycle()
 	// After all modules have had their change to see if note was triggered,
 	// reset the status
 	mNoteTrigger = false;
+
+	if (mIsPausable)
+	{
+		// Increase silence counter and check if we are outputting non-silence
+
+		for (int i = 0 ; i < 2 ; ++i)
+		{
+			if (fabs(mOutput[i]) > silenceThreshold)
+			{
+				mSilenceLength = 0;
+			}
+		}
+
+		if (++mSilenceLength > silenceDurationUntilPause)
+		{
+			mPaused = true;
+		}
+	}
 }
 
 
 void ModularSynth::triggerNote()
 {
 	mNoteTrigger = true;
+
+	// Resume synth and reset silence counter
+	mPaused = false;
+	mSilenceLength = 0;
 }
 
 
@@ -160,10 +199,14 @@ void ModularSynth::update(int numSamples)
 
 void ModularSynth::render(Sample16 *buffer, int numSamples, int offset)
 {
+	if (!mIsEnabled)
+		return;
+
 	lock();
 
-	// No update or output if volume is zero, meaning the channel is muted
-	if (mVolume > 0.0f)
+	// No update or output if paused
+
+	if (!mPaused)
 	{
 		for (int i = offset ; i < numSamples ; ++i)
 		{
@@ -222,11 +265,15 @@ void ModularSynth::swapModules(int fromModule, int toModule)
 		else if (connection.toModule == fromModule)
 			connection.toModule = toModule;
 	}
+
+	mSynthChangeListenable.notify();
 }
 
 
 void ModularSynth::removeModule(int index)
 {
+	lockParent();
+
 	if (mModules[index] != NULL)
 	{
 		delete mModules[index];
@@ -243,6 +290,14 @@ void ModularSynth::removeModule(int index)
 			else
 				++i;
 		}
+
+		unlockParent();
+
+		mSynthChangeListenable.notify();
+	}
+	else
+	{
+		unlockParent();
 	}
 }
 
@@ -450,6 +505,7 @@ void ModularSynth::setSampleRate(int rate)
 
 void ModularSynth::copy(const ModularSynth& source)
 {
+	lockParent();
 	strncpy(mName, source.getName(), sizeof(mName));
 
 	for (int i = 0 ; i < maxModules ; ++i)
@@ -460,7 +516,7 @@ void ModularSynth::copy(const ModularSynth& source)
 		const SynthModule *oldModule = source.getModule(i);
 		if (oldModule != NULL)
 		{
-			if (addModule(i, source.getModule(i)->getSynthId()))
+			if (addModule(i, oldModule->getSynthId()))
 			{
 				SynthModule *newModule = getModule(i);
 				newModule->copy(*oldModule);
@@ -475,12 +531,14 @@ void ModularSynth::copy(const ModularSynth& source)
 		const SynthConnection& connection = source.getConnection(i);
 		connectModules(connection.fromModule, connection.toModule, connection.fromOutput, connection.toInput);
 	}
+
+	unlockParent();
 }
 
 
-ModularSynth* ModularSynth::createEmpty() const
+ModularSynth* ModularSynth::createEmpty(bool isPausable) const
 {
-	return new ModularSynth(mSynth, mPlayer);
+	return new ModularSynth(mSynth, mPlayer, isPausable, this);
 }
 
 
@@ -568,4 +626,52 @@ void ModularSynth::onShow()
 		if (module != NULL)
 			module->onShow();
 	}
+}
+
+
+bool ModularSynth::isPaused() const
+{
+	return mPaused;
+}
+
+
+void ModularSynth::addChangeListener(Listener* listener)
+{
+	mSynthChangeListenable.addListener(listener);
+}
+
+
+void ModularSynth::removeChangeListener(Listener* listener)
+{
+	mSynthChangeListenable.removeListener(listener);
+}
+
+
+float ModularSynth::getOutput(int index) const
+{
+	return mOutput[index];
+}
+
+
+void ModularSynth::lockParent() const
+{
+	if (mParentSynth == NULL)
+		lock();
+	else
+		mParentSynth->lockParent();
+}
+
+
+void ModularSynth::unlockParent() const
+{
+	if (mParentSynth == NULL)
+		unlock();
+	else
+		mParentSynth->unlockParent();
+}
+
+
+float ModularSynth::getVolume() const
+{
+	return mVolume;
 }

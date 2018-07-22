@@ -13,7 +13,7 @@ Lockable::~Lockable()
 }
 
 
-void Lockable::lock()
+void Lockable::lock() const
 {
 	SDL_AtomicLock(&mSpinlock);
 	if (++mLockCounter > 0)
@@ -28,7 +28,7 @@ void Lockable::lock()
 }
 
 
-void Lockable::unlock()
+void Lockable::unlock() const
 {
 	SDL_AtomicLock(&mSpinlock);
 	if (mLockCounter-- > 0)

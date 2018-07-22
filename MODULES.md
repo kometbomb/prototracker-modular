@@ -6,6 +6,7 @@ Modules are loosely divided in three categories: Control, Generators and Modifie
     - [Good to know](#good-to-know)
     - [Control](#control)
         - [FrequencyIn](#frequencyin)
+        - [Volume](#volume)
         - [TriggerNote](#triggernote)
         - [Const](#const)
         - [Effect](#effect)
@@ -23,6 +24,7 @@ Modules are loosely divided in three categories: Control, Generators and Modifie
     - [Modifiers](#modifiers)
         - [Add](#add)
         - [Mul](#mul)
+        - [Div](#div)
         - [Abs](#abs)
         - [Bits](#bits)
         - [Shape](#shape)
@@ -38,7 +40,8 @@ Modules are loosely divided in three categories: Control, Generators and Modifie
         - [Delay](#delay)
         - [Reverb](#reverb)
         - [Container](#container)
-        - [ExtIn/ExtOut](#extin-extout)
+        - [ExtIn/ExtOut](#extinextout)
+        - [Virtual](#virtual)
 
 ## Good to know
 
@@ -55,6 +58,12 @@ These modules are used to control other modules.
 | Output | Description |
 |--------|-------------|
 | 0 | Keydown frequency in kHz |
+
+### Volume
+
+| Output | Description |
+|--------|-------------|
+| 0 | Current track volume (0..1.0) |
 
 ### TriggerNote
 
@@ -253,6 +262,19 @@ and use it to multiple the two separate inputs to synchronize.
 |--------|--------------|
 | 0 | A multiplied by the multiplier |
 | 1 | B multiplied by the multiplier |
+
+### Div
+
+Divide the first input by the second output the result.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Input |
+| 1 | Divisor |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Input divided by the divisor |
 
 ### Abs
 
@@ -469,3 +491,29 @@ host synth. Looking from outside the Container, these show up as normal
 module inputs and outputs on the Container.
 
 Use the mouse wheel to select which input or output the modules connect to.
+
+### Virtual
+
+This module can be used to host multiple polyphonic instances of the same layout.
+The difference between a Container and a Virtual module is that Virtual
+only has left/right/mono audio outputs and the hosted layout needs to use the
+AudioOut module for any outputs. ExtIn modules can be used as with Container.
+
+Whenever the AudioOut signal is close to zero for some duration the track
+is stopped and queued as the next available track. This means all layouts
+should e.g. fade out when TriggerNote is not outputting a signal.
+
+The first input is required and it can be routed from e.g. TriggerNote.
+Whenever the first input is triggered a new virtual track is picked from the
+available tracks and the ExtIn signals are routed to the new track.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | KeyOn |
+| 1.. | ExtIn 0.. |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Mono out |
+| 1 | Left out |
+| 2 | Right out |

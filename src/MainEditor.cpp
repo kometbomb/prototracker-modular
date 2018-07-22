@@ -1,6 +1,7 @@
 #include "Debug.h"
 #include "MainEditor.h"
 #include "IPlayer.h"
+#include "Debug.h"
 #include "PatternEditor.h"
 #include "Oscilloscope.h"
 #include "MacroEditor.h"

@@ -4,14 +4,14 @@
 
 class Lockable
 {
-    SDL_mutex *mMutex;
-	SDL_SpinLock mSpinlock;
-	int mLockCounter;
+    mutable SDL_mutex *mMutex;
+	mutable SDL_SpinLock mSpinlock;
+	mutable int mLockCounter;
 
 public:
     Lockable();
     ~Lockable();
 
-    void lock();
-	void unlock();
+    void lock() const;
+	void unlock() const;
 };

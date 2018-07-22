@@ -3,6 +3,7 @@
 #include "SynthConnection.h"
 #include "IOscillator.h"
 #include "Lockable.h"
+#include "Listenable.h"
 
 struct SynthModule;
 struct FileSection;
@@ -19,6 +20,7 @@ public:
 	static const int nameLength = 16;
 
 private:
+	const ModularSynth* const mParentSynth;
 	char mName[nameLength + 1];
 	Synth& mSynth;
 	IPlayer& mPlayer;
@@ -30,8 +32,25 @@ private:
 	bool mNoteTrigger;
 	int mEffectValues[256];
 
+	// Samples since the synth last output non-silence
+	int mSilenceLength;
+	bool mIsPausable, mPaused;
+
+	// Consider output under the threshold as silence
+	static constexpr float silenceThreshold = 0.001f;
+
+	// Synth will pause after this many samples of "silence"
+	static const int silenceDurationUntilPause = 1000;
+
+	Listenable mSynthChangeListenable;
+
+protected:
+	// Lock the "root" ModularSynth
+	void lockParent() const;
+	void unlockParent() const;
+
 public:
-	ModularSynth(Synth& synth, IPlayer& player);
+	ModularSynth(Synth& synth, IPlayer& player, bool isPausable = false, const ModularSynth* parent = NULL);
 	virtual ~ModularSynth();
 
 	const char *getName() const;
@@ -39,8 +58,9 @@ public:
 	void setName(const char *name);
 
 	void cycle();
+	bool isPaused() const;
 
-	ModularSynth* createEmpty() const;
+	ModularSynth* createEmpty(bool isPausable = false) const;
 	ModularSynth* clone() const;
 	void copy(const ModularSynth& source);
 
@@ -53,6 +73,7 @@ public:
 	float getExtInput(int index) const;
 	void setExtOutput(int index, float value);
 	float getExtOutput (int index) const;
+	float getOutput(int index) const;
 
 	bool addModule(int index, int moduleId);
 	void removeModule(int index);
@@ -61,6 +82,9 @@ public:
 	void removeConnection(int index);
 	void swapModules(int fromModule, int toModule);
 	void onShow();
+
+	void addChangeListener(Listener* listener);
+	void removeChangeListener(Listener* listener);
 
 	void clear();
 
@@ -80,6 +104,7 @@ public:
 	virtual void triggerNote();
 	virtual void setFrequency(float frequency);
 	virtual void setVolume(int volume);
+	virtual float getVolume() const;
 	virtual void update(int numSamples);
 	virtual void render(Sample16 *buffer, int numSamples, int offset = 0);
 	virtual void setSampleRate(int rate);

@@ -12,6 +12,8 @@ know when they need a redraw.
 
 */
 
+struct Listener;
+
 class Listenable
 {
 protected:
