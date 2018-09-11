@@ -118,6 +118,9 @@
 		309D6A4120C5B65B002F2352 /* LerpModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 309D6A3F20C5B65B002F2352 /* LerpModule.cpp */; };
 		30C1C3F620FD8295001F8EC7 /* CommandOptionSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30C1C3F220FD8295001F8EC7 /* CommandOptionSelector.cpp */; };
 		30C1C3F720FD8295001F8EC7 /* CommandSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30C1C3F420FD8295001F8EC7 /* CommandSelector.cpp */; };
+		30E330D62148607A0050DCC0 /* DivModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30E330D02148607A0050DCC0 /* DivModule.cpp */; };
+		30E330D72148607A0050DCC0 /* VirtualModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30E330D22148607A0050DCC0 /* VirtualModule.cpp */; };
+		30E330D82148607A0050DCC0 /* VolumeModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30E330D42148607A0050DCC0 /* VolumeModule.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -355,6 +358,12 @@
 		30C1C3F320FD8295001F8EC7 /* CommandOptionSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandOptionSelector.h; path = ../src/CommandOptionSelector.h; sourceTree = "<group>"; };
 		30C1C3F420FD8295001F8EC7 /* CommandSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CommandSelector.cpp; path = ../src/CommandSelector.cpp; sourceTree = "<group>"; };
 		30C1C3F520FD8295001F8EC7 /* CommandSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandSelector.h; path = ../src/CommandSelector.h; sourceTree = "<group>"; };
+		30E330D02148607A0050DCC0 /* DivModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DivModule.cpp; sourceTree = "<group>"; };
+		30E330D12148607A0050DCC0 /* DivModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DivModule.h; sourceTree = "<group>"; };
+		30E330D22148607A0050DCC0 /* VirtualModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualModule.cpp; sourceTree = "<group>"; };
+		30E330D32148607A0050DCC0 /* VirtualModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualModule.h; sourceTree = "<group>"; };
+		30E330D42148607A0050DCC0 /* VolumeModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VolumeModule.cpp; sourceTree = "<group>"; };
+		30E330D52148607A0050DCC0 /* VolumeModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VolumeModule.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -374,11 +383,11 @@
 		304927BF20B4B1D90038E787 = {
 			isa = PBXGroup;
 			children = (
-				304927CA20B4B1D90038E787 /* Prototracker Modular */,
-				3049281120B4BB590038E787 /* SDLMain */,
-				3049280820B4B9C90038E787 /* Resources */,
 				304927F420B4B44E0038E787 /* Frameworks */,
 				304927C920B4B1D90038E787 /* Products */,
+				304927CA20B4B1D90038E787 /* Prototracker Modular */,
+				3049280820B4B9C90038E787 /* Resources */,
+				3049281120B4BB590038E787 /* SDLMain */,
 			);
 			sourceTree = "<group>";
 		};
@@ -592,6 +601,8 @@
 				307A81AD20B5EC2900C1FA54 /* DisplayModule.h */,
 				307A81AE20B5EC2900C1FA54 /* DistortionModule.cpp */,
 				307A81AF20B5EC2900C1FA54 /* DistortionModule.h */,
+				30E330D02148607A0050DCC0 /* DivModule.cpp */,
+				30E330D12148607A0050DCC0 /* DivModule.h */,
 				307A81B020B5EC2900C1FA54 /* EffectModule.cpp */,
 				307A81B120B5EC2900C1FA54 /* EffectModule.h */,
 				307A81B220B5EC2900C1FA54 /* EGModule.cpp */,
@@ -638,6 +649,10 @@
 				307A81D920B5EC2900C1FA54 /* TransposeModule.h */,
 				307A81DA20B5EC2900C1FA54 /* TriggerNoteModule.cpp */,
 				307A81DB20B5EC2900C1FA54 /* TriggerNoteModule.h */,
+				30E330D22148607A0050DCC0 /* VirtualModule.cpp */,
+				30E330D32148607A0050DCC0 /* VirtualModule.h */,
+				30E330D42148607A0050DCC0 /* VolumeModule.cpp */,
+				30E330D52148607A0050DCC0 /* VolumeModule.h */,
 				307A81DC20B5EC2900C1FA54 /* VUMeterModule.cpp */,
 				307A81DD20B5EC2900C1FA54 /* VUMeterModule.h */,
 			);
@@ -736,9 +751,11 @@
 				307A825720B5EC2900C1FA54 /* PulseModule.cpp in Sources */,
 				307A824220B5EC2900C1FA54 /* BitsModule.cpp in Sources */,
 				307A822D20B5EC2900C1FA54 /* Debug.cpp in Sources */,
+				30E330D82148607A0050DCC0 /* VolumeModule.cpp in Sources */,
 				307A826F20B5EC2900C1FA54 /* Song.cpp in Sources */,
 				307A824920B5EC2900C1FA54 /* EffectModule.cpp in Sources */,
 				307A824C20B5EC2900C1FA54 /* ExtOutModule.cpp in Sources */,
+				30E330D62148607A0050DCC0 /* DivModule.cpp in Sources */,
 				307A821B20B5EC2900C1FA54 /* Main.cpp in Sources */,
 				307A825E20B5EC2900C1FA54 /* TriggerNoteModule.cpp in Sources */,
 				307A826420B5EC2900C1FA54 /* Pattern.cpp in Sources */,
@@ -801,6 +818,7 @@
 				307A821920B5EC2900C1FA54 /* IPlayer.cpp in Sources */,
 				307A822820B5EC2900C1FA54 /* TrackState.cpp in Sources */,
 				307A823820B5EC2900C1FA54 /* Macro.cpp in Sources */,
+				30E330D72148607A0050DCC0 /* VirtualModule.cpp in Sources */,
 				307A821720B5EC2900C1FA54 /* FileSelector.cpp in Sources */,
 				307A825C20B5EC2900C1FA54 /* TickModule.cpp in Sources */,
 				307A824420B5EC2900C1FA54 /* ConstModule.cpp in Sources */,
