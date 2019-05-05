@@ -38,6 +38,7 @@
 #include "modules/ExtInModule.h"
 #include "modules/ExtOutModule.h"
 #include "modules/DisplayModule.h"
+#include "modules/SampleModule.h"
 #include <cstdlib>
 
 #define REGISTER(module) registerModule(module::moduleId, module::moduleName, &module::createModule, module::maxInstances)
@@ -81,6 +82,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(AudioOutModule);
 	REGISTER(ContainerModule);
 	REGISTER(VirtualModule);
+	REGISTER(SampleModule);
 	REGISTER(ExtInModule);
 	REGISTER(ExtOutModule);
 }

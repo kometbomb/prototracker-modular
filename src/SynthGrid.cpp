@@ -758,6 +758,20 @@ void SynthGrid::onFileSelectorEvent(const Editor& selector, bool accept)
 				else
 					showMessage(MessageError, "Synth layout was not saved");
 				break;
+
+      case ChildModuleFileLoad: {
+        FILE *f = fopen(reinterpret_cast<const FileSelector&>(selector).getSelectedPath(), "rb");
+
+        if (f == NULL)
+        {
+          showMessage(MessageError, "Could not open file");
+        }
+        else
+        {
+          mChildModuleFileSelectorCallback(f);
+          fclose(f);
+        }
+      } break;
 		}
 	}
 
@@ -1198,4 +1212,17 @@ void SynthGrid::onRequestCommandRegistration()
 	registerCommand("Synth", "Go to parent synth", [this]() {
 		this->gotoParentSynth();
 	}, SDLK_BACKSPACE);
+}
+
+
+void SynthGrid::displayFileSelectionDialog(const char *title, const char *fileExtension, std::function<void(FILE*)> callback)
+{
+  mFileSelector->setId(ChildModuleFileLoad);
+	mFileSelector->setTitle(title);
+	mFileSelector->setFilter(fileExtension);
+	mFileSelector->setOverwriteCheck(false);
+	mFileSelector->populate();
+	setModal(mFileSelector);
+
+  mChildModuleFileSelectorCallback = callback;
 }
