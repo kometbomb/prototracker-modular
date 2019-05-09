@@ -31,7 +31,8 @@ bool Prototracker::init()
 	mSong = new Song();
 	mPlayer = new Player(*mSong);
 	mGamepad = new Gamepad();
-	mSynth = new Synth();
+  Synth *synth = new Synth(*mPlayer, *mSong);
+	mSynth = synth;
 	mMixer = new Mixer(*mPlayer, *mSynth);
 	mRenderer = new Renderer();
 
@@ -40,6 +41,9 @@ bool Prototracker::init()
 	if (!initRenderer()) {
 		return false;
 	}
+
+  mSong->addSectionListener("AUTO", synth, SectionListener::Load|SectionListener::Save);
+  mSong->addSectionListener("SYNT", synth, SectionListener::Load|SectionListener::Save);
 
 #ifndef __EMSCRIPTEN__
   	initEditor();

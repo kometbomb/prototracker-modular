@@ -48,6 +48,7 @@ ModuleFactory::ModuleFactory()
 	REGISTER(OscillatorModule);
 	REGISTER(NoiseModule);
 	REGISTER(PulseModule);
+	REGISTER(SampleModule);
 	REGISTER(EGModule);
 	REGISTER(PassthruModule);
 	REGISTER(AddModule);
@@ -82,7 +83,6 @@ ModuleFactory::ModuleFactory()
 	REGISTER(AudioOutModule);
 	REGISTER(ContainerModule);
 	REGISTER(VirtualModule);
-	REGISTER(SampleModule);
 	REGISTER(ExtInModule);
 	REGISTER(ExtOutModule);
 }

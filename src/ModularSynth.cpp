@@ -416,7 +416,7 @@ void ModularSynth::writeSynth(FileSection& section)
 
 	for (int i = 0 ; i < maxModules ; ++i)
 	{
-		if (mModules[i] != NULL)
+    if (mModules[i] != NULL)
 		{
 			section.writeByte(mModules[i]->getSynthId());
 

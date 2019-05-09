@@ -768,7 +768,9 @@ void SynthGrid::onFileSelectorEvent(const Editor& selector, bool accept)
         }
         else
         {
+          mPlayer.lock();
           mChildModuleFileSelectorCallback(f);
+          mPlayer.unlock();
           fclose(f);
         }
       } break;

@@ -1,15 +1,14 @@
 #include "SampleModule.h"
 #include "../FileSection.h"
 #include "../SynthGrid.h"
+#include "../Debug.h"
 #include <cmath>
 #include <algorithm>
 #include <cstdio>
 #include <cstring>
 
-static const int floatResolution = 0x10000000;
-
 SampleModule::SampleModule(ModularSynth& synth)
-	:SynthModule(synth, moduleId, 1, 3, 0, true),
+	:SynthModule(synth, moduleId, 1, 4, 0, true),
   mSampleData(NULL), mSampleLength(0), mSampleRate(0)
 {
 }
@@ -48,18 +47,15 @@ void SampleModule::cycle()
   }
 
   const float index = fabs(getInput(0));
-  const float sampleIndex = mSampleLength * index;
-  const int indexA = floor(sampleIndex);
-  const int indexB = indexA + 1;
-  const float frac = sampleIndex - indexA;
-  const Sample& currentSampleA = mSampleData[indexA % mSampleLength];
-  const Sample& currentSampleB = mSampleData[indexB % mSampleLength];
-  const float left = currentSampleA.left;
-  const float right = currentSampleA.right;
+  const float sampleIndex = floor(mSampleLength * index);
+  const Sample& currentSample = mSampleData[static_cast<int>(sampleIndex) % mSampleLength];
+  const float left = currentSample.left;
+  const float right = currentSample.right;
 
-  setOutput(0, left);
-  setOutput(1, left + right);
+  setOutput(0, left + right);
+  setOutput(1, left);
   setOutput(2, right);
+  setOutput(3, static_cast<float>(mSampleLength) / std::max(1, mSampleRate));
 }
 
 
@@ -72,7 +68,7 @@ const char * SampleModule::getInputName(int input) const
 
 const char * SampleModule::getOutputName(int output) const
 {
-	static const char *names[] = {"Left", "Mono", "Right"};
+	static const char *names[] = {"L+R", "Left", "Right", "Length"};
 	return names[output];
 }
 
@@ -119,14 +115,14 @@ bool SampleModule::readData(const FileSection& section)
 
     for (int i = 0 ; i < mSampleLength ; ++i)
     {
-      int amp = section.readDword(offset);
+      float amp = section.readFloat(offset);
 
-      if (amp == FileSection::invalidRead)
+      if (amp == NAN)
       {
         return false;
       }
 
-      accumulator += static_cast<float>(amp - floatResolution) / floatResolution;
+      accumulator += amp;
 
       if (channel == 0)
       {
@@ -170,7 +166,6 @@ bool SampleModule::readRIFF(FILE *file)
 
   if (main->readHeader(file))
   {
-    debug("header: %4s", main->id);
     if (strncmp("RIFF", main->id, 4) == 0)
     {
       // Skip main RIFF header, assume it's a wave
@@ -286,7 +281,7 @@ bool SampleModule::writeData(FileSection& section) const
         amp = mSampleData[i].right - mSampleData[i].left;
       }
 
-      section.writeDword(floatResolution * (amp - prevAmp) + floatResolution);
+      section.writeFloat(amp - prevAmp);
     }
   }
 
@@ -360,7 +355,6 @@ SampleModule::RIFF::Chunk* SampleModule::RIFF::readRIFFChunk(FILE *file, const c
 
   while (chunk->readHeader(file))
   {
-    debug("RIFF chunk: %4s", chunk->id);
     if (strncmp(chunk->id, chunkName, 4) == 0)
     {
       if (chunk->readData(file))
@@ -397,7 +391,6 @@ void SampleModule::onDataSave(FileSection& section)
 void SampleModule::onAction(SynthGrid& synthGrid)
 {
   synthGrid.displayFileSelectionDialog("Load sample", "wav", [this, &synthGrid](FILE *f) {
-    debug("SampleModule::onAction");
     if (!readRIFF(f))
     {
       // message
