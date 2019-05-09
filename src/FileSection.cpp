@@ -171,6 +171,19 @@ unsigned int FileSection::readDword(int& offset) const
 }
 
 
+float FileSection::readFloat(int& offset) const
+{
+	if (offset < 0 || offset + sizeof(float) > mSize)
+		return NAN;
+
+	unsigned int returnValueRaw = read4bytes(&static_cast<char*>(mData)[offset]);
+
+	offset += sizeof(float);
+
+	return *reinterpret_cast<float*>(&returnValueRaw);
+}
+
+
 const char * FileSection::readString(int& offset) const
 {
 	for (int i = offset ; ; ++i)
@@ -205,6 +218,16 @@ void FileSection::writeDword(unsigned int dword)
 	ensureAllocated(mSize + sizeof(unsigned int));
 
 	write4bytes(&static_cast<char*>(mData)[mSize], dword);
+
+	mSize += sizeof(unsigned int);
+}
+
+
+void FileSection::writeFloat(float value)
+{
+	ensureAllocated(mSize + sizeof(unsigned int));
+
+	write4bytes(&static_cast<char*>(mData)[mSize], *reinterpret_cast<unsigned int*>(&value));
 
 	mSize += sizeof(unsigned int);
 }
