@@ -126,6 +126,7 @@ void Mixer::deinitAudio()
 	if (mThread != NULL)
 	{
 		SDL_WaitThread(mThread, NULL);
+		mThread = NULL;
 	}
 
 	if (mAudioOpened)
