@@ -115,6 +115,7 @@
 		3092517720B60868002D6F35 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3092517520B60868002D6F35 /* SDL2.framework */; };
 		3092517920B60BA9002D6F35 /* SDL2.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 3092517520B60868002D6F35 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3092517A20B60BA9002D6F35 /* SDL2_image.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 3092517420B60868002D6F35 /* SDL2_image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		309A579422DCCB0500F526C6 /* Prototracker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 309A579222DCCB0500F526C6 /* Prototracker.cpp */; };
 		309D6A4120C5B65B002F2352 /* LerpModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 309D6A3F20C5B65B002F2352 /* LerpModule.cpp */; };
 		30C1C3F620FD8295001F8EC7 /* CommandOptionSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30C1C3F220FD8295001F8EC7 /* CommandOptionSelector.cpp */; };
 		30C1C3F720FD8295001F8EC7 /* CommandSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30C1C3F420FD8295001F8EC7 /* CommandSelector.cpp */; };
@@ -186,7 +187,6 @@
 		307A816C20B5EC2900C1FA54 /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Color.cpp; path = ../src/Color.cpp; sourceTree = "<group>"; };
 		307A816D20B5EC2900C1FA54 /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Color.h; path = ../src/Color.h; sourceTree = "<group>"; };
 		307A816E20B5EC2900C1FA54 /* ColumnEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColumnEditor.cpp; path = ../src/ColumnEditor.cpp; sourceTree = "<group>"; };
-		307A816F20B5EC2900C1FA54 /* Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Context.h; path = ../src/Context.h; sourceTree = "<group>"; };
 		307A817020B5EC2900C1FA54 /* CopyBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CopyBuffer.cpp; path = ../src/CopyBuffer.cpp; sourceTree = "<group>"; };
 		307A817120B5EC2900C1FA54 /* CopyBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CopyBuffer.h; path = ../src/CopyBuffer.h; sourceTree = "<group>"; };
 		307A817220B5EC2900C1FA54 /* Debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Debug.cpp; path = ../src/Debug.cpp; sourceTree = "<group>"; };
@@ -352,6 +352,8 @@
 		307A821320B5EC2900C1FA54 /* Value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Value.h; path = ../src/Value.h; sourceTree = "<group>"; };
 		3092517420B60868002D6F35 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		3092517520B60868002D6F35 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		309A579222DCCB0500F526C6 /* Prototracker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Prototracker.cpp; path = ../src/Prototracker.cpp; sourceTree = "<group>"; };
+		309A579322DCCB0500F526C6 /* Prototracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Prototracker.h; path = ../src/Prototracker.h; sourceTree = "<group>"; };
 		309D6A3F20C5B65B002F2352 /* LerpModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LerpModule.cpp; sourceTree = "<group>"; };
 		309D6A4020C5B65B002F2352 /* LerpModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LerpModule.h; sourceTree = "<group>"; };
 		30C1C3F220FD8295001F8EC7 /* CommandOptionSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CommandOptionSelector.cpp; path = ../src/CommandOptionSelector.cpp; sourceTree = "<group>"; };
@@ -417,7 +419,6 @@
 				30C1C3F320FD8295001F8EC7 /* CommandOptionSelector.h */,
 				30C1C3F420FD8295001F8EC7 /* CommandSelector.cpp */,
 				30C1C3F520FD8295001F8EC7 /* CommandSelector.h */,
-				307A816F20B5EC2900C1FA54 /* Context.h */,
 				307A817020B5EC2900C1FA54 /* CopyBuffer.cpp */,
 				307A817120B5EC2900C1FA54 /* CopyBuffer.h */,
 				307A817220B5EC2900C1FA54 /* Debug.cpp */,
@@ -497,6 +498,8 @@
 				307A81EF20B5EC2900C1FA54 /* Player.h */,
 				307A81F020B5EC2900C1FA54 /* PlayerState.cpp */,
 				307A81F120B5EC2900C1FA54 /* PlayerState.h */,
+				309A579222DCCB0500F526C6 /* Prototracker.cpp */,
+				309A579322DCCB0500F526C6 /* Prototracker.h */,
 				307A81F220B5EC2900C1FA54 /* Random.cpp */,
 				307A81F320B5EC2900C1FA54 /* Random.h */,
 				307A815D20B5EC2900C1FA54 /* Renderer.cpp */,
@@ -739,6 +742,7 @@
 				307A822720B5EC2900C1FA54 /* TouchRegion.cpp in Sources */,
 				307A822020B5EC2900C1FA54 /* ModuleFactory.cpp in Sources */,
 				307A825920B5EC2900C1FA54 /* RMSModule.cpp in Sources */,
+				309A579422DCCB0500F526C6 /* Prototracker.cpp in Sources */,
 				307A824B20B5EC2900C1FA54 /* ExtInModule.cpp in Sources */,
 				307A824520B5EC2900C1FA54 /* ContainerModule.cpp in Sources */,
 				307A822F20B5EC2900C1FA54 /* EditorState.cpp in Sources */,
@@ -862,10 +866,11 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -904,7 +909,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -939,7 +944,7 @@
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
-				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"SCALE=2",
@@ -981,6 +986,8 @@
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "SCALE=2";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
