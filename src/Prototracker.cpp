@@ -36,6 +36,10 @@ bool Prototracker::init()
 	mMixer = new Mixer(*mPlayer, *mSynth);
 	mRenderer = new Renderer();
 
+	mSynth = new Synth(*mPlayer, *mSong);
+	mMixer = new Mixer(*mPlayer, *mSynth);
+	mRenderer = new Renderer();
+
 	mMainEditor = new MainEditor(*mEditorState, *mPlayer, mPlayer->getPlayerState(), *mSong, *mSynth, *mMixer);
 
 	if (!initRenderer()) {

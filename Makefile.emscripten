@@ -8,7 +8,7 @@ OUTPUT=prototracker
 SRC=src/*.cpp src/modules/*.cpp
 SRC_H=src/*.h src/modules/*.h
 
-$(OUTPUT).html: $(SRC) src/*.h
+$(OUTPUT).html: $(SRC) $(SRC_H)
 	emcc -std=c++11 --preload-file assets -O3 -s NO_EXIT_RUNTIME=0 \
 		-s EXPORTED_FUNCTIONS='["_main"]' -s SDL2_IMAGE_FORMATS='["png"]' \
 		-s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "FS"]' -DSCALE=2 -DSAMPLERATE=22050 \
