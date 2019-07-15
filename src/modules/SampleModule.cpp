@@ -48,7 +48,7 @@ void SampleModule::cycle()
 
   const float index = fabs(getInput(0));
   const float sampleIndex = floor(mSampleLength * index);
-  const Sample& currentSample = mSampleData[static_cast<int>(sampleIndex) % mSampleLength];
+  const Sample& currentSample = mSampleData[std::min(static_cast<int>(sampleIndex), mSampleLength - 1)];
   const float left = currentSample.left;
   const float right = currentSample.right;
 
