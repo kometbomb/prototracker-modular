@@ -228,7 +228,7 @@ void FileSection::writeFloat(float value)
 {
 	ensureAllocated(mSize + sizeof(unsigned int));
 
-  write4bytes(&static_cast<char*>(mData)[mSize], *reinterpret_cast<unsigned int*>(&value));
+	write4bytes(&static_cast<char*>(mData)[mSize], *reinterpret_cast<unsigned int*>(&value));
 
 	mSize += sizeof(unsigned int);
 }
