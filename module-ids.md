@@ -20,4 +20,4 @@ Here's a list of reserved module IDs.
 | 39 | divisor-module |
 | 40 | midi-controlelr-module |
 | 41 | virtual-tracks |
-| 42 | sample-modules |
+| 42 | sample-module |

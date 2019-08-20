@@ -234,6 +234,8 @@ These modules are used to generate signals useful as audio.
 
 This module will output the buffer amplitude at the position (0..1) specified by input 0. Double click to open a file dialog to open a WAV file, up to two channels are supported.
 
+An easy way to play a sample at its base rate (as specified by the WAV file) is to hook output #3 to an EG module ATTACK input and the EG output #0 back to the sample input #0. When the EG module is triggered the sample module will output the sample amplitude at the correct speed.
+
 | Input | Description  |
 |-------|--------------|
 | 0 | Sample position (0..1) |
