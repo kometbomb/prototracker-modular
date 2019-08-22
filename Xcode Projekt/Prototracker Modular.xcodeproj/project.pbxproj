@@ -117,6 +117,7 @@
 		3092517A20B60BA9002D6F35 /* SDL2_image.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 3092517420B60868002D6F35 /* SDL2_image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		309A579422DCCB0500F526C6 /* Prototracker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 309A579222DCCB0500F526C6 /* Prototracker.cpp */; };
 		309D6A4120C5B65B002F2352 /* LerpModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 309D6A3F20C5B65B002F2352 /* LerpModule.cpp */; };
+		30A90132230F48DC0005605A /* SampleModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30A90130230F48DC0005605A /* SampleModule.cpp */; };
 		30C1C3F620FD8295001F8EC7 /* CommandOptionSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30C1C3F220FD8295001F8EC7 /* CommandOptionSelector.cpp */; };
 		30C1C3F720FD8295001F8EC7 /* CommandSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30C1C3F420FD8295001F8EC7 /* CommandSelector.cpp */; };
 		30E330D62148607A0050DCC0 /* DivModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30E330D02148607A0050DCC0 /* DivModule.cpp */; };
@@ -356,6 +357,8 @@
 		309A579322DCCB0500F526C6 /* Prototracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Prototracker.h; path = ../src/Prototracker.h; sourceTree = "<group>"; };
 		309D6A3F20C5B65B002F2352 /* LerpModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LerpModule.cpp; sourceTree = "<group>"; };
 		309D6A4020C5B65B002F2352 /* LerpModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LerpModule.h; sourceTree = "<group>"; };
+		30A90130230F48DC0005605A /* SampleModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SampleModule.cpp; sourceTree = "<group>"; };
+		30A90131230F48DC0005605A /* SampleModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleModule.h; sourceTree = "<group>"; };
 		30C1C3F220FD8295001F8EC7 /* CommandOptionSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CommandOptionSelector.cpp; path = ../src/CommandOptionSelector.cpp; sourceTree = "<group>"; };
 		30C1C3F320FD8295001F8EC7 /* CommandOptionSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandOptionSelector.h; path = ../src/CommandOptionSelector.h; sourceTree = "<group>"; };
 		30C1C3F420FD8295001F8EC7 /* CommandSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CommandSelector.cpp; path = ../src/CommandSelector.cpp; sourceTree = "<group>"; };
@@ -642,6 +645,8 @@
 				307A81CF20B5EC2900C1FA54 /* ReverbModule.h */,
 				307A81D020B5EC2900C1FA54 /* RMSModule.cpp */,
 				307A81D120B5EC2900C1FA54 /* RMSModule.h */,
+				30A90130230F48DC0005605A /* SampleModule.cpp */,
+				30A90131230F48DC0005605A /* SampleModule.h */,
 				307A81D220B5EC2900C1FA54 /* ShapeModule.cpp */,
 				307A81D320B5EC2900C1FA54 /* ShapeModule.h */,
 				307A81D420B5EC2900C1FA54 /* SplitModule.cpp */,
@@ -791,6 +796,7 @@
 				307A825320B5EC2900C1FA54 /* NoiseModule.cpp in Sources */,
 				3049281020B4BB530038E787 /* SDLMain.m in Sources */,
 				307A824D20B5EC2900C1FA54 /* FilterModule.cpp in Sources */,
+				30A90132230F48DC0005605A /* SampleModule.cpp in Sources */,
 				307A823D20B5EC2900C1FA54 /* AbsModule.cpp in Sources */,
 				307A823C20B5EC2900C1FA54 /* MessageManager.cpp in Sources */,
 				307A827720B5EC2900C1FA54 /* Value.cpp in Sources */,
