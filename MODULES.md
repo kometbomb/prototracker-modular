@@ -3,45 +3,46 @@
 Modules are loosely divided in three categories: Control, Generators and Modifiers. This doesn't mean they are limited to that role, though. An oscillator is useful for modifying audio volume as much as an envelope.
 
 - [Prototracker-modular modules](#prototracker-modular-modules)
-    - [Good to know](#good-to-know)
-    - [Control](#control)
-        - [FrequencyIn](#frequencyin)
-        - [Volume](#volume)
-        - [TriggerNote](#triggernote)
-        - [Const](#const)
-        - [Effect](#effect)
-        - [Automation](#automation)
-        - [AudioOut](#audioout)
-        - [Oscilloscope](#oscilloscope)
-        - [VUMeter](#vumeter)
-        - [EG](#eg)
-        - [Accumulator](#accumulator)
-        - [Semitone](#semitone)
-    - [Generators](#generators)
-        - [Oscillator](#oscillator)
-        - [Pulse](#pulse)
-        - [Noise](#noise)
-    - [Modifiers](#modifiers)
-        - [Add](#add)
-        - [Mul](#mul)
-        - [Div](#div)
-        - [Abs](#abs)
-        - [Bits](#bits)
-        - [Shape](#shape)
-        - [Linear](#linear)
-        - [Clamp](#clamp)
-        - [Distorion](#distorion)
-        - [Split](#split)
-        - [RMS](#rms)
-        - [Mixer](#mixer)
-        - [Lerp](#lerp)
-        - [Filter](#filter)
-        - [Glide](#glide)
-        - [Delay](#delay)
-        - [Reverb](#reverb)
-        - [Container](#container)
-        - [ExtIn/ExtOut](#extinextout)
-        - [Virtual](#virtual)
+  - [Good to know](#good-to-know)
+  - [Control](#control)
+    - [FrequencyIn](#frequencyin)
+    - [Volume](#volume)
+    - [TriggerNote](#triggernote)
+    - [Const](#const)
+    - [Effect](#effect)
+    - [Automation](#automation)
+    - [AudioOut](#audioout)
+    - [Oscilloscope](#oscilloscope)
+    - [VUMeter](#vumeter)
+    - [EG](#eg)
+    - [Accumulator](#accumulator)
+    - [Semitone](#semitone)
+  - [Generators](#generators)
+    - [Oscillator](#oscillator)
+    - [Pulse](#pulse)
+    - [Noise](#noise)
+    - [Sample](#sample)
+  - [Modifiers](#modifiers)
+    - [Add](#add)
+    - [Mul](#mul)
+    - [Div](#div)
+    - [Abs](#abs)
+    - [Bits](#bits)
+    - [Shape](#shape)
+    - [Linear](#linear)
+    - [Clamp](#clamp)
+    - [Distorion](#distorion)
+    - [Split](#split)
+    - [RMS](#rms)
+    - [Mixer](#mixer)
+    - [Lerp](#lerp)
+    - [Filter](#filter)
+    - [Glide](#glide)
+    - [Delay](#delay)
+    - [Reverb](#reverb)
+    - [Container](#container)
+    - [ExtIn/ExtOut](#extinextout)
+    - [Virtual](#virtual)
 
 ## Good to know
 
@@ -228,6 +229,23 @@ These modules are used to generate signals useful as audio.
 | 0 | Noise out (-1..1) |
 | 1 | 4-bit noise out (-1..1) |
 | 2 | 1-bit noise out (-1..1) |
+
+### Sample
+
+This module will output the buffer amplitude at the position (0..1) specified by input 0. Double click to open a file dialog to open a WAV file, up to two channels are supported.
+
+An easy way to play a sample at its base rate (as specified by the WAV file) is to hook output #3 to an EG module ATTACK input and the EG output #0 back to the sample input #0. When the EG module is triggered the sample module will output the sample amplitude at the correct speed.
+
+| Input | Description  |
+|-------|--------------|
+| 0 | Sample position (0..1) |
+
+| Output | Description  |
+|--------|--------------|
+| 0 | Mono out (-1..1) |
+| 1 | Left channel out (-1..1) |
+| 2 | Right channel out (-1..1) |
+| 3 | Sample length in seconds |
 
 ## Modifiers
 
