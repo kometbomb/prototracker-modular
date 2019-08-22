@@ -1,5 +1,6 @@
 #include "MixerModule.h"
 #include <algorithm>
+#include <cmath>
 #include "SDL.h"
 
 MixerModule::MixerModule(ModularSynth& synth)
@@ -35,14 +36,14 @@ void MixerModule::cycle()
 
 
 
-const char * MixerModule::getInputName(int input) const 
+const char * MixerModule::getInputName(int input) const
 {
 	static const char *names[] = {"Input", "Mixing"};
 	return names[input];
 }
 
 
-const char * MixerModule::getOutputName(int output) const 
+const char * MixerModule::getOutputName(int output) const
 {
 	static const char *names[] = {"Output A", "Output B"};
 	return names[output];
