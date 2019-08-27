@@ -4,7 +4,7 @@ SRC=src/*.cpp src/modules/*.cpp
 SRC_H=src/*.h src/modules/*.h
 
 $(OUTPUT): $(SRC) src/*.h
-	$(CC) -O3 -Wformat -std=c++11 -o $@ $(SRC) -lSDL2_image -lSDL2main `sdl2-config --cflags --libs` -s -DSCALE=2
+	$(CC) -O3 -Wformat -std=c++11 -o $@ $(SRC) -lSDL2_image -lSDL2main `sdl2-config --cflags --libs` -s -DSCALE=2 -static-libstdc++ -static-libgcc
 
 clean:
 	rm $(OUTPUT)
