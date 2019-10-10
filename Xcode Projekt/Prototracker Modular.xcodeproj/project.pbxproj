@@ -115,7 +115,14 @@
 		3092517720B60868002D6F35 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3092517520B60868002D6F35 /* SDL2.framework */; };
 		3092517920B60BA9002D6F35 /* SDL2.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 3092517520B60868002D6F35 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3092517A20B60BA9002D6F35 /* SDL2_image.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 3092517420B60868002D6F35 /* SDL2_image.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		309A579422DCCB0500F526C6 /* Prototracker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 309A579222DCCB0500F526C6 /* Prototracker.cpp */; };
 		309D6A4120C5B65B002F2352 /* LerpModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 309D6A3F20C5B65B002F2352 /* LerpModule.cpp */; };
+		30A90132230F48DC0005605A /* SampleModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30A90130230F48DC0005605A /* SampleModule.cpp */; };
+		30C1C3F620FD8295001F8EC7 /* CommandOptionSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30C1C3F220FD8295001F8EC7 /* CommandOptionSelector.cpp */; };
+		30C1C3F720FD8295001F8EC7 /* CommandSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30C1C3F420FD8295001F8EC7 /* CommandSelector.cpp */; };
+		30E330D62148607A0050DCC0 /* DivModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30E330D02148607A0050DCC0 /* DivModule.cpp */; };
+		30E330D72148607A0050DCC0 /* VirtualModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30E330D22148607A0050DCC0 /* VirtualModule.cpp */; };
+		30E330D82148607A0050DCC0 /* VolumeModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 30E330D42148607A0050DCC0 /* VolumeModule.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -181,7 +188,6 @@
 		307A816C20B5EC2900C1FA54 /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Color.cpp; path = ../src/Color.cpp; sourceTree = "<group>"; };
 		307A816D20B5EC2900C1FA54 /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Color.h; path = ../src/Color.h; sourceTree = "<group>"; };
 		307A816E20B5EC2900C1FA54 /* ColumnEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColumnEditor.cpp; path = ../src/ColumnEditor.cpp; sourceTree = "<group>"; };
-		307A816F20B5EC2900C1FA54 /* Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Context.h; path = ../src/Context.h; sourceTree = "<group>"; };
 		307A817020B5EC2900C1FA54 /* CopyBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CopyBuffer.cpp; path = ../src/CopyBuffer.cpp; sourceTree = "<group>"; };
 		307A817120B5EC2900C1FA54 /* CopyBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CopyBuffer.h; path = ../src/CopyBuffer.h; sourceTree = "<group>"; };
 		307A817220B5EC2900C1FA54 /* Debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Debug.cpp; path = ../src/Debug.cpp; sourceTree = "<group>"; };
@@ -347,8 +353,22 @@
 		307A821320B5EC2900C1FA54 /* Value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Value.h; path = ../src/Value.h; sourceTree = "<group>"; };
 		3092517420B60868002D6F35 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		3092517520B60868002D6F35 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		309A579222DCCB0500F526C6 /* Prototracker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Prototracker.cpp; path = ../src/Prototracker.cpp; sourceTree = "<group>"; };
+		309A579322DCCB0500F526C6 /* Prototracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Prototracker.h; path = ../src/Prototracker.h; sourceTree = "<group>"; };
 		309D6A3F20C5B65B002F2352 /* LerpModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LerpModule.cpp; sourceTree = "<group>"; };
 		309D6A4020C5B65B002F2352 /* LerpModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LerpModule.h; sourceTree = "<group>"; };
+		30A90130230F48DC0005605A /* SampleModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SampleModule.cpp; sourceTree = "<group>"; };
+		30A90131230F48DC0005605A /* SampleModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleModule.h; sourceTree = "<group>"; };
+		30C1C3F220FD8295001F8EC7 /* CommandOptionSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CommandOptionSelector.cpp; path = ../src/CommandOptionSelector.cpp; sourceTree = "<group>"; };
+		30C1C3F320FD8295001F8EC7 /* CommandOptionSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandOptionSelector.h; path = ../src/CommandOptionSelector.h; sourceTree = "<group>"; };
+		30C1C3F420FD8295001F8EC7 /* CommandSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CommandSelector.cpp; path = ../src/CommandSelector.cpp; sourceTree = "<group>"; };
+		30C1C3F520FD8295001F8EC7 /* CommandSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommandSelector.h; path = ../src/CommandSelector.h; sourceTree = "<group>"; };
+		30E330D02148607A0050DCC0 /* DivModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DivModule.cpp; sourceTree = "<group>"; };
+		30E330D12148607A0050DCC0 /* DivModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DivModule.h; sourceTree = "<group>"; };
+		30E330D22148607A0050DCC0 /* VirtualModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VirtualModule.cpp; sourceTree = "<group>"; };
+		30E330D32148607A0050DCC0 /* VirtualModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualModule.h; sourceTree = "<group>"; };
+		30E330D42148607A0050DCC0 /* VolumeModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VolumeModule.cpp; sourceTree = "<group>"; };
+		30E330D52148607A0050DCC0 /* VolumeModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VolumeModule.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -368,11 +388,11 @@
 		304927BF20B4B1D90038E787 = {
 			isa = PBXGroup;
 			children = (
-				304927CA20B4B1D90038E787 /* Prototracker Modular */,
-				3049281120B4BB590038E787 /* SDLMain */,
-				3049280820B4B9C90038E787 /* Resources */,
 				304927F420B4B44E0038E787 /* Frameworks */,
 				304927C920B4B1D90038E787 /* Products */,
+				304927CA20B4B1D90038E787 /* Prototracker Modular */,
+				3049280820B4B9C90038E787 /* Resources */,
+				3049281120B4BB590038E787 /* SDLMain */,
 			);
 			sourceTree = "<group>";
 		};
@@ -398,7 +418,10 @@
 				307A816D20B5EC2900C1FA54 /* Color.h */,
 				307A816E20B5EC2900C1FA54 /* ColumnEditor.cpp */,
 				307A814920B5EC2900C1FA54 /* ColumnEditor.h */,
-				307A816F20B5EC2900C1FA54 /* Context.h */,
+				30C1C3F220FD8295001F8EC7 /* CommandOptionSelector.cpp */,
+				30C1C3F320FD8295001F8EC7 /* CommandOptionSelector.h */,
+				30C1C3F420FD8295001F8EC7 /* CommandSelector.cpp */,
+				30C1C3F520FD8295001F8EC7 /* CommandSelector.h */,
 				307A817020B5EC2900C1FA54 /* CopyBuffer.cpp */,
 				307A817120B5EC2900C1FA54 /* CopyBuffer.h */,
 				307A817220B5EC2900C1FA54 /* Debug.cpp */,
@@ -478,6 +501,8 @@
 				307A81EF20B5EC2900C1FA54 /* Player.h */,
 				307A81F020B5EC2900C1FA54 /* PlayerState.cpp */,
 				307A81F120B5EC2900C1FA54 /* PlayerState.h */,
+				309A579222DCCB0500F526C6 /* Prototracker.cpp */,
+				309A579322DCCB0500F526C6 /* Prototracker.h */,
 				307A81F220B5EC2900C1FA54 /* Random.cpp */,
 				307A81F320B5EC2900C1FA54 /* Random.h */,
 				307A815D20B5EC2900C1FA54 /* Renderer.cpp */,
@@ -582,6 +607,8 @@
 				307A81AD20B5EC2900C1FA54 /* DisplayModule.h */,
 				307A81AE20B5EC2900C1FA54 /* DistortionModule.cpp */,
 				307A81AF20B5EC2900C1FA54 /* DistortionModule.h */,
+				30E330D02148607A0050DCC0 /* DivModule.cpp */,
+				30E330D12148607A0050DCC0 /* DivModule.h */,
 				307A81B020B5EC2900C1FA54 /* EffectModule.cpp */,
 				307A81B120B5EC2900C1FA54 /* EffectModule.h */,
 				307A81B220B5EC2900C1FA54 /* EGModule.cpp */,
@@ -618,6 +645,8 @@
 				307A81CF20B5EC2900C1FA54 /* ReverbModule.h */,
 				307A81D020B5EC2900C1FA54 /* RMSModule.cpp */,
 				307A81D120B5EC2900C1FA54 /* RMSModule.h */,
+				30A90130230F48DC0005605A /* SampleModule.cpp */,
+				30A90131230F48DC0005605A /* SampleModule.h */,
 				307A81D220B5EC2900C1FA54 /* ShapeModule.cpp */,
 				307A81D320B5EC2900C1FA54 /* ShapeModule.h */,
 				307A81D420B5EC2900C1FA54 /* SplitModule.cpp */,
@@ -628,6 +657,10 @@
 				307A81D920B5EC2900C1FA54 /* TransposeModule.h */,
 				307A81DA20B5EC2900C1FA54 /* TriggerNoteModule.cpp */,
 				307A81DB20B5EC2900C1FA54 /* TriggerNoteModule.h */,
+				30E330D22148607A0050DCC0 /* VirtualModule.cpp */,
+				30E330D32148607A0050DCC0 /* VirtualModule.h */,
+				30E330D42148607A0050DCC0 /* VolumeModule.cpp */,
+				30E330D52148607A0050DCC0 /* VolumeModule.h */,
 				307A81DC20B5EC2900C1FA54 /* VUMeterModule.cpp */,
 				307A81DD20B5EC2900C1FA54 /* VUMeterModule.h */,
 			);
@@ -714,9 +747,11 @@
 				307A822720B5EC2900C1FA54 /* TouchRegion.cpp in Sources */,
 				307A822020B5EC2900C1FA54 /* ModuleFactory.cpp in Sources */,
 				307A825920B5EC2900C1FA54 /* RMSModule.cpp in Sources */,
+				309A579422DCCB0500F526C6 /* Prototracker.cpp in Sources */,
 				307A824B20B5EC2900C1FA54 /* ExtInModule.cpp in Sources */,
 				307A824520B5EC2900C1FA54 /* ContainerModule.cpp in Sources */,
 				307A822F20B5EC2900C1FA54 /* EditorState.cpp in Sources */,
+				30C1C3F720FD8295001F8EC7 /* CommandSelector.cpp in Sources */,
 				309D6A4120C5B65B002F2352 /* LerpModule.cpp in Sources */,
 				307A823520B5EC2900C1FA54 /* Label.cpp in Sources */,
 				307A826B20B5EC2900C1FA54 /* Sequence.cpp in Sources */,
@@ -725,9 +760,11 @@
 				307A825720B5EC2900C1FA54 /* PulseModule.cpp in Sources */,
 				307A824220B5EC2900C1FA54 /* BitsModule.cpp in Sources */,
 				307A822D20B5EC2900C1FA54 /* Debug.cpp in Sources */,
+				30E330D82148607A0050DCC0 /* VolumeModule.cpp in Sources */,
 				307A826F20B5EC2900C1FA54 /* Song.cpp in Sources */,
 				307A824920B5EC2900C1FA54 /* EffectModule.cpp in Sources */,
 				307A824C20B5EC2900C1FA54 /* ExtOutModule.cpp in Sources */,
+				30E330D62148607A0050DCC0 /* DivModule.cpp in Sources */,
 				307A821B20B5EC2900C1FA54 /* Main.cpp in Sources */,
 				307A825E20B5EC2900C1FA54 /* TriggerNoteModule.cpp in Sources */,
 				307A826420B5EC2900C1FA54 /* Pattern.cpp in Sources */,
@@ -759,6 +796,7 @@
 				307A825320B5EC2900C1FA54 /* NoiseModule.cpp in Sources */,
 				3049281020B4BB530038E787 /* SDLMain.m in Sources */,
 				307A824D20B5EC2900C1FA54 /* FilterModule.cpp in Sources */,
+				30A90132230F48DC0005605A /* SampleModule.cpp in Sources */,
 				307A823D20B5EC2900C1FA54 /* AbsModule.cpp in Sources */,
 				307A823C20B5EC2900C1FA54 /* MessageManager.cpp in Sources */,
 				307A827720B5EC2900C1FA54 /* Value.cpp in Sources */,
@@ -790,6 +828,7 @@
 				307A821920B5EC2900C1FA54 /* IPlayer.cpp in Sources */,
 				307A822820B5EC2900C1FA54 /* TrackState.cpp in Sources */,
 				307A823820B5EC2900C1FA54 /* Macro.cpp in Sources */,
+				30E330D72148607A0050DCC0 /* VirtualModule.cpp in Sources */,
 				307A821720B5EC2900C1FA54 /* FileSelector.cpp in Sources */,
 				307A825C20B5EC2900C1FA54 /* TickModule.cpp in Sources */,
 				307A824420B5EC2900C1FA54 /* ConstModule.cpp in Sources */,
@@ -805,6 +844,7 @@
 				307A824820B5EC2900C1FA54 /* DistortionModule.cpp in Sources */,
 				307A823620B5EC2900C1FA54 /* Listenable.cpp in Sources */,
 				307A821F20B5EC2900C1FA54 /* ModularSynth.cpp in Sources */,
+				30C1C3F620FD8295001F8EC7 /* CommandOptionSelector.cpp in Sources */,
 				307A823720B5EC2900C1FA54 /* Lockable.cpp in Sources */,
 				307A824F20B5EC2900C1FA54 /* GlideModule.cpp in Sources */,
 			);
@@ -832,10 +872,11 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -874,7 +915,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -909,7 +950,7 @@
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
-				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"SCALE=2",
@@ -951,6 +992,8 @@
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "SCALE=2";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = NO;
