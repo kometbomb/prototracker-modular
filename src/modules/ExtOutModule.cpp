@@ -45,7 +45,7 @@ void ExtOutModule::onDial(int delta)
 {
 	int index = (static_cast<int>(static_cast<float>(delta) + mParams[0]) + ModularSynth::numExtConnections) % ModularSynth::numExtConnections;
 	setParam(0, index);
-	sprintf(mLabel, "%s%d", moduleName, index);
+	sprintf(mLabel, "Out%d", index);
 }
 
 
