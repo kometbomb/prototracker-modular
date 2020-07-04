@@ -1,5 +1,5 @@
 CC=g++
-OUTPUT=prototracker
+OUTPUT=prototracker-modular
 SRC=src/*.cpp src/modules/*.cpp
 SRC_H=src/*.h src/modules/*.h
 
